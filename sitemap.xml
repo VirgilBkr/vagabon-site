@@ -40,14 +40,20 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- RESSOURCES_SITEMAP_START — repère utilisé par
-       cms/workers/shared/renderRessourcesPage.js pour ajouter/retirer
-       automatiquement les entrées d'articles à chaque publication,
-       modification de slug ou archivage, sans toucher au reste du fichier.
-       Ne pas retirer ce commentaire.
-       Les 3 entrées ci-dessous sont un contenu de démonstration TEMPORAIRE
-       (voir cms/README.md) : elles seront remplacées automatiquement dès
-       que le CMS Sanity sera connecté. -->
+  <!-- Repère utilisé par cms/workers/shared/renderRessourcesPage.js pour
+       ajouter/retirer automatiquement les entrées d'articles ci-dessous à
+       chaque publication, modification de slug ou archivage, sans toucher
+       au reste du fichier. Ne pas retirer les deux marqueurs qui les
+       entourent : le Worker recherche les repères RESSOURCES_SITEMAP_START
+       et RESSOURCES_SITEMAP_END sous forme de commentaires XML fermés sur
+       une seule ligne chacun (fonction replaceBetweenMarkers) — un
+       commentaire réparti sur plusieurs lignes, comme celui-ci, n'est
+       volontairement PAS utilisé comme repère. Tout ce qui se trouve entre
+       ces deux marqueurs est intégralement REMPLACÉ (jamais complété) à
+       chaque régénération : les 3 entrées de démonstration ci-dessous
+       disparaîtront automatiquement, sans doublon, dès la première
+       publication réussie depuis Sanity. -->
+  <!-- RESSOURCES_SITEMAP_START -->
   <url>
     <loc>https://www.vagabon-exemple.fr/ressources/construire-strategie-communication-coherente/</loc>
     <changefreq>monthly</changefreq>

@@ -146,12 +146,21 @@
          connecté — elle n'est PAS pensée pour être maintenue à la main. -->
     <section class="ressources-grid-section" aria-label="Liste des articles">
       <div class="ressources-grid" data-ressources-grid>
-        <!-- RESSOURCES_GRID_START — repère utilisé par
-             cms/workers/shared/renderRessourcesPage.js pour remplacer
-             automatiquement ce bloc de cartes à chaque publication/
-             modification/archivage d'un article, sans toucher au reste du
-             fichier (hero, filtres, header, footer). Ne pas retirer ce
-             commentaire. -->
+        <!-- Repère utilisé par cms/workers/shared/renderRessourcesPage.js
+             pour remplacer automatiquement le bloc de cartes ci-dessous à
+             chaque publication/modification/archivage d'un article, sans
+             toucher au reste du fichier (hero, filtres, header, footer).
+             Ne pas retirer les deux marqueurs qui l'entourent : le Worker
+             recherche les repères RESSOURCES_GRID_START et
+             RESSOURCES_GRID_END sous forme de commentaires HTML fermés sur
+             une seule ligne chacun (fonction replaceBetweenMarkers) — un
+             commentaire réparti sur plusieurs lignes, comme celui-ci,
+             n'est volontairement PAS utilisé comme repère. Tout ce qui se
+             trouve entre ces deux marqueurs est intégralement REMPLACÉ
+             (jamais complété) à chaque régénération : les 3 cartes de
+             démonstration ci-dessous disparaîtront automatiquement, sans
+             doublon, dès la première publication réussie depuis Sanity. -->
+        <!-- RESSOURCES_GRID_START -->
         <a class="ressources-card" data-ressources-card data-category="strategie-de-communication" data-search="Construire une stratégie de communication cohérente Stratégie de communication" href="ressources/construire-strategie-communication-coherente/">
           <div class="ressources-card__image-frame"><span class="u-visually-hidden">Image à venir</span></div>
           <p class="ressources-card__category" data-i18n="expertise.strategy">Stratégie de communication</p>
