@@ -179,7 +179,20 @@
 
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    // IMPORTANT — orientation de la texture : tout le reste de ce shader
+    // (imgPx/imgUv, uOffsetPx, uCanvasSize, uMouse) raisonne en pixels
+    // "haut vers le bas", exactement comme le CSS/les images (y=0 = haut).
+    // Le vertex shader ci-dessus convertit déjà le clip-space WebGL vers
+    // cette même convention (vUv.y=0 en haut de l'écran). Pour que
+    // texture2D(uTexture, imgUv) retrouve le haut réel de l'image à
+    // imgUv.y=0, la texture doit être chargée SANS retournement (valeur
+    // par défaut de WebGL, flip=false) : la ligne
+    // "gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)" qui se trouvait ici
+    // inversait ce sens et produisait un rendu à l'envers (portrait +
+    // arrière-plan glacé retournés à 180°) — c'était la cause réelle du
+    // bug constaté sur le déploiement, corrigée en ne retournant plus la
+    // texture à l'upload, plutôt qu'en ajoutant une transformation inverse
+    // supplémentaire quelque part dans la chaîne.
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
