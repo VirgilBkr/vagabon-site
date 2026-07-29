@@ -1,0 +1,491 @@
+/* ==========================================================================
+   VAGABON — css/pages/ressources.css
+   Styles du système Ressources : la grille publique (ressources.html) et
+   le gabarit des pages articles individuelles (ressources/<slug>/index.html).
+
+   Ne redéfinit AUCUN jeton : réutilise entièrement la palette --u-* et les
+   classes de rythme (.universe-section, .universe-section__inner,
+   .universe-eyebrow, .c-btn) déjà déclarées dans css/pages/universe.css et
+   css/components.css, chargés avant ce fichier. Portée strictement limitée
+   aux classes préfixées "ressources-" / "article-" ci-dessous.
+
+   Direction artistique volontairement sobre (demande explicite) : pas de
+   grandes cartes blanches, pas d'ombres portées, pas de badges criards,
+   pas de dégradés — hiérarchie construite avec la typographie, l'espace et
+   de fins séparateurs, comme le reste du site.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* A. Lien de retour — identique à .who-back (qui-suis-je.css), redéclaré  */
+/* sous un nom propre à cette page plutôt que de charger un fichier tiers  */
+/* pour une seule règle.                                                   */
+/* ---------------------------------------------------------------------- */
+.ressources-back {
+  position: absolute;
+  top: calc(var(--nav-height) + var(--space-lg));
+  left: clamp(24px, 5vw, 64px);
+  z-index: 2;
+  display: inline-flex;
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.04em;
+  color: var(--u-ink-subtle);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+.ressources-back:hover,
+.ressources-back:focus-visible {
+  color: var(--u-warm);
+  border-color: var(--u-warm-soft);
+}
+
+/* ---------------------------------------------------------------------- */
+/* B. Hero — sobre et éditorial : eyebrow + titre + intro, pas de visuel.  */
+/* ---------------------------------------------------------------------- */
+.ressources-hero {
+  padding-top: calc(var(--nav-height) + var(--space-2xl));
+  padding-bottom: var(--space-xl);
+}
+
+.ressources-hero__inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+}
+
+.ressources-hero__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5.6vw, 4.2rem);
+  line-height: 1.08;
+  letter-spacing: var(--letter-spacing-display);
+  color: var(--u-ink);
+}
+
+.ressources-hero__intro {
+  margin-top: var(--space-md);
+  max-width: 56ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+/* ---------------------------------------------------------------------- */
+/* C. Filtres — catégorie (pills texte) + recherche. Aucun filtre par tags */
+/* (demande explicite). Sticky discret sous le header pour rester          */
+/* accessible en scrollant la grille, sans jamais recouvrir le contenu.    */
+/* ---------------------------------------------------------------------- */
+.ressources-filters {
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 3;
+  background: var(--u-bg);
+  border-top: 1px solid var(--u-line);
+  border-bottom: 1px solid var(--u-line);
+}
+
+.ressources-filters__inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-md) clamp(24px, 5vw, 64px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.ressources-filters__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+
+.ressources-filters__pill {
+  appearance: none;
+  border: 1px solid var(--u-line-strong);
+  background: transparent;
+  border-radius: var(--radius-full);
+  padding: var(--space-3xs) var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.02em;
+  color: var(--u-ink-subtle);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+.ressources-filters__pill:hover,
+.ressources-filters__pill:focus-visible {
+  color: var(--u-ink);
+  border-color: var(--u-warm-soft);
+}
+
+/* Catégorie active — trait plein doré, pas de fond plein (reste sobre). */
+.ressources-filters__pill[aria-pressed="true"] {
+  color: var(--u-ink);
+  border-color: var(--u-warm);
+}
+
+.ressources-filters__search {
+  position: relative;
+  min-width: 220px;
+  flex: 0 1 280px;
+}
+
+.ressources-filters__search-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--u-line-strong);
+  padding: var(--space-3xs) 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--u-ink);
+}
+
+.ressources-filters__search-input::placeholder {
+  color: var(--u-ink-subtle);
+}
+
+.ressources-filters__search-input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--u-warm);
+}
+
+@media (max-width: 640px) {
+  .ressources-filters__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ressources-filters__search {
+    flex: 1 1 auto;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* D. Grille d'articles — grille régulière uniquement (pas de masonry, pas */
+/* de tailles aléatoires, demande explicite).                             */
+/* ---------------------------------------------------------------------- */
+.ressources-grid-section {
+  padding-block: var(--space-xl);
+}
+
+.ressources-grid {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl) var(--space-lg);
+}
+
+@media (max-width: 980px) {
+  .ressources-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .ressources-grid { grid-template-columns: 1fr; }
+}
+
+.ressources-empty {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-2xl) clamp(24px, 5vw, 64px);
+  font-family: var(--font-body);
+  color: var(--u-ink-subtle);
+  text-align: center;
+}
+
+/* Carte — image, catégorie, titre, extrait, date, temps de lecture.       */
+/* Entièrement cliquable via le <a> englobant (display:contents), sans     */
+/* fond blanc, sans ombre, sans badge : la hiérarchie vient de la          */
+/* typographie et de l'espace, comme demandé explicitement. */
+.ressources-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.ressources-card__image-frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--u-bg) 100%, black 10%);
+  border: 1px solid color-mix(in srgb, var(--u-bg) 100%, black 24%);
+}
+
+.ressources-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow, 0.5s) var(--ease-standard);
+}
+
+.ressources-card:hover .ressources-card__image,
+.ressources-card:focus-visible .ressources-card__image {
+  transform: scale(1.03);
+}
+
+.ressources-card__category {
+  margin-top: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--u-warm);
+}
+
+.ressources-card__title {
+  margin-top: var(--space-3xs);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.2rem, 1.6vw, 1.5rem);
+  line-height: 1.22;
+  color: var(--u-ink);
+}
+
+.ressources-card__excerpt {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+.ressources-card__meta {
+  margin-top: var(--space-sm);
+  display: flex;
+  gap: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  color: var(--u-ink-subtle);
+}
+
+.ressources-card__meta-sep { opacity: 0.6; }
+
+/* ---------------------------------------------------------------------- */
+/* E. Page article — gabarit de lecture longue.                           */
+/* ---------------------------------------------------------------------- */
+.article-hero {
+  padding-top: calc(var(--nav-height) + var(--space-2xl));
+  padding-bottom: var(--space-lg);
+}
+
+.article-hero__inner {
+  max-width: 74ch;
+  margin-inline: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+}
+
+.article-hero__category {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--u-warm);
+}
+
+.article-hero__title {
+  margin-top: var(--space-sm);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4.4vw, 3.2rem);
+  line-height: 1.12;
+  color: var(--u-ink);
+}
+
+.article-hero__intro {
+  margin-top: var(--space-md);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+.article-hero__meta {
+  margin-top: var(--space-lg);
+  display: flex;
+  gap: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--u-ink-subtle);
+  border-top: 1px solid var(--u-line);
+  padding-top: var(--space-sm);
+}
+
+/* Repère purement interne signalant un article de démonstration/test —
+   discret (même traitement qu'une meta secondaire, pas un badge coloré) :
+   voir demande explicite "ne pas présenter ces contenus comme définitifs". */
+.article-hero__demo-notice {
+  margin-top: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-style: italic;
+  color: var(--u-ink-subtle);
+}
+
+.article-cover-frame {
+  max-width: 1040px;
+  margin: var(--space-lg) auto 0;
+  padding-inline: clamp(24px, 5vw, 64px);
+}
+
+.article-cover-frame img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid color-mix(in srgb, var(--u-bg) 100%, black 24%);
+}
+
+/* Emplacement réservé tant qu'aucune image de couverture réelle n'existe
+   (cas des 3 articles de démonstration) — même convention visuelle que les
+   autres placeholders du site (voir .who-hero__portrait-frame,
+   .project-showcase__item--placeholder) : un rectangle discret, sans cadre
+   ni ombre marquée, jamais une image cassée. */
+.article-cover-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--u-bg) 100%, black 10%);
+  border: 1px solid color-mix(in srgb, var(--u-bg) 100%, black 24%);
+  text-align: center;
+}
+
+.article-cover-placeholder span {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #495359;
+}
+
+/* Corps de l'article — largeur confortable pour la lecture longue (~68ch),
+   hiérarchie typographique réelle (H2/H3 distincts du corps de texte). */
+.article-body {
+  max-width: 68ch;
+  margin: var(--space-xl) auto 0;
+  padding-inline: clamp(24px, 5vw, 64px);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+.article-body > * + * { margin-top: var(--space-md); }
+
+.article-body h2 {
+  margin-top: var(--space-xl);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-heading);
+  color: var(--u-ink);
+}
+
+.article-body h3 {
+  margin-top: var(--space-lg);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-heading);
+  color: var(--u-ink);
+}
+
+.article-body p { }
+
+.article-body ul,
+.article-body ol {
+  padding-left: 1.4em;
+}
+
+.article-body li + li { margin-top: var(--space-2xs); }
+
+.article-body a {
+  color: var(--u-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--u-warm-soft);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--duration-fast) var(--ease-standard);
+}
+
+.article-body a:hover,
+.article-body a:focus-visible { text-decoration-color: var(--u-warm); }
+
+.article-body blockquote {
+  margin-inline: 0;
+  padding-left: var(--space-md);
+  border-left: 2px solid var(--u-warm);
+  font-style: italic;
+  color: var(--u-ink);
+}
+
+.article-body figure { margin: 0; }
+
+.article-body figure img {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--u-bg) 100%, black 24%);
+}
+
+.article-body figure figcaption {
+  margin-top: var(--space-2xs);
+  font-size: var(--font-size-xs);
+  color: var(--u-ink-subtle);
+  text-align: center;
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--u-line);
+  margin-block: var(--space-lg);
+}
+
+/* CTA inséré manuellement par Virgil dans le corps — réutilise .c-btn tel  */
+/* quel (voir css/components.css), aucun style de bouton inventé.          */
+.article-body .article-cta {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* ---------------------------------------------------------------------- */
+/* F. À lire également — grille de 2-3 cartes, réutilise .ressources-card. */
+/* ---------------------------------------------------------------------- */
+.article-related {
+  max-width: 1040px;
+  margin: var(--space-2xl) auto 0;
+  padding: var(--space-xl) clamp(24px, 5vw, 64px) var(--space-2xl);
+  border-top: 1px solid var(--u-line);
+}
+
+.article-related__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+  color: var(--u-ink);
+}
+
+.article-related__grid {
+  margin-top: var(--space-lg);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+@media (max-width: 900px) {
+  .article-related__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .article-related__grid { grid-template-columns: 1fr; }
+}
+
+.article-back-footer {
+  max-width: 68ch;
+  margin: var(--space-xl) auto 0;
+  padding-inline: clamp(24px, 5vw, 64px);
+}

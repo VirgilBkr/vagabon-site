@@ -1,0 +1,830 @@
+/* ==========================================================================
+   VAGABON — css/pages/face-a-face.css
+   Styles propres à face-a-face.html (narration verticale du projet).
+
+   GABARIT RÉUTILISABLE : toutes les classes ci-dessous sont préfixées
+   .project-page__ (jamais .face-a-face__) volontairement : ce fichier est
+   pensé pour être copié presque tel quel pour les futures pages projet
+   (projet 02, 03, 04...). Pour créer une nouvelle page projet : dupliquer
+   ce fichier, changer le sélecteur body.page-face-a-face en body.page-<slug>,
+   et adapter uniquement le contenu (textes/images) dans le HTML.
+
+   ISOLATION : tout est scopé à body.page-face-a-face. Cette page charge
+   AUSSI css/pages/universe.css tel quel (voir face-a-face.html) pour
+   hériter de la palette glaciale (--u-*), du header sombre et surtout du
+   moteur du carrousel (.universe-project__media--stack et associés) sans
+   aucune duplication de règle — ce fichier n'ajoute donc QUE ce qui est
+   propre à la narration verticale (sections alternées, ouverture, mise en
+   avant du logo, bloc de clôture).
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* A. Ouverture                                                             */
+/* ---------------------------------------------------------------------- */
+/* ESPACE VIDE — root cause du grand vide avant "Contexte" : ce padding-bottom
+   (--space-2xl, 112px) s'additionnait au padding-top de la section suivante
+   (.project-page__section hérite de padding-block: --space-3xl, 160px des
+   DEUX côtés) → 112 + 160 = 272px de vide cumulé entre la fin du lede et le
+   début visible de la section suivante, sans qu'aucun min-height/100vh/
+   transform ne soit en cause. Fix : padding-bottom réduit à --space-lg
+   (44px) ici, et un padding-top réduit scopé UNIQUEMENT à la section qui
+   suit directement l'ouverture (voir règle .project-page__opening +
+   .project-page__section plus bas) — 44 + 44 = 88px. Section "Contexte"
+   depuis supprimée (demande explicite) : cette règle générique cible
+   désormais automatiquement le carrousel vidéo, devenu la nouvelle section
+   directement adjacente à l'ouverture — aucun changement nécessaire ici.
+   Les autres transitions entre sections (Vidéo→Photo, Photo→Identité,
+   etc.) gardent leur --space-3xl d'origine, inchangé, puisque seul CE
+   premier seuil a été signalé comme excessif. */
+/* CENTRAGE VERTICAL DU BLOC ÉDITORIAL — v2, correctif du premier essai.
+   Diagnostic du premier essai (min-height:100vh + flex-column + margin-
+   block:auto sur .opening-inner, avec .project-page__back laissé dans le
+   flux normal juste au-dessus) : cette approche ne centrait effectivement
+   le bloc QUE si le "flux normal" (back-link + sa marge + le bloc lui-
+   même) laissait un espace résiduel dans les 100vh. Or .project-page__back
+   participait encore au flux : padding-top (132px : nav-height 88 +
+   space-lg 44) + le lien lui-même + son ancienne margin-bottom (space-2xl,
+   112px) consommaient à eux seuls environ 264px AVANT même le début du
+   logo. Sur les hauteurs d'écran desktop courantes (souvent 800-950px de
+   hauteur de fenêtre réelle, bien en dessous d'un grand écran 1440p), le
+   reste du contenu (logo + eyebrow + titre 2 lignes en grande taille +
+   paragraphe 5 lignes) atteignait ou dépassait déjà la hauteur restante :
+   il ne subsistait alors aucun espace résiduel à répartir par le
+   centrage, qui n'avait donc visuellement aucun effet — d'où le retour
+   signalé comme "sans effet perceptible", même si la règle CSS était bien
+   présente et correcte en elle-même.
+   FIX RÉEL : sortir .project-page__back du flux normal de cette section
+   (position: absolute, voir règle plus bas) plutôt que de le laisser
+   consommer de la hauteur dans le calcul du centrage. Sa position visuelle
+   Reste EXACTEMENT la même qu'avant (mêmes offsets top/left que le
+   padding-top/padding-inline de la section, donc aucun déplacement
+   perceptible du lien lui-même) — mais il ne compte plus dans "l'espace
+   consommé" du bloc à centrer. .project-page__opening ne contient donc
+   plus, en flux normal, qu'un seul enfant : .project-page__opening-inner
+   (logo + eyebrow + titre + paragraphe). Avec display:flex + align-items:
+   center + justify-content:center sur ce conteneur devenu à enfant unique,
+   ce bloc est désormais centré à la fois verticalement ET horizontalement
+   dans TOUTE la hauteur disponible de la section (min-height: 100vh,
+   border-box — inclut déjà padding-top/bottom), sans dépendre d'une marge
+   automatique sur l'enfant (mécanisme simplifié, un seul système au lieu
+   de deux redondants).
+   padding-top/padding-bottom restent des MINIMUMS non négociables (mêmes
+   valeurs qu'avant, jamais réduits) : padding-top garantit la respiration
+   sous le header fixe (nav-height + space-lg), padding-bottom une
+   respiration symétrique (space-lg) avant la section suivante. Le lien
+   entre ces deux minimums est volontairement symétrique UNE FOIS le
+   nav-height retiré du calcul (le nav-height n'est pas un "vide" perçu
+   par le visiteur : cette zone est visuellement occupée par le bandeau du
+   header fixe, posé par-dessus) — la respiration réellement perçue
+   au-dessus (space-lg + moitié de l'espace résiduel) et en dessous
+   (space-lg + l'autre moitié) est donc bien équilibrée.
+   ROBUSTESSE MULTI-RÉSOLUTIONS : min-height (jamais height) — si le
+   contenu (bloc + les deux paddings) dépasse malgré tout 100vh sur un
+   écran très bas, la section grandit simplement pour tout contenir
+   (aucun risque de chevauchement avec le header ni de contenu coupé) ;
+   le centrage s'applique alors simplement à un espace résiduel nul, sans
+   jamais produire de dépassement au-dessus du header. Sur un écran haut,
+   le centrage réel doit maintenant être clairement visible, quelle que
+   soit la résolution desktop testée. */
+.project-page__opening {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: calc(var(--nav-height) + var(--space-lg));
+  padding-bottom: var(--space-lg);
+  padding-inline: clamp(24px, 5vw, 64px);
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+/* Sorti du flux (voir diagnostic ci-dessus) : mêmes offsets que
+   padding-top/padding-inline de la section pour reproduire EXACTEMENT sa
+   position visuelle précédente — le lien ne bouge donc pas, seul son
+   ancienne consommation de hauteur dans le flux disparaît. */
+.project-page__back {
+  position: absolute;
+  top: calc(var(--nav-height) + var(--space-lg));
+  left: clamp(24px, 5vw, 64px);
+  display: inline-flex;
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.04em;
+  color: var(--u-ink-subtle);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+.project-page__back:hover,
+.project-page__back:focus-visible {
+  color: var(--u-warm);
+  border-color: var(--u-warm-soft);
+}
+
+/* Recentrage demandé explicitement : logo, eyebrow, titre et texte
+   introductif forment désormais une composition centrée sur un seul axe
+   vertical, plutôt qu'une colonne alignée à gauche. flex column +
+   align-items: center centre chaque enfant comme un bloc (quelle que soit
+   sa propre largeur/max-width), et text-align: center centre le texte à
+   l'intérieur des éléments qui passent sur plusieurs lignes (titre, lede) —
+   les deux mécanismes sont nécessaires ensemble. max-width retiré ici : ce
+   n'est plus une colonne de texte à largeur fixe, chaque enfant gère
+   désormais sa propre largeur (voir .project-page__title et
+   .project-page__lede plus bas). */
+.project-page__opening-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-inline: auto;
+  /* Centrage vertical : géré par align-items/justify-content sur le
+     parent .project-page__opening (voir commentaire détaillé plus haut) —
+     .project-page__back étant désormais sorti du flux (position:absolute),
+     ce conteneur est le seul enfant en flux normal de la section, donc
+     aucune marge automatique n'est nécessaire ici.
+     SÉCURITÉ ANTI-CHEVAUCHEMENT — .project-page__back étant en position:
+     absolute au même point de départ (top) que le contenu de cette
+     section, un scénario extrême (contenu quasi aussi haut que le
+     viewport, espace résiduel de centrage proche de zéro — voir
+     commentaire sur .project-page__opening) placerait ce bloc tout en
+     haut de la zone de contenu, exactement à la même hauteur que le lien
+     "Retour aux projets". Une petite marge haute fixe (space-lg, 44px —
+     nettement supérieure à la hauteur réelle d'une ligne de ce lien,
+     ~21px) supprime tout risque de chevauchement vertical entre les deux,
+     quelle que soit la résolution : dans le cas normal (espace résiduel
+     disponible), son effet sur le centrage est négligeable (quelques
+     pixels de biais vers le bas au maximum) ; dans le cas extrême, elle
+     garantit simplement que le bloc démarre toujours sous le lien plutôt
+     que par-dessus. */
+  margin-top: var(--space-lg);
+}
+
+/* CONTRASTE — var(--u-ink-subtle) (#82868D) est pensé pour un fond SOMBRE ;
+   sur le fond réel de cette page (--u-bg: #AEC8D8, bleu glacier clair),
+   son contraste mesuré n'est qu'environ 2.1:1, bien sous le seuil AA
+   (4.5:1). Fix : #495359, déjà la couleur de référence utilisée ailleurs
+   sur universe.css pour du texte secondaire posé sur ce même fond
+   (≈4.52:1, conforme) — pas une couleur inventée. Scopé à ce fichier
+   (face-a-face.css) uniquement : --u-ink-subtle reste inchangé partout
+   ailleurs sur le site. */
+.project-page__eyebrow,
+.project-page__section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-eyebrow);
+  text-transform: uppercase;
+  color: #495359;
+  margin-bottom: var(--space-md);
+}
+
+.project-page__eyebrow::before,
+.project-page__section-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--u-warm-soft);
+}
+
+/* max-width + margin-inline: auto ajoutés pour équilibrer les retours à la
+   ligne une fois le titre centré (demande explicite) : sans cette largeur,
+   le titre utiliserait toute la largeur disponible avant de retourner à la
+   ligne, ce qui aurait cassé la répartition "Face à Face —" / "Club de
+   Muay Thaï" en un troisième retour à la ligne disgracieux ("Thaï" seul).
+   22ch laisse "Club de Muay Thaï" tenir sur sa propre ligne après le <br>
+   existant dans le HTML (inchangé). Taille, graisse, couleur, importance
+   visuelle : strictement inchangées. */
+.project-page__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  line-height: 1.08;
+  letter-spacing: var(--letter-spacing-display);
+  color: var(--u-ink);
+  max-width: 22ch;
+  margin-inline: auto;
+}
+
+/* CONTRASTE — même correctif que ci-dessus : var(--u-ink-muted) (#C7C4BC)
+   n'atteint qu'environ 1.0:1 sur --u-bg (quasiment invisible). Fix :
+   #495359 (≈4.52:1), sans concurrencer le blanc du titre au-dessus.
+
+   TEXTE REMPLACÉ (demande explicite) : reprend désormais mot pour mot le
+   paragraphe de la section CONTEXTE plus bas (voir data-i18n dans le HTML,
+   repointé vers la clé "faf.section.context_body" au lieu de "faf.lede" —
+   même clé de traduction, donc aucun doublon créé dans
+   data/translations.js, et le paragraphe original de CONTEXTE a été
+   retiré pour ne pas répéter deux fois le même texte sur la page).
+   Largeur élargie (52ch → 80ch) car ce nouveau texte est nettement plus
+   long que l'ancienne introduction : à 52ch il aurait produit 7-8 lignes
+   (bloc bien trop haut) ; à 80ch, environ 5 lignes sur desktop, conforme à
+   la fourchette demandée (3 à 5 lignes selon la largeur d'écran).
+   margin-top resserré (space-lg → space-md) pour une composition plus
+   compacte, sans supprimer toute respiration entre le titre et le texte. */
+.project-page__lede {
+  margin-top: var(--space-md);
+  max-width: 80ch;
+  margin-inline: auto;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+/* Logo Face à Face — signature visuelle du client, affichée AVANT le
+   titre du projet. RECENTRAGE (demande explicite, remplace le précédent
+   alignement à gauche) : tout le bloc d'ouverture (logo, eyebrow, titre,
+   texte) est désormais centré horizontalement — voir
+   .project-page__opening-inner ci-dessus (flex column + align-items:
+   center), qui centre ce logo comme chacun des autres enfants. margin-
+   inline: auto conservé ici par cohérence/robustesse (redondant avec le
+   flex du parent, mais sans effet indésirable). Taille, proportions, PNG
+   transparent et absence de fond/bordure/ombre : strictement inchangés. */
+.project-page__opening-logo {
+  display: block;
+  margin-inline: auto;
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+  width: clamp(120px, 13vw, 170px);
+  height: auto;
+}
+
+/* ---------------------------------------------------------------------- */
+/* B. Sections alternées — visuel/texte                                    */
+/* ---------------------------------------------------------------------- */
+.project-page__section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 96px);
+  padding-block: var(--space-3xl);
+  padding-inline: clamp(24px, 5vw, 64px);
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+/* Réduit uniquement le padding-top de la section qui suit directement
+   l'ouverture — sélecteur de sibling direct, générique par conception :
+   il cible "quelle que soit la section juste après .project-page__opening"
+   plutôt qu'une section nommée. À l'origine, il s'agissait de "Contexte" ;
+   cette section a depuis été supprimée (demande explicite), et le
+   carrousel vidéo est devenu le nouveau premier voisin direct — la règle
+   s'applique donc désormais à lui automatiquement, sans aucune
+   modification nécessaire. Voir commentaire sur .project-page__opening
+   ci-dessus pour le diagnostic complet. N'affecte ni le padding-bottom de
+   cette section, ni le padding-top/bottom d'aucune autre section plus bas
+   sur la page (Photo, Identité, Print gardent --space-3xl inchangé). */
+.project-page__opening + .project-page__section {
+  padding-top: var(--space-lg);
+}
+
+/* Alternance : texte à gauche / visuel à droite (ordre naturel du DOM) vs
+   visuel à gauche / texte à droite (ordre inversé visuellement, DOM
+   inchangé pour l'ordre de lecture au clavier/lecteur d'écran). */
+.project-page__section--visual-left .project-page__section-visual {
+  order: -1;
+}
+
+/* Même mécanisme, étendu à la colonne vidéo (section D, Zohir Remidi) :
+   .universe-project n'est pas un .project-page__section-visual (c'est le
+   composant vidéo partagé avec la section C), donc la règle ci-dessus ne le
+   couvrait pas. Plutôt que créer un second système de colonnes inversées,
+   cette règle réutilise la même classe --visual-left déjà posée sur la
+   <section> pour obtenir exactement le même comportement (vidéo affichée à
+   gauche alors que le DOM la place après le texte, pour garder un ordre de
+   lecture texte-puis-vidéo cohérent avec la section C). Reset mobile
+   symétrique juste plus bas, dans le même media query que l'équivalent
+   .project-page__section-visual. */
+.project-page__section--visual-left .universe-project {
+  order: -1;
+}
+
+.project-page__section-eyebrow { margin-bottom: var(--space-sm); }
+
+.project-page__section-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  line-height: 1.18;
+  color: var(--u-ink);
+  max-width: 18ch;
+}
+
+/* CONTRASTE — même correctif (voir .project-page__lede plus haut). */
+.project-page__section-body {
+  margin-top: var(--space-md);
+  max-width: 46ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+/* Ligne "matériel & logiciels" (section Production vidéo uniquement) —
+   crédit éditorial sobre entre le titre et le texte descriptif : ni badge,
+   ni carte, ni icône, une seule ligne typographique. Hiérarchie demandée :
+   plus grande que le corps de texte (réutilise --font-size-body-lg, déjà
+   le palier existant juste au-dessus dans l'échelle typographique, plutôt
+   qu'une taille inventée) et légèrement plus grasse (600 : --font-body
+   utilise actuellement son repli Georgia/Times New Roman en attendant les
+   fichiers Stigsa Display, un repli système qui dispose de graisses
+   intermédiaires réelles — contrairement à Good Times/--font-display, où
+   une seule graisse 400 est livrée, aucun risque de graisse manquante
+   ici) ; toujours plus discrète que .project-page__section-title (Good
+   Times, blanc, taille bien supérieure). Même gris foncé que le reste du
+   texte secondaire de la page. margin-top resserré (space-sm) pour rester
+   proche du titre, comme une légende, avant la respiration plus large
+   (space-md, héritée de .project-page__section-body ci-dessus) vers le
+   texte descriptif qui suit. max-width légèrement supérieure à celle du
+   corps de texte : lui laisse la meilleure chance de tenir sur une seule
+   ligne sur les grands écrans, tout en s'enroulant proprement si la
+   colonne est plus étroite (pas de nowrap, pour ne jamais déborder). */
+.project-page__section-meta {
+  margin-top: var(--space-sm);
+  max-width: 58ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  font-weight: 600;
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+/* Largeur du corps de texte élargie UNIQUEMENT pour cette section (le
+   nouveau texte en 3 paragraphes est nettement plus long que l'ancienne
+   phrase unique) : à 46ch (largeur par défaut, partagée avec Photo/Print,
+   non modifiée pour elles), ce texte aurait produit environ 18 lignes:
+   à 52ch, environ 16 — une colonne de texte sensiblement plus courte,
+   sans dépasser la largeur réellement disponible dans cette colonne de
+   grille (~560-570px au plus large, contre ~470px nécessaires à 52ch).
+   Scopé à .project-page__section--carousel : n'affecte pas
+   .project-page__section-body ailleurs sur la page. */
+.project-page__section--carousel .project-page__section-body {
+  max-width: 52ch;
+}
+
+.project-page__section-visual {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--u-shadow);
+}
+
+.project-page__section-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+/* Verso du flyer (section Supports print) — CAUSE RÉELLE DU ROGNAGE :
+   la règle générique ci-dessus force toute image dans une boîte
+   aspect-ratio 4/5 (0.8) puis la remplit avec object-fit: cover. C'est
+   voulu pour des photos plein cadre (Contexte, Photographie), mais le
+   verso du flyer a un ratio natif différent (1011×1436 ≈ 0.70, plus
+   étroit/allongé que 4/5) : forcé dans cette boîte via cover, il était
+   donc automatiquement recadré en haut ET en bas pour remplir la
+   hauteur — pas un défaut du fichier, uniquement de son affichage ici.
+   Fix scopé à .project-page__section-visual--flyer UNIQUEMENT (posé sur
+   le conteneur de cette image précise dans le HTML) : la règle générique
+   .project-page__section-visual / -visual img juste au-dessus reste
+   intacte et continue de s'appliquer telle quelle aux autres sections
+   (Contexte, Photographie). object-fit: contain + aspect-ratio: auto
+   (ratio natif, non forcé) affichent 100% du verso, sans le recadrer ni
+   le déformer ; max-height le limite pour que l'intégralité (haut,
+   "Nos cours", "Nos formules", "Nos salles", "Inscription", bas) tienne
+   à l'écran sans avoir à scroller à l'intérieur du visuel, y compris sur
+   des écrans plus bas que haut (laptop). Ombre et arrondi (déjà existants
+   sur .project-page__section-visual) déplacés directement sur l'image :
+   comme celle-ci ne remplit plus toute la colonne, l'ombre doit épouser
+   ses dimensions réelles plutôt qu'une boîte invisible plus grande —
+   aucun nouveau fond ni bordure ajoutés, juste le même effet repositionné. */
+.project-page__section-visual--flyer {
+  overflow: visible;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-page__section-visual--flyer img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(70vh, 580px);
+  aspect-ratio: auto;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--u-shadow);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Section "Communication digitale" — deux piles INTERACTIVES de pages     */
+/* Instagram (Jean-Marc / Zohir), posées dans la colonne visuelle à        */
+/* droite, même logique de wrapper que --flyer juste au-dessus (overflow   */
+/* visible, chaque image gère sa propre ombre/arrondi). Round précédent :  */
+/* piles purement décoratives (transforms CSS fixes). Round actuel :       */
+/* rendues fonctionnelles en réutilisant TEL QUEL le moteur de glissement  */
+/* déjà utilisé par les deux vidéos plus haut (js/universe-media-stack.js,
+   .universe-project__stack / .universe-project__stack-card, génériques
+   dans universe.css, non dupliqués ici) — voir commentaire HTML pour le
+   détail de la structure adoptée. */
+.project-page__section-visual--carousels {
+  overflow: visible;
+  box-shadow: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(28px, 4vw, 48px);
+  row-gap: var(--space-xl);
+}
+
+/* .universe-project est display:grid (2 colonnes) par défaut dans
+   universe.css, pensé pour un couple image/texte — neutralisé ici
+   exactement comme .project-page__section--carousel le fait déjà pour les
+   vidéos : cette pile est le seul contenu de son <article>, pas besoin
+   d'une grille à deux colonnes. */
+.project-page__carousel-group {
+  display: block;
+  flex: 0 0 auto;
+}
+
+/* Léger décalage vertical entre les deux piles (inchangé depuis le round
+   précédent) — desktop/tablette uniquement (voir media query plus bas) :
+   sur mobile, les deux piles s'empilent verticalement via flex-wrap et ce
+   décalage supplémentaire n'a plus lieu d'être. */
+@media (min-width: 901px) {
+  .project-page__carousel-group--offset {
+    margin-top: 32px;
+  }
+}
+
+/* Wrapper dédié (PAS .universe-project__media) : cette classe porte par
+   défaut un ratio 4:5 forcé en object-fit:cover, plus un zoom décoratif
+   automatique au survol (voir universe.css) — le second est en réalité
+   PROBLÉMATIQUE ici, puisque le survol de cette même zone pilote aussi le
+   glissement du carrousel (zoneEl = .closest(".universe-project")) : les
+   deux effets se seraient superposés, exactement le problème déjà
+   diagnostiqué et corrigé pour la vidéo (voir universe.css, commentaire
+   sur .universe-project__stack-card video). Un wrapper neutre évite ce
+   conflit à la source plutôt que de le corriger après coup.
+   AGRANDISSEMENT (demande explicite) : largeur portée de
+   clamp(140px, 15vw, 190px) à clamp(190px, 20vw, 250px) — nettement plus
+   présent, tout en restant plafonné : à 250px de large, la pile mesure
+   ≈365px de haut (ratio 1082/1582 inchangé), et les deux piles combinées
+   (avec leur léger décalage de 32px) restent contenues dans environ 400px
+   de hauteur totale — nettement sous la hauteur du bloc de texte
+   (eyebrow + titre + 3 paragraphes) sur desktop, donc la hauteur de la
+   section reste dictée par le texte, pas par les visuels : aucun
+   agrandissement de la section elle-même. --stack-peek-step : décalage
+   horizontal entre profondeurs (lu par universe-media-stack.js),
+   proportionnel à la nouvelle taille, plus petit que celui des vidéos
+   (piles plus compactes). */
+.project-page__carousel-media {
+  position: relative;
+  width: clamp(190px, 20vw, 250px);
+  aspect-ratio: 1082 / 1582;
+  --stack-peek-step: 18px;
+}
+
+/* .universe-project__stack (position:absolute; inset:0; touch-action:
+   pan-y) et .universe-project__stack-card (position:absolute; inset:0;
+   overflow:hidden; border-radius; box-shadow; fond dégradé de secours)
+   sont déjà génériques dans universe.css — appliquées automatiquement dès
+   lors qu'elles sont présentes dans le HTML, sans sélecteur supplémentaire
+   ici. Seule l'image à l'intérieur de chaque carte a besoin d'une règle
+   dédiée : object-fit:contain (jamais cover) pour qu'aucune page ne soit
+   jamais rognée, quelle que soit sa position dans la pile. */
+.project-page__carousel-media .universe-project__stack-card img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Indice visuel discret : une carte qui n'est pas au premier plan est
+   cliquable/touchable pour être amenée devant (voir l'ajout dans
+   js/universe-media-stack.js) — le curseur en main le signale sans ajouter
+   le moindre élément visuel supplémentaire (pas de bouton, pas de flèche).
+   La carte active garde son curseur "grab" déjà défini génériquement dans
+   universe.css (.universe-project__stack-card.is-active). */
+.project-page__carousel-media .universe-project__stack-card:not(.is-active) {
+  cursor: pointer;
+}
+
+@media (min-width: 901px) and (max-width: 1150px) {
+  .project-page__carousel-media {
+    width: clamp(170px, 19vw, 220px);
+    --stack-peek-step: 15px;
+  }
+}
+
+@media (max-width: 900px) {
+  .project-page__carousel-media {
+    width: clamp(160px, 32vw, 210px);
+    --stack-peek-step: 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  .project-page__carousel-media {
+    width: clamp(140px, 42vw, 180px);
+    --stack-peek-step: 10px;
+  }
+}
+
+/* Section carrousel : le texte garde le même traitement typographique,
+   mais la colonne "visuelle" est ici le carrousel existant lui-même — pas
+   d'image directe, donc pas de contrainte d'aspect-ratio forcée (le
+   carrousel gère déjà son propre ratio 9:16, voir universe.css). */
+.project-page__section--carousel .universe-project {
+  display: block;
+}
+
+.project-page__section--carousel .universe-project__media--stack {
+  margin-inline: auto;
+}
+
+/* Ajustements fins appliqués IDENTIQUEMENT aux DEUX vidéos (Jean-Marc et
+   Zohir) — .project-page__section--carousel est la classe commune aux deux
+   sections vidéo, sans distinction --visual-left ici : demande explicite
+   d'harmonisation, la vidéo Zohir doit désormais recevoir exactement le
+   même traitement que Jean-Marc plutôt qu'un second système parallèle
+   (l'ancienne restriction :not(.project-page__section--visual-left), qui
+   réservait ces règles à Jean-Marc seul lors d'un réglage précédent, a donc
+   été retirée). Aucune autre section ne porte --carousel : les autres
+   composants du site utilisant .universe-project__media--stack (s'il en
+   existe) restent hors de portée de ce sélecteur.
+
+   1) AGRANDISSEMENT ~5% : reprend exactement la formule min(px, vw, vh) de
+      .universe-project__media--stack (universe.css, non modifié) — seuls
+      les trois chiffres sont multipliés par 1.05 (380→399px, 30→31.5vw,
+      34→35.7vh). Une seule dimension (width) reste pilotée, aspect-ratio
+      continue de dériver la hauteur : proportions et absence de
+      déformation garanties exactement comme avant, juste ~5% plus grand,
+      sur les deux vidéos à l'identique (même présence visuelle des deux
+      côtés). Limité au palier desktop par défaut (pas de media query) : la
+      demande porte explicitement sur "la composition desktop" — les
+      paliers tablette/mobile (901-1150px, ≤900px, ≤560px, dans
+      universe.css) restent tels quels pour les deux sections.
+   2) LÉGER DÉCALAGE VERTICAL : translateY de quelques pixels sur le
+      composant vidéo entier (.universe-project), pas sur la carte interne
+      ni sur le média lui-même — n'interfère donc jamais avec les
+      transforms inline posés par universe-media-stack.js sur
+      .universe-project__stack-card (élément différent), ni avec l'ordre
+      visuel inversé de la section Zohir (order: -1, posé sur
+      .universe-project lui-même par --visual-left plus haut : un
+      translateY n'affecte pas cet ordre). Limité à min-width: 901px : sous
+      ce seuil la grille repasse en une seule colonne (voir media query
+      ≤900px plus bas) et le déséquilibre vertical texte/vidéo qui motive ce
+      réglage ne se pose plus de la même façon — décalage volontairement
+      PAS appliqué sur mobile/tablette étroite pour ne pas risquer d'y
+      dégrader la mise en page empilée, sur aucune des deux sections. */
+.project-page__section--carousel .universe-project__media--stack {
+  width: min(399px, 31.5vw, 35.7vh);
+}
+
+@media (min-width: 901px) {
+  .project-page__section--carousel .universe-project {
+    transform: translateY(14px);
+  }
+}
+
+/* Bouton(s) sur la vidéo (voir js/face-a-face-video-sound.js) — discrets,
+   posés directement sur la vidéo plutôt qu'un contrôle natif imposant.
+   Coin inférieur droit, à l'intérieur de la carte (qui a déjà
+   overflow: hidden + border-radius, voir universe.css) : n'empiète pas sur
+   une part importante de l'image. Fond sombre translucide + flou plutôt
+   qu'un simple contour (comme .c-icon-btn ailleurs sur le site) : ces
+   boutons doivent rester lisibles sur une vidéo dont le contenu réel (clair
+   ou sombre) n'est pas prévisible à l'avance, contrairement aux boutons du
+   header qui reposent toujours sur le même fond glaciel. Couleur d'icône
+   (#F3F1EA) et rayon (var(--radius-full)) réutilisent des valeurs déjà
+   existantes dans la charte plutôt que d'en inventer de nouvelles.
+   .universe-project__play-toggle (lecture/pause) partage exactement ce
+   même style visuel que .universe-project__sound-toggle (son) — règle
+   commune ci-dessous — seule la position horizontale diffère (juste à
+   gauche du bouton son, voir les deux règles "right" séparées plus bas) :
+   n'existe que sur la vidéo Jean-Marc, la vidéo Zohir garde uniquement son
+   bouton son, strictement inchangé. */
+.universe-project__sound-toggle,
+.universe-project__play-toggle {
+  position: absolute;
+  z-index: 5;
+  bottom: var(--space-sm);
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(243, 241, 234, 0.35);
+  background: rgba(14, 19, 22, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #F3F1EA;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard);
+}
+
+.universe-project__sound-toggle {
+  right: var(--space-sm);
+}
+
+/* 40px (largeur du bouton) + var(--space-sm) (même respiration que celle
+   déjà utilisée entre le bouton et le bord de la vidéo) : les deux boutons
+   restent côte à côte avec un espacement visuellement identique de chaque
+   côté, sans valeur inventée. */
+.universe-project__play-toggle {
+  right: calc(var(--space-sm) + 40px + var(--space-sm));
+}
+
+.universe-project__sound-toggle:hover,
+.universe-project__sound-toggle:focus-visible,
+.universe-project__play-toggle:hover,
+.universe-project__play-toggle:focus-visible {
+  background: rgba(14, 19, 22, 0.75);
+  border-color: rgba(243, 241, 234, 0.6);
+  transform: translateY(-1px);
+}
+
+.universe-project__sound-icon,
+.universe-project__play-icon {
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+/* Icône affichée = inverse de l'état "son coupé" par défaut (aria-pressed
+   reflète l'état réel, posé par le script) : une seule des deux icônes est
+   visible à la fois, jamais superposées. */
+.universe-project__sound-icon--on {
+  display: none;
+}
+
+.universe-project__sound-toggle[aria-pressed="true"] .universe-project__sound-icon--off {
+  display: none;
+}
+
+.universe-project__sound-toggle[aria-pressed="true"] .universe-project__sound-icon--on {
+  display: block;
+}
+
+/* Bouton lecture/pause : aria-pressed="true" = vidéo en cours de lecture
+   (état par défaut, la vidéo étant en autoplay) → icône pause visible, un
+   clic met en pause. aria-pressed="false" = vidéo en pause → icône lecture
+   visible, un clic relance. Même logique d'affichage exclusif que le
+   bouton son ci-dessus. */
+.universe-project__play-icon--play {
+  display: none;
+}
+
+.universe-project__play-toggle[aria-pressed="false"] .universe-project__play-icon--pause {
+  display: none;
+}
+
+.universe-project__play-toggle[aria-pressed="false"] .universe-project__play-icon--play {
+  display: block;
+}
+
+/* POSITION VERTICALE — historique : un précédent réglage forçait
+   align-items: start sur cette section (+ un padding-top compensatoire sur
+   la colonne de texte), à un moment où le bloc de texte ne comportait que
+   le label et le titre — bien plus court que le carrousel vidéo, ce qui
+   rendait un centrage classique visuellement "trop bas". Depuis, la ligne
+   "Sony A7 IV — ..." et les trois paragraphes descriptifs ont été ajoutés :
+   la colonne de texte est désormais nettement plus haute, et c'est
+   maintenant la VIDÉO (plus courte) qui apparaissait plaquée en haut de la
+   rangée avec align-items: start, loin du centre du bloc éditorial.
+   Demande explicite : revenir à un véritable align-items: center (déjà la
+   règle générique de .project-page__section, ligne ~80 plus haut) plutôt
+   qu'un déplacement arbitraire — l'override et le padding-top compensatoire
+   sont donc retirés ici. La vidéo (colonne la plus courte) se centre ainsi
+   naturellement sur la hauteur totale de la colonne de texte (qui, étant la
+   plus haute, dicte la hauteur de la rangée) — un alignement qui reste
+   correct quelle que soit la taille d'écran, sans marge ni transform fixe.
+   Dimensions, ratio, responsive, lecture, bouton son : aucun changement. */
+
+@media (max-width: 900px) {
+  .project-page__section {
+    grid-template-columns: 1fr;
+  }
+  .project-page__section--visual-left .project-page__section-visual {
+    order: 0;
+  }
+  .project-page__section--visual-left .universe-project {
+    order: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* C. Mise en avant du logo — grand visuel plein centre, respiration       */
+/* maximale, pas de texte concurrent.                                      */
+/* ---------------------------------------------------------------------- */
+.project-page__spotlight {
+  padding-block: var(--space-3xl);
+  padding-inline: clamp(24px, 5vw, 64px);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.project-page__spotlight .project-page__section-eyebrow {
+  justify-content: center;
+}
+
+.project-page__spotlight-logo {
+  width: clamp(220px, 30vw, 360px);
+  height: auto;
+  margin-block: var(--space-xl);
+}
+
+/* CONTRASTE — même correctif (voir .project-page__lede plus haut). */
+.project-page__spotlight-caption {
+  max-width: 46ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+/* ---------------------------------------------------------------------- */
+/* D. Bloc "à venir" — honnête, sobre, jamais un faux mockup.               */
+/* ---------------------------------------------------------------------- */
+.project-page__pending {
+  padding-block: var(--space-2xl);
+  padding-inline: clamp(24px, 5vw, 64px);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  border-top: 1px solid var(--u-line);
+  border-bottom: 1px solid var(--u-line);
+}
+
+/* CONTRASTE — même correctif que .project-page__eyebrow plus haut. */
+.project-page__pending-text {
+  max-width: 52ch;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--font-size-body);
+  color: #495359;
+}
+
+/* ---------------------------------------------------------------------- */
+/* E. Clôture — retour + projet suivant                                    */
+/* ---------------------------------------------------------------------- */
+.project-page__closing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding-block: var(--space-2xl) var(--space-3xl);
+  padding-inline: clamp(24px, 5vw, 64px);
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+.project-page__closing-back,
+.project-page__closing-next {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--u-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--u-line-strong);
+  padding-bottom: var(--space-3xs);
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+.project-page__closing-back:hover,
+.project-page__closing-back:focus-visible,
+.project-page__closing-next:hover,
+.project-page__closing-next:focus-visible {
+  color: var(--u-warm);
+  border-color: var(--u-warm-soft);
+}
+
+/* Révélation au scroll : AUCUNE règle propre ici. [data-reveal]/[data-reveal-delay]
+   sont déjà gérés génériquement par css/animations.css (fichier partagé,
+   chargé sur cette page) + js/animations.js (IntersectionObserver générique,
+   neutre sous prefers-reduced-motion). Dupliquer cette logique ici aurait
+   ajouté une seconde transition concurrente sur les mêmes éléments — voir
+   .universe-project__number/category/title/text plus haut dans
+   universe.css pour le même principe déjà appliqué au texte des projets. */

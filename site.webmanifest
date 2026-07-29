@@ -1,0 +1,17 @@
+{
+  "name": "Vagabon — Studio créatif indépendant",
+  "short_name": "Vagabon",
+  "description": "Studio créatif indépendant de Virgil Boukraa : identité visuelle, vidéo, UI/UX et stratégie de communication.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

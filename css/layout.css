@@ -1,0 +1,97 @@
+/* ==========================================================================
+   VAGABON — LAYOUT.CSS
+   Grilles, conteneurs, rythme vertical des sections.
+   ========================================================================== */
+
+.l-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}
+
+.l-container--narrow {
+  max-width: var(--container-narrow);
+}
+
+.l-section {
+  padding-block: var(--space-2xl);
+}
+
+.l-section--tight {
+  padding-block: var(--space-xl);
+}
+
+.l-section--first {
+  padding-top: calc(var(--nav-height) + var(--space-2xl));
+}
+
+.l-section--surface {
+  background: var(--color-background-secondary);
+}
+
+.l-grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.l-grid--2 { grid-template-columns: repeat(2, 1fr); }
+.l-grid--3 { grid-template-columns: repeat(3, 1fr); }
+.l-grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+.l-grid--asym {
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+}
+
+.l-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.l-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.l-split {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+main {
+  display: block;
+}
+
+/* Chaque page pousse son contenu sous le header fixe */
+.l-page {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.l-page > main {
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
+  .l-grid--3 { grid-template-columns: repeat(2, 1fr); }
+  .l-grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .l-grid--asym { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .l-grid--2,
+  .l-grid--3,
+  .l-grid--4 {
+    grid-template-columns: 1fr;
+  }
+  .l-section { padding-block: var(--space-xl); }
+  .l-section--first { padding-top: calc(var(--nav-height) + var(--space-lg)); }
+}

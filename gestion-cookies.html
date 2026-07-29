@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" href="assets/fonts/good-times/good-times.woff2" as="font" type="font/woff2" crossorigin>
+  <title>Gestion des cookies — Vagabon</title>
+  <meta name="description" content="Comment gérer ou réinitialiser la préférence de langue enregistrée par le site Vagabon.">
+  <link rel="canonical" href="https://www.vagabon-exemple.fr/gestion-cookies.html">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#AEC8D8">
+
+  <link rel="stylesheet" href="css/reset.css?v=2">
+  <link rel="stylesheet" href="css/variables.css?v=2">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/layout.css?v=2">
+  <link rel="stylesheet" href="css/components.css?v=2">
+  <link rel="stylesheet" href="css/utilities.css?v=2">
+  <link rel="stylesheet" href="css/animations.css?v=2">
+  <link rel="stylesheet" href="css/responsive.css?v=2">
+  <link rel="stylesheet" href="css/pages/legal.css?v=1">
+</head>
+<body class="page-legal">
+  <a class="skip-link" href="#main-content">Aller au contenu</a>
+
+  <div class="loader" data-loader aria-hidden="false">
+    <div class="loader__mark" aria-hidden="true">V</div>
+    <p class="loader__wordmark">VAGABON</p>
+    <div class="loader__bar-track"><div class="loader__bar"></div></div>
+  </div>
+
+  <header class="c-header" data-header>
+    <div class="l-container c-header__inner">
+      <a href="index.html" class="legal-brand" aria-label="Retour à l'accueil Vagabon">VAGABON</a>
+      <div class="c-header__actions">
+        <button type="button" class="c-icon-btn u-hide-mobile" data-lang-toggle aria-label="Switch to English">FR</button>
+        <a href="contact.html" class="c-btn c-btn--secondary u-hide-mobile" data-i18n="nav.book_call">Réserver un appel</a>
+        <button type="button" class="c-menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="nav-fullscreen" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.menu.open">
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="c-nav-fullscreen" id="nav-fullscreen" data-nav-menu data-open="false" aria-hidden="true" aria-label="Navigation principale">
+    <div class="c-nav-fullscreen__grid">
+      <ul class="c-nav-fullscreen__list">
+        <li><a class="c-nav-fullscreen__link" href="index.html" data-nav-link><span class="c-nav-fullscreen__link-number">01</span><span data-i18n="nav.home">Accueil</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="universe.html" data-nav-link><span class="c-nav-fullscreen__link-number">02</span><span data-i18n="nav.menu.universe">Univers</span></a></li>
+      </ul>
+      <div class="c-nav-fullscreen__aside">
+        <div>
+          <p class="c-nav-fullscreen__meta"><span data-i18n="meta.location_line1">Reims · Paris · Lille</span><br><span data-i18n="meta.location_line2">France entière, à distance</span></p>
+          <p class="c-nav-fullscreen__meta u-mt-md"><a href="mailto:virgil.bkr51@outlook.fr" class="c-btn--ghost">virgil.bkr51@outlook.fr</a></p>
+        </div>
+        <div>
+          <a href="contact.html" class="c-btn c-btn--primary c-btn--block" data-menu-close data-i18n="nav.book_call">Réserver un appel</a>
+          <div class="c-nav-fullscreen__social u-mt-md" data-social-links aria-label="Réseaux sociaux"></div>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="c-icon-btn" data-menu-close style="position:absolute; top:24px; right:24px;" aria-label="Fermer le menu" data-i18n-attr="aria-label:nav.menu.close">✕</button>
+  </nav>
+
+  <div class="l-page">
+  <main id="main-content" tabindex="-1">
+    <section class="l-section l-section--first">
+      <div class="l-container l-container--narrow">
+        <p><a href="universe.html" class="c-btn--ghost legal-back">← <span data-i18n="cta.back_universe">Retour à l'univers</span></a></p>
+
+        <h1 data-i18n="legal.cookies_manage.h1">Gestion des cookies</h1>
+        <p class="u-text-subtle" data-i18n="legal.last_updated">Dernière mise à jour : 22 juillet 2026</p>
+
+        <p><span data-i18n="legal.cookies_manage.body1_pre">Ce site n'utilise aucun cookie tiers ni traceur nécessitant un consentement (voir la</span> <a href="politique-cookies.html" data-i18n="legal.cookies_policy.link_label">politique de cookies</a><span data-i18n="legal.cookies_manage.body1_post">) : il n'y a donc pas de bandeau de consentement à paramétrer.</span></p>
+        <p data-i18n="legal.cookies_manage.body2">Il enregistre uniquement, dans le stockage local de votre navigateur, une préférence d'affichage : la langue (FR/EN). Vous pouvez la réinitialiser à tout moment, directement depuis cette page :</p>
+
+        <p style="margin-top:var(--space-lg);">
+          <button type="button" id="reset-prefs-btn" class="c-btn c-btn--primary" data-i18n="legal.cookies_manage.reset_button">Réinitialiser ma préférence de langue</button>
+        </p>
+        <p id="reset-prefs-status" role="status" aria-live="polite" class="u-text-subtle" style="margin-top:var(--space-sm);"></p>
+
+        <h2 data-i18n="legal.cookies_manage.h2_browser">Via les réglages de votre navigateur</h2>
+        <p data-i18n="legal.cookies_manage.browser_body">Vous pouvez également effacer l'ensemble des données de site enregistrées par votre navigateur (cookies et stockage local) depuis ses réglages de confidentialité — la procédure exacte dépend du navigateur utilisé (Chrome, Firefox, Safari, Edge...) et est généralement accessible depuis son menu "Confidentialité" ou "Vie privée".</p>
+
+        <h2 data-i18n="legal.cookies_manage.h2_questions">Questions</h2>
+        <p><span data-i18n="legal.cookies_manage.questions_body">Pour toute question sur la gestion de vos données :</span> <a href="mailto:virgil.bkr51@outlook.fr">virgil.bkr51@outlook.fr</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="universe-footer">
+    <div class="universe-footer__inner">
+      <div>
+        <p class="universe-footer__brand">Vagabon</p>
+        <p class="universe-footer__role">Virgil Boukraa<br><span data-i18n="footer.role">Studio créatif indépendant · Communication freelance</span></p>
+      </div>
+      <div>
+        <p class="universe-footer__heading" data-i18n="footer.legal">Informations</p>
+        <nav class="universe-footer__list" aria-label="Informations légales">
+          <a href="mentions-legales.html" data-i18n="footer.link.mentions">Mentions légales</a>
+          <a href="politique-confidentialite.html" data-i18n="footer.link.privacy">Politique de confidentialité</a>
+          <a href="politique-cookies.html" data-i18n="footer.link.cookies_policy">Politique de cookies</a>
+          <a href="gestion-cookies.html" data-i18n="footer.link.cookies_manage">Gestion des cookies</a>
+          <a href="contact.html" data-i18n="nav.contact">Contact</a>
+        </nav>
+      </div>
+      <div>
+        <p class="universe-footer__heading" data-i18n="footer.follow">Suivre</p>
+        <div class="universe-footer__social" data-social-links aria-label="Réseaux sociaux"></div>
+      </div>
+    </div>
+    <div class="universe-footer__bottom">
+      <p>© Vagabon — Virgil Boukraa</p>
+      <p data-i18n="footer.rights">Tous droits réservés.</p>
+    </div>
+  </footer>
+  </div>
+
+  <script src="data/settings.js"></script>
+  <script src="data/translations.js"></script>
+  <script src="js/loader.js"></script>
+  <script src="js/accessibility.js" defer></script>
+  <script src="js/language.js" defer></script>
+  <script src="js/navigation.js" defer></script>
+  <script src="js/data-renderer.js" defer></script>
+  <script src="js/main.js" defer></script>
+
+  <!-- Bouton de réinitialisation de la préférence locale — fonctionnalité
+       réelle (pas un placeholder) : efface la clé localStorage de langue
+       utilisée par le site puis recharge la page. -->
+  <script>
+    (function () {
+      "use strict";
+      function init() {
+        var button = document.getElementById("reset-prefs-btn");
+        var status = document.getElementById("reset-prefs-status");
+        if (!button) return;
+        button.addEventListener("click", function () {
+          try {
+            localStorage.removeItem("vagabon-lang");
+          } catch (e) {
+            /* Stockage indisponible (navigation privée...) : rien à effacer. */
+          }
+          if (status) {
+            var lang = document.documentElement.getAttribute("lang") === "en" ? "en" : "fr";
+            var dict = window.VAGABON_TRANSLATIONS && window.VAGABON_TRANSLATIONS[lang];
+            status.textContent = (dict && dict["legal.cookies_manage.reset_status"]) || "Préférence réinitialisée. Rechargement…";
+          }
+          window.setTimeout(function () { window.location.reload(); }, 400);
+        });
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" href="assets/fonts/good-times/good-times.woff2" as="font" type="font/woff2" crossorigin>
+  <title>Ressources — Vagabon | Virgil Boukraa, Reims</title>
+  <meta name="description" content="Réflexions, méthodes et ressources autour de la communication, de la création et de l'image de marque, par Vagabon.">
+  <link rel="canonical" href="https://www.vagabon-exemple.fr/ressources.html"><!-- Domaine à renseigner avant mise en ligne -->
+  <!-- INDEXABLE (contrairement à universe.html / qui-suis-je.html, encore en
+       placeholder) : cette page et ses articles sont le contenu éditorial
+       du site, pensé pour être trouvé par les moteurs de recherche. -->
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vagabon">
+  <meta property="og:title" content="Ressources — Vagabon">
+  <meta property="og:description" content="Réflexions, méthodes et ressources autour de la communication, de la création et de l'image de marque.">
+  <meta property="og:url" content="https://www.vagabon-exemple.fr/ressources.html">
+  <meta property="og:locale" content="fr_FR">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#AEC8D8">
+
+  <link rel="stylesheet" href="css/reset.css?v=2">
+  <link rel="stylesheet" href="css/variables.css?v=2">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/layout.css?v=2">
+  <link rel="stylesheet" href="css/components.css?v=2">
+  <link rel="stylesheet" href="css/utilities.css?v=2">
+  <link rel="stylesheet" href="css/animations.css?v=2">
+  <link rel="stylesheet" href="css/responsive.css?v=2">
+  <!-- Réutilise universe.css TEL QUEL (identique à qui-suis-je.html) :
+       palette --u-*, header/menu plein écran, curseur glace. -->
+  <link rel="stylesheet" href="css/pages/universe.css?v=39">
+  <link rel="stylesheet" href="css/pages/ressources.css?v=1">
+
+  <!-- Cloudflare Web Analytics — sans cookie, respecte le système de
+       consentement du site (aucun cookie n'étant posé, aucune bannière
+       n'est requise, voir gestion-cookies.html). Jeton (data-cf-beacon) à
+       compléter une fois le compte Cloudflare créé et le site ajouté à
+       Web Analytics — voir cms/docs/SETUP.md. Volontairement inactif tant
+       que ce jeton n'est pas renseigné (le script ne charge alors rien). -->
+  <!--
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "A_COMPLETER"}'></script>
+  -->
+</head>
+<body class="page-universe page-ressources">
+  <a class="skip-link" href="#main-content">Aller au contenu</a>
+
+  <div class="loader" data-loader aria-hidden="false">
+    <div class="loader__mark" aria-hidden="true">V</div>
+    <p class="loader__wordmark">VAGABON</p>
+    <div class="loader__bar-track"><div class="loader__bar"></div></div>
+  </div>
+
+  <div class="c-progress" data-progress data-progress-live aria-hidden="true"></div>
+
+  <!-- ======================= HEADER (structure partagée) ======================= -->
+  <header class="c-header" data-header>
+    <div class="l-container c-header__inner">
+      <a href="index.html" class="universe-brand" aria-label="Retour à l'accueil Vagabon">VAGABON</a>
+
+      <div class="c-header__actions">
+        <button type="button" class="c-icon-btn u-hide-mobile" data-lang-toggle aria-label="Switch to English">FR</button>
+        <a href="contact.html" class="c-btn c-btn--secondary u-hide-mobile" data-i18n="nav.book_call">Réserver un appel</a>
+        <button type="button" class="c-menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="nav-fullscreen" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.menu.open">
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu plein écran — mêmes 3 destinations que qui-suis-je.html/face-a-face.html
+       (Accueil / Projets / Contact) : cette page est atteinte depuis le
+       menu principal de universe.html (entrée "Ressources", à ajouter —
+       voir note dans le rapport d'implémentation), pas listée ici puisque
+       c'est la page courante. -->
+  <nav class="c-nav-fullscreen" id="nav-fullscreen" data-nav-menu data-open="false" aria-hidden="true" aria-label="Navigation principale">
+    <div class="c-nav-fullscreen__grid">
+      <ul class="c-nav-fullscreen__list">
+        <li><a class="c-nav-fullscreen__link" href="index.html" data-nav-link><span class="c-nav-fullscreen__link-number">01</span><span data-i18n="nav.home">Accueil</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="universe.html#projets" data-nav-link><span class="c-nav-fullscreen__link-number">02</span><span data-i18n="nav.projects">Projets</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="contact.html" data-nav-link><span class="c-nav-fullscreen__link-number">03</span><span data-i18n="nav.contact">Contact</span></a></li>
+      </ul>
+      <div class="c-nav-fullscreen__aside">
+        <div>
+          <p class="c-nav-fullscreen__meta"><span data-i18n="meta.location_line1">Reims · Paris · Lille</span><br><span data-i18n="meta.location_line2">France entière, à distance</span></p>
+          <p class="c-nav-fullscreen__meta u-mt-md"><a href="mailto:virgil.bkr51@outlook.fr" class="c-btn--ghost">virgil.bkr51@outlook.fr</a></p>
+          <p class="u-mt-md"><a href="universe.html" class="universe-nav__back">← <span data-i18n="cta.back_universe">Retour à l'univers</span></a></p>
+        </div>
+        <div>
+          <a href="contact.html" class="c-btn c-btn--primary c-btn--block" data-menu-close data-i18n="nav.book_call">Réserver un appel</a>
+          <div class="c-nav-fullscreen__social u-mt-md" data-social-links aria-label="Réseaux sociaux"></div>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="c-icon-btn" data-menu-close style="position:absolute; top:24px; right:24px;" aria-label="Fermer le menu" data-i18n-attr="aria-label:nav.menu.close">✕</button>
+  </nav>
+
+  <div class="l-page">
+  <main id="main-content" tabindex="-1">
+
+    <!-- ======================= A. HERO ======================= -->
+    <section class="ressources-hero" aria-labelledby="ressources-hero-title">
+      <a href="universe.html" class="ressources-back">← <span data-i18n="cta.back_universe">Retour à l'univers</span></a>
+      <div class="ressources-hero__inner">
+        <div class="universe-eyebrow" data-reveal data-i18n="ressources.hero_eyebrow">Ressources</div>
+        <h1 id="ressources-hero-title" class="ressources-hero__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="ressources.hero_title">Ressources</h1>
+        <p class="ressources-hero__intro" data-reveal data-reveal-delay="2" data-i18n="ressources.hero_intro">Réflexions, méthodes et ressources autour de la communication, de la création et de l'image de marque.</p>
+      </div>
+    </section>
+
+    <!-- ======================= B. FILTRES ======================= -->
+    <div class="ressources-filters">
+      <div class="ressources-filters__inner">
+        <div class="ressources-filters__categories" role="group" aria-label="Filtrer par catégorie">
+          <button type="button" class="ressources-filters__pill" data-ressources-filter="all" aria-pressed="true" data-i18n="ressources.filter.all_categories">Toutes les catégories</button>
+          <button type="button" class="ressources-filters__pill" data-ressources-filter="strategie-de-communication" aria-pressed="false" data-i18n="expertise.strategy">Stratégie de communication</button>
+          <button type="button" class="ressources-filters__pill" data-ressources-filter="identite-branding" aria-pressed="false" data-i18n="expertise.branding">Identité &amp; branding</button>
+          <button type="button" class="ressources-filters__pill" data-ressources-filter="direction-artistique" aria-pressed="false" data-i18n="expertise.direction">Direction artistique</button>
+          <button type="button" class="ressources-filters__pill" data-ressources-filter="creation-de-contenu" aria-pressed="false" data-i18n="expertise.content">Création de contenu</button>
+          <button type="button" class="ressources-filters__pill" data-ressources-filter="photo-video" aria-pressed="false" data-i18n="expertise.photo_video">Photo &amp; vidéo</button>
+          <button type="button" class="ressources-filters__pill" data-ressources-filter="print-digital" aria-pressed="false" data-i18n="expertise.print_digital">Print &amp; digital</button>
+          <button type="button" class="ressources-filters__pill" data-ressources-filter="seo-sea" aria-pressed="false" data-i18n="expertise.seo_sea">SEO &amp; SEA</button>
+        </div>
+        <div class="ressources-filters__search">
+          <label class="u-visually-hidden" for="ressources-search" data-i18n="ressources.filter.search_label">Rechercher un article</label>
+          <input type="search" id="ressources-search" class="ressources-filters__search-input" data-ressources-search data-i18n-attr="placeholder:ressources.filter.search_placeholder" placeholder="Rechercher un article…">
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= C. GRILLE D'ARTICLES =======================
+         IMPORTANT : les 3 cartes ci-dessous sont un contenu de
+         DÉMONSTRATION TEMPORAIRE (voir cms/README.md et la mention sur
+         chaque page article), utilisé uniquement pour valider la structure
+         demandée. Cette grille est destinée à être régénérée
+         automatiquement par cms/workers/generate-page à chaque
+         publication/modification depuis Sanity Studio, une fois le CMS
+         connecté — elle n'est PAS pensée pour être maintenue à la main. -->
+    <section class="ressources-grid-section" aria-label="Liste des articles">
+      <div class="ressources-grid" data-ressources-grid>
+        <!-- RESSOURCES_GRID_START — repère utilisé par
+             cms/workers/shared/renderRessourcesPage.js pour remplacer
+             automatiquement ce bloc de cartes à chaque publication/
+             modification/archivage d'un article, sans toucher au reste du
+             fichier (hero, filtres, header, footer). Ne pas retirer ce
+             commentaire. -->
+        <a class="ressources-card" data-ressources-card data-category="strategie-de-communication" data-search="Construire une stratégie de communication cohérente Stratégie de communication" href="ressources/construire-strategie-communication-coherente/">
+          <div class="ressources-card__image-frame"><span class="u-visually-hidden">Image à venir</span></div>
+          <p class="ressources-card__category" data-i18n="expertise.strategy">Stratégie de communication</p>
+          <h2 class="ressources-card__title">Construire une stratégie de communication cohérente</h2>
+          <p class="ressources-card__excerpt">Une stratégie de communication efficace ne se résume pas à publier du contenu régulièrement : elle repose sur une direction claire, des objectifs précis et une cohérence de message dans le temps.</p>
+          <p class="ressources-card__meta"><span>10 juillet 2026</span><span class="ressources-card__meta-sep" aria-hidden="true">·</span><span>4 min de lecture</span></p>
+        </a>
+
+        <a class="ressources-card" data-ressources-card data-category="identite-branding" data-search="Identité visuelle bien plus qu'un simple logo Identité Branding" href="ressources/identite-visuelle-plus-qu-un-logo/">
+          <div class="ressources-card__image-frame"><span class="u-visually-hidden">Image à venir</span></div>
+          <p class="ressources-card__category" data-i18n="expertise.branding">Identité &amp; branding</p>
+          <h2 class="ressources-card__title">Identité visuelle : bien plus qu'un simple logo</h2>
+          <p class="ressources-card__excerpt">Un logo n'est qu'une pièce parmi d'autres : l'identité visuelle rassemble une palette, une typographie, un ton et des usages cohérents qui construisent la reconnaissance d'une marque dans la durée.</p>
+          <p class="ressources-card__meta"><span>18 juillet 2026</span><span class="ressources-card__meta-sep" aria-hidden="true">·</span><span>4 min de lecture</span></p>
+        </a>
+
+        <a class="ressources-card" data-ressources-card data-category="seo-sea" data-search="SEO et contenu construire une visibilité sur le long terme référencement" href="ressources/seo-contenu-visibilite-long-terme/">
+          <div class="ressources-card__image-frame"><span class="u-visually-hidden">Image à venir</span></div>
+          <p class="ressources-card__category" data-i18n="expertise.seo_sea">SEO &amp; SEA</p>
+          <h2 class="ressources-card__title">SEO et contenu : construire une visibilité sur le long terme</h2>
+          <p class="ressources-card__excerpt">Le référencement naturel ne se résume pas à des mots-clés : il s'appuie sur un contenu utile, une structure technique saine et une régularité qui se construit sur plusieurs mois.</p>
+          <p class="ressources-card__meta"><span>25 juillet 2026</span><span class="ressources-card__meta-sep" aria-hidden="true">·</span><span>3 min de lecture</span></p>
+        </a>
+        <!-- RESSOURCES_GRID_END -->
+      </div>
+      <p class="ressources-empty" data-ressources-empty hidden data-i18n="ressources.empty_state">Aucun article ne correspond à votre recherche pour le moment.</p>
+    </section>
+
+  </main>
+
+  <!-- ======================= PIED DE PAGE (identique aux autres pages) ======================= -->
+  <footer class="universe-footer">
+    <div class="universe-footer__inner">
+      <div>
+        <p class="universe-footer__brand">Vagabon</p>
+        <p class="universe-footer__role">Virgil Boukraa<br><span data-i18n="footer.role">Studio créatif indépendant · Communication freelance</span></p>
+      </div>
+      <div>
+        <p class="universe-footer__heading" data-i18n="footer.legal">Informations</p>
+        <nav class="universe-footer__list" aria-label="Informations légales">
+          <a href="mentions-legales.html" data-i18n="footer.link.mentions">Mentions légales</a>
+          <a href="politique-confidentialite.html" data-i18n="footer.link.privacy">Politique de confidentialité</a>
+          <a href="politique-cookies.html" data-i18n="footer.link.cookies_policy">Politique de cookies</a>
+          <a href="gestion-cookies.html" data-i18n="footer.link.cookies_manage">Gestion des cookies</a>
+          <a href="contact.html" data-i18n="nav.contact">Contact</a>
+        </nav>
+      </div>
+      <div>
+        <p class="universe-footer__heading" data-i18n="footer.follow">Suivre</p>
+        <div class="universe-footer__social" data-social-links aria-label="Réseaux sociaux"></div>
+      </div>
+    </div>
+    <div class="universe-footer__bottom">
+      <p>© Vagabon — Virgil Boukraa</p>
+      <p data-i18n="footer.rights">Tous droits réservés.</p>
+    </div>
+  </footer>
+  </div>
+
+  <!-- Données (chargées avant les scripts qui en dépendent) -->
+  <script src="data/settings.js"></script>
+  <script src="data/translations.js"></script>
+
+  <script src="js/loader.js"></script>
+  <script src="js/accessibility.js" defer></script>
+  <script src="js/language.js" defer></script>
+  <script src="js/navigation.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/data-renderer.js" defer></script>
+  <script src="js/universe.js" defer></script>
+  <script src="js/universe-cursor.js?v=9" defer></script>
+  <script src="js/ressources.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

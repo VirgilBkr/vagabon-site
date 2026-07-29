@@ -1,0 +1,696 @@
+/**
+ * VAGABON — data/translations.js
+ * Système de traduction bilingue FR/EN. Le français est la langue de
+ * référence et reste la langue par défaut au premier chargement de toute
+ * page. L'anglais couvre l'intégralité des éléments d'interface et du
+ * contenu éditorial visible par l'utilisateur (navigation, boutons, CTA,
+ * titres, sous-titres, descriptions, formulaire de contact, footer, pages
+ * légales...). Les noms propres (marque « Vagabon », noms de personnes,
+ * noms de projets comme « Face à Face — Club de Muay Thaï ») ne sont
+ * jamais traduits et restent identiques dans les deux langues : ils ne
+ * portent donc volontairement aucun attribut data-i18n.
+ *
+ * Fonctionnement : tout élément portant data-i18n="cle" voit son
+ * textContent remplacé par js/language.js selon la langue active.
+ * Un élément peut aussi porter data-i18n-attr="attr:cle[,attr2:cle2]"
+ * pour traduire un ou plusieurs attributs plutôt qu'un textContent.
+ *
+ * Convention pour les textes contenant un retour à la ligne (<br>) ou un
+ * lien imbriqué : le texte est découpé en plusieurs éléments portant
+ * chacun leur propre data-i18n, séparés par un <br> ou un <a> statique
+ * dans le HTML — jamais une seule clé contenant du HTML brut (le moteur
+ * applique un textContent, pas un innerHTML, afin de rester simple et sûr
+ * contre l'injection de balises).
+ */
+
+/* eslint-disable no-unused-vars */
+const VAGABON_TRANSLATIONS = {
+  fr: {
+    /* ===================== NAVIGATION / HEADER ===================== */
+    "nav.home": "Accueil",
+    "nav.home_sub": "Le Prologue",
+    "nav.about": "À propos",
+    "nav.services": "Services",
+    "nav.projects": "Projets",
+    "nav.testimonials": "Témoignages",
+    "nav.articles": "Articles",
+    "nav.contact": "Contact",
+    "nav.menu.open": "Ouvrir le menu",
+    "nav.menu.close": "Fermer le menu",
+    "nav.menu.index": "Index",
+    "nav.menu.universe": "Univers",
+    "nav.menu.philosophy": "Philosophie",
+    /* Nouvelle entrée de menu — remplace la destination "Philosophie"
+       (section interne #philosophie, déjà désactivée, voir universe.html)
+       par une page dédiée. La clé "nav.menu.philosophy" ci-dessus est
+       conservée intacte : elle reste utilisée par le balisage commenté de
+       cette section, pour une réactivation future éventuelle sans rien
+       recréer. */
+    "nav.menu.who": "Qui suis-je",
+    "nav.book_call": "Réserver un appel",
+    "nav.language": "Passer en anglais",
+    "nav.sound.on": "Activer le son",
+    "nav.sound.off": "Couper le son",
+    "nav.sound_video_label": "Activer le son de la vidéo",
+
+    /* ===================== LIENS DE RETOUR ===================== */
+    "cta.back_home": "Retour à l'accueil",
+    "cta.back_universe": "Retour à l'univers",
+    "cta.back_projects": "Retour aux projets",
+
+    /* ===================== APPELS À L'ACTION ===================== */
+    "cta.discover_projects": "Découvrir les projets",
+    "cta.discover": "Découvrir",
+    "cta.book_call": "Réserver un appel",
+    "cta.start_project": "Démarrer un projet",
+    "cta.discovery_call": "Réserver un appel découverte",
+    "cta.see_case_study": "Voir l'étude de cas",
+    "cta.see_all_projects": "Voir tous les projets",
+    "cta.see_all_services": "Voir tous les services",
+    "cta.see_all_articles": "Voir tous les articles",
+    "cta.contact_me": "Me contacter",
+    "cta.next_project": "Projet suivant",
+
+    /* ===================== TEXTES PARTAGÉS (localisation, meta) ===================== */
+    "meta.location_line1": "Reims · Paris · Lille",
+    "meta.location_line2": "France entière, à distance",
+
+    /* ===================== FORMULAIRE DE CONTACT ===================== */
+    "form.first_name": "Prénom",
+    "form.last_name": "Nom",
+    "form.first_last_name": "Prénom & nom",
+    "form.company": "Dénomination de l'entreprise",
+    "form.company_brand": "Entreprise / marque",
+    "form.email": "Adresse e-mail",
+    "form.email_short": "E-mail",
+    "form.phone": "Numéro de téléphone",
+    "form.phone_short": "Téléphone",
+    "form.need_type": "Type de besoin",
+    "form.project_type": "Type de projet",
+    "form.project_type_hint": "Quel terrain allons-nous explorer ?",
+    "form.select_placeholder": "Sélectionnez une option",
+    "form.opt_identity": "Identité visuelle",
+    "form.opt_direction": "Direction artistique",
+    "form.opt_website": "Site web / expérience digitale",
+    "form.opt_video": "Vidéo / contenu",
+    "form.opt_strategy": "Stratégie / communication",
+    "form.opt_other": "Autre",
+    "form.budget": "Budget indicatif",
+    "form.budget_amount": "Budget envisagé (€)",
+    "form.budget_placeholder": "Ex. 3 000 €, ou une fourchette",
+    "form.timeline": "Délai souhaité",
+    "form.message": "Description de la demande",
+    "form.message_label": "Votre message",
+    "form.message_hint": "Parlez-moi de votre idée",
+    "form.message_placeholder": "Décrivez votre projet, vos objectifs, vos inspirations…",
+    "form.consent": "J'accepte que mes données soient utilisées pour être recontacté(e), conformément à la politique de confidentialité.",
+    "form.optional": "facultatif",
+    "form.submit": "Envoyer la demande",
+    "form.submit.loading": "Envoi en cours…",
+    "form.submit_ice": "Briser la glace",
+    "form.privacy_pre": "En envoyant ce formulaire, vous acceptez notre",
+    "form.privacy_link": "politique de confidentialité",
+    "form.success": "Votre message a bien été enregistré (mode démonstration). Virgil vous répondra rapidement une fois le service d'envoi connecté.",
+    "form.success_title_line1": "La glace est brisée.",
+    "form.success_title_line2": "On revient vers vous très vite.",
+    "form.success_text": "Merci pour votre message — Virgil y répondra personnellement dès que possible.",
+    "form.demo_note": "Mode démonstration : ce formulaire n'est pas encore relié à un service d'envoi, aucun message n'a donc réellement été transmis pour l'instant.",
+    "form.error": "Une erreur est survenue. Merci de vérifier les champs indiqués.",
+    "form.required": "Ce champ est requis.",
+    "form.invalid_email": "Merci de renseigner une adresse e-mail valide.",
+    "form.err_name_required": "Merci d'indiquer votre prénom et votre nom.",
+    "form.err_email_required": "Merci d'indiquer une adresse e-mail.",
+    "form.err_project_type_required": "Merci de sélectionner un type de projet.",
+    "form.err_message_required": "Parlez-moi un peu de votre idée avant d'envoyer.",
+    "form.err_message_short": "Un message un peu plus détaillé nous aidera à mieux vous répondre.",
+    "form.err_generic": "Une erreur est survenue. Merci de réessayer, ou d'écrire directement par e-mail.",
+
+    /* ===================== CALENDLY ===================== */
+    "calendly.title": "Vous préférez en parler directement ?",
+    "calendly.subtitle": "Réservez un créneau directement dans mon agenda — sans attendre de réponse par e-mail.",
+    "calendly.note": "Le lien de réservation n'est pas encore configuré : utilisez le formulaire ci-dessus en attendant, je vous recontacterai rapidement.",
+    "calendly.button": "Réserver un créneau",
+
+    /* ===================== NEWSLETTER ===================== */
+    "newsletter.email": "Votre adresse e-mail",
+    "newsletter.consent": "J'accepte de recevoir des e-mails de Vagabon.",
+    "newsletter.submit": "S'inscrire",
+    "newsletter.success": "Inscription enregistrée (mode démonstration). La newsletter sera activée avec un service d'envoi dédié.",
+
+    /* ===================== FOOTER ===================== */
+    "footer.navigation": "Navigation",
+    "footer.contact": "Contact",
+    "footer.legal": "Informations",
+    "footer.follow": "Suivre",
+    "footer.rights": "Tous droits réservés.",
+    "footer.role": "Studio créatif indépendant · Communication freelance",
+    "footer.link.mentions": "Mentions légales",
+    "footer.link.privacy": "Politique de confidentialité",
+    "footer.link.cookies_policy": "Politique de cookies",
+    "footer.link.cookies_manage": "Gestion des cookies",
+
+    /* ===================== DIVERS ===================== */
+    "misc.placeholder_testimonial": "Témoignage client à ajouter prochainement.",
+    "misc.reading_time": "min de lecture",
+
+    /* ===================== HERO (index.html) ===================== */
+    "hero.eyebrow": "Studio créatif indépendant",
+    "hero.metadata.direction_label": "Direction",
+    "hero.metadata.direction_value": "Virgil Boukraa",
+    "hero.statement": "J'explore les idées pour construire des identités, des contenus et des stratégies qui laissent une empreinte.",
+    "hero.metadata.location_label": "Basé à",
+    "hero.metadata.location_value": "Reims · France",
+    "hero.button": "Entrer dans l'univers",
+    "hero.sound_message": "Expérience optimale avec le son",
+    "hero.title_accessible": "Vagabon — Studio créatif indépendant de Virgil Boukraa",
+
+    /* ===================== UNIVERS (universe.html) ===================== */
+    "universe.hero_title": "Chaque projet est un univers à explorer.",
+    "universe.hero_text": "Vagabon conçoit des identités, des univers visuels et des expériences numériques pensés comme des lieux : une entrée, une atmosphère, un rythme qui leur est propre.",
+    "universe.scroll_cue": "Défiler",
+    "universe.signature_name": "Virgil Boukraa",
+    "universe.signature_role": "Freelance en stratégie de communication & direction artistique",
+    "universe.projects_heading": "Mes projets.",
+
+    "project.faf.category": "Direction artistique — Contenu — Identité visuelle",
+    "project.faf.description": "Accompagnement créatif du club Face à Face autour de son image et de sa communication : direction artistique, production vidéo, photographie, créations graphiques et supports print.",
+    "project.faf.tool_direction": "Direction artistique",
+    "project.faf.tool_video": "Vidéo",
+    "project.faf.tool_photo": "Photographie",
+    "project.faf.tool_design": "Design graphique",
+    "project.faf.tool_print": "Print",
+    "project.faf.aria_discover": "Découvrir le projet Face à Face — Club de Muay Thaï",
+
+    "project.placeholder.title_02": "Projet 02 — En cours",
+    "project.placeholder.title_03": "Projet 03 — En cours",
+    "project.placeholder.category": "Projet en cours",
+    "project.placeholder.description": "Projet actuellement en cours de développement. Une sélection de contenus et réalisations viendra prochainement compléter cette présentation.",
+    "project.placeholder.label": "En cours",
+
+    /* ===================== BANDEAU D'EXPERTISES (universe.html, entre Hero et Projets) ===================== */
+    "expertise.section_label": "Domaines d'expertise Vagabon",
+    "expertise.strategy": "Stratégie de communication",
+    "expertise.branding": "Identité & branding",
+    "expertise.direction": "Direction artistique",
+    "expertise.content": "Création de contenu",
+    "expertise.photo_video": "Photo & vidéo",
+    "expertise.print_digital": "Print & digital",
+    "expertise.seo_sea": "SEO & SEA",
+
+    /* ===================== TÉMOIGNAGES (universe.html, entre Projet 03 et Contact) =====================
+       IMPORTANT : les trois témoignages ci-dessous servent uniquement à
+       tester la mise en page du bandeau (demande explicite). Aucun n'est un
+       avis réellement reçu :
+       - "testimonials.01" (Zohir Remidi) est un texte FICTIF fourni par
+         Virgil lui-même pour le gabarit, à remplacer par un vrai retour
+         client ;
+       - "testimonials.02" (Jean-Marc Guillot, personne réelle apparaissant
+         par ailleurs dans le projet Face à Face) n'a volontairement REÇU
+         AUCUNE citation inventée en son nom : le texte est un simple repère
+         "[Témoignage à venir]", jamais présenté comme un avis authentique ;
+       - "testimonials.03" est un emplacement générique pour un futur
+         client, nom et avis tous deux en attente. */
+    "testimonials.section_label": "Témoignages",
+    "testimonials.title": "Ce sont eux qui en parlent le mieux.",
+    "testimonials.01.name": "Zohir Remidi",
+    "testimonials.01.quote": "« Virgil a su transformer nos besoins en une communication claire, cohérente et réellement adaptée à l'identité de Face à Face. Au-delà de la création visuelle, il a pris le temps de comprendre notre fonctionnement et nos contraintes afin de proposer des supports aussi efficaces qu'esthétiques. »",
+    "testimonials.02.name": "Jean-Marc Guillot",
+    "testimonials.02.quote": "[Témoignage à venir — avis de Jean-Marc Guillot à intégrer ultérieurement.]",
+    "testimonials.03.name": "Client — À venir",
+    "testimonials.03.quote": "[Avis à venir.]",
+
+    "philosophy.eyebrow": "Philosophie",
+    "philosophy.title": "Une pratique attentive, jamais générique.",
+    "philosophy.text": "Chaque projet commence par une observation : celle d'un contexte, d'une audience, d'une tension à résoudre. Vagabon construit ensuite une réponse sur mesure — identité, contenu ou stratégie — pensée pour durer plutôt que pour suivre une tendance. Le studio privilégie le temps juste : ni plus vite, ni plus lent que ce que le projet demande réellement.",
+
+    /* ===================== PAGE "QUI SUIS-JE" (qui-suis-je.html) =====================
+       Page de présentation personnelle. Le nom et la fonction du Hero
+       réutilisent volontairement les clés "universe.signature_name" /
+       "universe.signature_role" déjà définies plus haut (cohérence exacte
+       avec la signature du Hero de la page principale, demande explicite)
+       plutôt que de dupliquer ce texte sous une nouvelle clé.
+       Les contenus marqués "[À venir]" sont des repères de structure
+       volontairement neutres : aucune information personnelle (parcours,
+       diplômes, clients, compétences) n'a été inventée pour les remplir —
+       à compléter avec les textes définitifs le moment venu. */
+    "who.hero_eyebrow": "Qui suis-je",
+    "who.portrait_placeholder": "Portrait à venir",
+    "who.meta_description": "Présentation de Virgil Boukraa, freelance en stratégie de communication et direction artistique derrière le studio Vagabon.",
+    "who.section01.number": "01",
+    "who.section01.eyebrow": "Mon profil",
+    "who.section01.title": "[Titre à venir]",
+    "who.section01.body": "[Texte à venir — présentez ici votre parcours, ce qui vous a mené à Vagabon, et la personne derrière le studio.]",
+    "who.section02.number": "02",
+    "who.section02.eyebrow": "Mon approche",
+    "who.section02.title": "[Titre à venir]",
+    "who.section02.body": "[Texte à venir — expliquez ici votre manière d'aborder la communication et la création.]",
+    "who.section03.number": "03",
+    "who.section03.eyebrow": "Stratégie & création",
+    "who.section03.title": "[Titre à venir]",
+    "who.section03.body": "[Texte à venir — expliquez ici pourquoi vous associez réflexion stratégique, communication, identité visuelle et direction artistique plutôt que de traiter ces disciplines séparément.]",
+    "who.section04.number": "04",
+    "who.section04.eyebrow": "Ma façon de travailler",
+    "who.section04.title": "[Titre à venir]",
+    "who.section04.body": "[Texte à venir — présentez ici votre manière d'accompagner un projet, depuis sa compréhension jusqu'à sa traduction visuelle et sa mise en œuvre.]",
+    "who.section04.step1": "[Étape à venir]",
+    "who.section04.step2": "[Étape à venir]",
+    "who.section04.step3": "[Étape à venir]",
+
+    /* ===================== SYSTÈME RESSOURCES (ressources.html + pages articles) =====================
+       Section additive : ces clés couvrent uniquement l'INTERFACE de la
+       page Ressources (hero, filtres, libellés) — le contenu éditorial de
+       chaque article (titre, extrait, corps) vit dans le CMS (Sanity), pas
+       ici, puisqu'il doit rester modifiable sans toucher au code. Les
+       catégories réutilisent VOLONTAIREMENT les clés "expertise.*" déjà
+       définies plus haut (bandeau d'expertises du Hero) : ce sont
+       exactement les 7 mêmes intitulés demandés pour les catégories de
+       Ressources — aucune traduction dupliquée. */
+    "nav.ressources": "Ressources",
+    "ressources.hero_eyebrow": "Ressources",
+    "ressources.hero_title": "Ressources",
+    "ressources.hero_intro": "Réflexions, méthodes et ressources autour de la communication, de la création et de l'image de marque.",
+    "ressources.meta_description": "Réflexions, méthodes et ressources autour de la communication, de la création et de l'image de marque, par Vagabon.",
+    "ressources.filter.search_label": "Rechercher un article",
+    "ressources.filter.search_placeholder": "Rechercher un article…",
+    "ressources.filter.all_categories": "Toutes les catégories",
+    "ressources.empty_state": "Aucun article ne correspond à votre recherche pour le moment.",
+    "ressources.card.reading_time": "min de lecture",
+    "ressources.back_link": "← Retour aux ressources",
+    "ressources.related_title": "À lire également",
+    "ressources.demo_notice": "Article de démonstration — contenu temporaire destiné à tester la structure du système Ressources, à remplacer par un article réel.",
+
+    "contact_section.title": "Parlons de votre prochain projet.",
+    "contact_section.meta": "Reims · Paris · Lille · France entière, à distance",
+
+    /* ===================== PAGE PROJET — FACE À FACE (face-a-face.html) ===================== */
+    "faf.eyebrow_opening": "Projet 01 — Réalisation complète",
+    "faf.lede": "Direction artistique, contenu et identité visuelle pour un club de Muay Thaï — une collaboration construite dans la durée, du logo aux supports print, en passant par la vidéo et la photographie.",
+    "faf.section.context_eyebrow": "Contexte",
+    "faf.section.context_title": "Un club, plusieurs disciplines à réunir sous une seule image.",
+    "faf.section.context_body": "Face à Face est un club de Muay Thaï bien implanté, porté par son entraîneur Jean-Marc Guillot. La mission : accompagner sa communication sur plusieurs fronts à la fois — vidéo pour capter l'énergie des entraînements, photographie pour documenter la pratique, identité graphique et supports print pour les événements du club — avec une cohérence visuelle unique du premier au dernier livrable.",
+    "faf.section.video_eyebrow": "Production vidéo",
+    "faf.section.video_title": "Deux tournages, une énergie commune.",
+    "faf.section.video_meta": "Sony A7 IV — Micro DJI Mic Mini — Premiere Pro",
+    "faf.section.video_body_1": "Le premier tournage avait pour objectif d'annoncer l'arrivée de Zohir Remidi, nouveau coach de la section enfants créée pour la saison 2026–2027. Pour introduire son parcours, le choix s'est naturellement porté sur Jean-Marc Guillot, fondateur du club et ancien entraîneur de Zohir.",
+    "faf.section.video_body_2": "À travers une interview de 50 secondes, Jean-Marc revient sur leur histoire commune et explique pourquoi il a choisi de lui confier cette nouvelle section. Son témoignage est accompagné de photographies d'archives prises en compétition, à l'époque où Zohir était encore élève de Face à Face.",
+    "faf.section.video_body_3": "Pensée comme un teaser, la vidéo dévoile progressivement leur relation et le parcours de Zohir, tout en conservant une part de mystère autour de l'identité du nouveau coach. L'objectif : susciter la curiosité tout en donnant du sens au choix du club.",
+    "faf.video.sound_on": "Activer le son",
+    "faf.video.sound_off": "Couper le son",
+    "faf.video.play": "Reprendre la lecture",
+    "faf.video.pause": "Mettre en pause",
+    "faf.section.zohir_title": "Zohir Remidi — au cœur du coaching.",
+    "faf.section.zohir_meta": "Sony A7 IV — Micro DJI Mic Mini — Suite Adobe (Premiere Pro)",
+    "faf.section.zohir_body": "Captation réalisée au cœur d'une séance de coaching menée par Zohir Remidi au sein du club Face à Face. Cette seconde réalisation met davantage l'accent sur son approche du coaching, son énergie et la relation construite avec les pratiquants.",
+    "faf.section.identity_eyebrow": "Identité visuelle",
+    "faf.spotlight_caption": "Une identité forte, prolongée à travers chaque support pour faire vivre l'énergie du club bien au-delà du ring.",
+    "faf.section.print_eyebrow": "Supports print",
+    "faf.section.print_title": "Une communication qui existe aussi hors-ligne.",
+    "faf.section.print_body": "Pour la saison 2026–2027, Face à Face m'a confié la conception du verso de son flyer afin d'y réunir une importante quantité de nouvelles informations : coachs, sections, créneaux et formules. L'enjeu était de structurer et hiérarchiser ces contenus dans un espace restreint, tout en prolongeant l'univers visuel du recto existant. Un travail d'équilibre entre densité d'information, lisibilité et cohérence graphique, pour rendre le support immédiatement compréhensible sans sacrifier son impact visuel.",
+    "faf.section.digital_eyebrow": "Communication digitale",
+    "faf.section.digital_title": "Clarifier l'offre, guider le choix.",
+    "faf.section.digital_body_1": "Dans le cadre de la communication autour de la saison 2026–2027, deux carrousels ont été conçus afin de présenter de manière claire les différentes offres proposées par Face à Face. L'objectif était de faciliter la compréhension des créneaux, des salles, des coachs et des formules disponibles, dont l'organisation varie selon les sections.",
+    "faf.section.digital_body_2": "Chaque carrousel met ainsi en avant un coach — Jean-Marc Guillot et Zohir Remidi — ainsi que les informations qui lui sont associées. La section enfants étant notamment encadrée exclusivement par Zohir Remidi, il était essentiel de rendre immédiatement perceptibles les différences entre les formules et d'aider le public à identifier celle correspondant le mieux à sa pratique.",
+    "faf.section.digital_body_3": "Une attention particulière a également été portée à la formule Premium, pensée comme l'offre la plus complète. Elle permet d'accéder à l'ensemble des salles, des créneaux et aux entraînements proposés par les deux coachs. Le travail graphique devait donc hiérarchiser une quantité importante d'informations tout en orientant naturellement le regard vers cette formule, sans compromettre la lisibilité générale des supports.",
+    "faf.pending_eyebrow": "À venir",
+    "faf.pending_text": "D'autres visuels du projet — photographies, créations graphiques et mockups supplémentaires — viendront enrichir cette page au fur et à mesure de leur réception.",
+
+    /* ===================== PAGE CONTACT (contact.html) ===================== */
+    "contact.hero_title_line1": "UNE IDÉE EN TÊTE ?",
+    "contact.hero_title_line2": "BRISONS LA GLACE.",
+    "contact.hero_intro": "Racontez-moi votre projet, votre vision, et ce que vous rêvez de construire — je reviens vers vous rapidement pour en discuter.",
+
+    /* ===================== PAGES LÉGALES ===================== */
+    "legal.last_updated": "Dernière mise à jour : 22 juillet 2026",
+    "legal.mentions.link_label": "mentions légales",
+    "legal.cookies_policy.link_label": "politique de cookies",
+    "legal.cookies_manage.link_label": "page de gestion des cookies",
+
+    "legal.mentions.h1": "Mentions légales",
+    "legal.mentions.h2_editor": "Éditeur du site",
+    "legal.mentions.editor_body": "Le site Vagabon est édité par Virgil Boukraa, activité indépendante basée à Reims (France).",
+    "legal.mentions.editor_pending": "Forme juridique, numéro SIRET et adresse légale complète : information à compléter avant mise en ligne.",
+    "legal.mentions.contact_prefix": "Contact :",
+    "legal.mentions.h2_director": "Directeur de la publication",
+    "legal.mentions.h2_hosting": "Hébergement",
+    "legal.mentions.hosting_pending": "Nom, raison sociale et adresse de l'hébergeur : information à compléter avant mise en ligne.",
+    "legal.mentions.h2_ip": "Propriété intellectuelle",
+    "legal.mentions.ip_body": "L'ensemble des contenus présents sur ce site (textes, visuels, identité graphique) est la propriété de Virgil Boukraa / Vagabon, sauf mention contraire, et ne peut être reproduit sans autorisation préalable.",
+    "legal.mentions.h2_liability": "Responsabilité",
+    "legal.mentions.liability_body": "Vagabon s'efforce d'assurer l'exactitude des informations diffusées sur ce site, sans garantie d'exhaustivité. L'éditeur ne saurait être tenu responsable des éventuelles erreurs ou omissions dans son contenu.",
+    "legal.mentions.h2_law": "Droit applicable",
+    "legal.mentions.law_body": "Le présent site est soumis au droit français.",
+    "legal.mentions.contact_body": "Pour toute question relative à ces mentions légales :",
+
+    "legal.privacy.h1": "Politique de confidentialité",
+    "legal.privacy.h2_controller": "Responsable",
+    "legal.privacy.controller_body": "Virgil Boukraa (Vagabon) est responsable de ce site. Pour toute question relative à vos données :",
+    "legal.privacy.h2_data": "Données réellement collectées",
+    "legal.privacy.data_body1": "Ce site est actuellement un site vitrine statique. Aucun formulaire de collecte n'y est actif : le seul moyen de contact est un lien \"mailto\" qui ouvre votre propre client de messagerie — aucune donnée saisie n'est envoyée à un serveur ni stockée par ce site.",
+    "legal.privacy.data_body2": "Le site utilise le stockage local de votre navigateur (localStorage) pour retenir une préférence d'affichage : la langue choisie (FR/EN). Cette information reste sur votre appareil, n'est jamais transmise, et ne permet aucune identification personnelle. Voir aussi la",
+    "legal.privacy.h2_basis": "Base légale et finalité",
+    "legal.privacy.basis_body": "En l'absence de collecte de données personnelles via un formulaire ou un outil de suivi, aucun traitement de données à caractère personnel n'est actuellement mis en œuvre par ce site au sens du RGPD.",
+    "legal.privacy.h2_rights": "Vos droits",
+    "legal.privacy.rights_body": "Si cette situation évolue (ajout d'un formulaire de contact, d'un outil de mesure d'audience...), cette page sera mise à jour en conséquence et détaillera vos droits d'accès, de rectification, d'effacement et d'opposition. Vous pouvez d'ores et déjà nous contacter à tout moment pour toute question :",
+    "legal.privacy.h2_hosting": "Hébergement des données",
+    "legal.privacy.hosting_body": "Nom et adresse de l'hébergeur du site : information à compléter avant mise en ligne (voir aussi les",
+
+    "legal.cookies_policy.h1": "Politique de cookies",
+    "legal.cookies_policy.h2_no_tracking": "Ce site n'utilise aucun cookie de suivi",
+    "legal.cookies_policy.body1": "Vagabon n'utilise ni cookie publicitaire, ni traceur de mesure d'audience, ni cookie tiers (réseaux sociaux, vidéos embarquées...). Ce site utilise uniquement le stockage local de votre navigateur (localStorage), qui n'est techniquement pas un cookie mais remplit un rôle similaire pour une préférence :",
+    "legal.cookies_policy.item_lang": "— la langue d'affichage choisie (français / anglais).",
+    "legal.cookies_policy.body2": "Cette information reste stockée uniquement sur votre appareil, n'est jamais transmise à un serveur, et ne permet aucune identification. Elle est automatiquement effacée si vous videz les données de navigation de votre navigateur.",
+    "legal.cookies_policy.h2_why": "Pourquoi aucun bandeau de consentement ?",
+    "legal.cookies_policy.why_body": "Le stockage local utilisé ici est strictement nécessaire au fonctionnement d'une préférence d'affichage et ne nécessite pas de consentement préalable au sens de la réglementation applicable aux cookies. Aucun traceur nécessitant un consentement n'est présent sur ce site à ce jour.",
+    "legal.cookies_policy.h2_future": "Si cela évolue",
+    "legal.cookies_policy.future_body": "Si un outil de mesure d'audience ou tout autre cookie tiers était ajouté ultérieurement, cette page serait mise à jour et un bandeau de consentement adapté serait mis en place avant toute activation.",
+    "legal.cookies_policy.manage_pre": "Pour gérer ou réinitialiser votre préférence actuelle, consultez la",
+
+    "legal.cookies_manage.h1": "Gestion des cookies",
+    "legal.cookies_manage.body1_pre": "Ce site n'utilise aucun cookie tiers ni traceur nécessitant un consentement (voir la",
+    "legal.cookies_manage.body1_post": ") : il n'y a donc pas de bandeau de consentement à paramétrer.",
+    "legal.cookies_manage.body2": "Il enregistre uniquement, dans le stockage local de votre navigateur, une préférence d'affichage : la langue (FR/EN). Vous pouvez la réinitialiser à tout moment, directement depuis cette page :",
+    "legal.cookies_manage.reset_button": "Réinitialiser ma préférence de langue",
+    "legal.cookies_manage.reset_status": "Préférence réinitialisée. Rechargement…",
+    "legal.cookies_manage.h2_browser": "Via les réglages de votre navigateur",
+    "legal.cookies_manage.browser_body": "Vous pouvez également effacer l'ensemble des données de site enregistrées par votre navigateur (cookies et stockage local) depuis ses réglages de confidentialité — la procédure exacte dépend du navigateur utilisé (Chrome, Firefox, Safari, Edge...) et est généralement accessible depuis son menu \"Confidentialité\" ou \"Vie privée\".",
+    "legal.cookies_manage.h2_questions": "Questions",
+    "legal.cookies_manage.questions_body": "Pour toute question sur la gestion de vos données :",
+  },
+
+  en: {
+    /* ===================== NAVIGATION / HEADER ===================== */
+    "nav.home": "Home",
+    "nav.home_sub": "The Prologue",
+    "nav.about": "About",
+    "nav.services": "Services",
+    "nav.projects": "Projects",
+    "nav.testimonials": "Testimonials",
+    "nav.articles": "Articles",
+    "nav.contact": "Contact",
+    "nav.menu.open": "Open menu",
+    "nav.menu.close": "Close menu",
+    "nav.menu.index": "Index",
+    "nav.menu.universe": "Universe",
+    "nav.menu.philosophy": "Philosophy",
+    "nav.menu.who": "About me",
+    "nav.book_call": "Book a call",
+    "nav.language": "Switch to French",
+    "nav.sound.on": "Turn sound on",
+    "nav.sound.off": "Turn sound off",
+    "nav.sound_video_label": "Turn on video sound",
+
+    /* ===================== LIENS DE RETOUR ===================== */
+    "cta.back_home": "Back to home",
+    "cta.back_universe": "Back to the universe",
+    "cta.back_projects": "Back to projects",
+
+    /* ===================== APPELS À L'ACTION ===================== */
+    "cta.discover_projects": "Discover the projects",
+    "cta.discover": "Discover",
+    "cta.book_call": "Book a call",
+    "cta.start_project": "Start a project",
+    "cta.discovery_call": "Book a discovery call",
+    "cta.see_case_study": "View case study",
+    "cta.see_all_projects": "View all projects",
+    "cta.see_all_services": "View all services",
+    "cta.see_all_articles": "View all articles",
+    "cta.contact_me": "Contact me",
+    "cta.next_project": "Next project",
+
+    /* ===================== TEXTES PARTAGÉS (localisation, meta) ===================== */
+    "meta.location_line1": "Reims · Paris · Lille",
+    "meta.location_line2": "Nationwide, remote",
+
+    /* ===================== FORMULAIRE DE CONTACT ===================== */
+    "form.first_name": "First name",
+    "form.last_name": "Last name",
+    "form.first_last_name": "Full name",
+    "form.company": "Company name",
+    "form.company_brand": "Company / brand",
+    "form.email": "Email address",
+    "form.email_short": "Email",
+    "form.phone": "Phone number",
+    "form.phone_short": "Phone",
+    "form.need_type": "Type of request",
+    "form.project_type": "Project type",
+    "form.project_type_hint": "What ground shall we explore?",
+    "form.select_placeholder": "Select an option",
+    "form.opt_identity": "Visual identity",
+    "form.opt_direction": "Art direction",
+    "form.opt_website": "Website / digital experience",
+    "form.opt_video": "Video / content",
+    "form.opt_strategy": "Strategy / communication",
+    "form.opt_other": "Other",
+    "form.budget": "Estimated budget",
+    "form.budget_amount": "Estimated budget (€)",
+    "form.budget_placeholder": "E.g. €3,000, or a range",
+    "form.timeline": "Desired timeline",
+    "form.message": "Project description",
+    "form.message_label": "Your message",
+    "form.message_hint": "Tell me about your idea",
+    "form.message_placeholder": "Describe your project, your goals, your inspirations…",
+    "form.consent": "I agree that my data may be used to be contacted, in line with the privacy policy.",
+    "form.optional": "optional",
+    "form.submit": "Send request",
+    "form.submit.loading": "Sending…",
+    "form.submit_ice": "Break the ice",
+    "form.privacy_pre": "By submitting this form, you agree to our",
+    "form.privacy_link": "privacy policy",
+    "form.success": "Your message has been recorded (demo mode). Virgil will get back to you quickly once the sending service is connected.",
+    "form.success_title_line1": "The ice is broken.",
+    "form.success_title_line2": "We'll get back to you very soon.",
+    "form.success_text": "Thank you for your message — Virgil will reply personally as soon as possible.",
+    "form.demo_note": "Demo mode: this form isn't connected to a sending service yet, so no message has actually been sent.",
+    "form.error": "Something went wrong. Please check the highlighted fields.",
+    "form.required": "This field is required.",
+    "form.invalid_email": "Please enter a valid email address.",
+    "form.err_name_required": "Please enter your first and last name.",
+    "form.err_email_required": "Please enter an email address.",
+    "form.err_project_type_required": "Please select a project type.",
+    "form.err_message_required": "Tell me a little about your idea before sending.",
+    "form.err_message_short": "A bit more detail will help us get back to you better.",
+    "form.err_generic": "Something went wrong. Please try again, or email us directly.",
+
+    /* ===================== CALENDLY ===================== */
+    "calendly.title": "Prefer to talk directly?",
+    "calendly.subtitle": "Book a slot directly in my calendar — no need to wait for an email reply.",
+    "calendly.note": "The booking link isn't set up yet: use the form above in the meantime, and I'll get back to you quickly.",
+    "calendly.button": "Book a slot",
+
+    /* ===================== NEWSLETTER ===================== */
+    "newsletter.email": "Your email address",
+    "newsletter.consent": "I agree to receive emails from Vagabon.",
+    "newsletter.submit": "Subscribe",
+    "newsletter.success": "Subscription recorded (demo mode). The newsletter will go live with a dedicated sending service.",
+
+    /* ===================== FOOTER ===================== */
+    "footer.navigation": "Navigation",
+    "footer.contact": "Contact",
+    "footer.legal": "Information",
+    "footer.follow": "Follow",
+    "footer.rights": "All rights reserved.",
+    "footer.role": "Independent creative studio · Freelance communication",
+    "footer.link.mentions": "Legal notice",
+    "footer.link.privacy": "Privacy policy",
+    "footer.link.cookies_policy": "Cookie policy",
+    "footer.link.cookies_manage": "Cookie management",
+
+    /* ===================== DIVERS ===================== */
+    "misc.placeholder_testimonial": "Client testimonial coming soon.",
+    "misc.reading_time": "min read",
+
+    /* ===================== HERO (index.html) ===================== */
+    "hero.eyebrow": "Independent creative studio",
+    "hero.metadata.direction_label": "Direction",
+    "hero.metadata.direction_value": "Virgil Boukraa",
+    "hero.statement": "I explore ideas to build identities, content and strategies that leave a mark.",
+    "hero.metadata.location_label": "Based in",
+    "hero.metadata.location_value": "Reims · France",
+    "hero.button": "Enter the universe",
+    "hero.sound_message": "Best experienced with sound on",
+    "hero.title_accessible": "Vagabon — Virgil Boukraa's independent creative studio",
+
+    /* ===================== UNIVERS (universe.html) ===================== */
+    "universe.hero_title": "Every project is a universe to explore.",
+    "universe.hero_text": "Vagabon designs identities, visual universes and digital experiences conceived as places: an entrance, an atmosphere, a rhythm all their own.",
+    "universe.scroll_cue": "Scroll",
+    "universe.signature_name": "Virgil Boukraa",
+    "universe.signature_role": "Freelance in communication strategy & art direction",
+    "universe.projects_heading": "My projects.",
+
+    "project.faf.category": "Art direction — Content — Visual identity",
+    "project.faf.description": "Creative support for the Face à Face club around its image and communication: art direction, video production, photography, graphic design and print materials.",
+    "project.faf.tool_direction": "Art direction",
+    "project.faf.tool_video": "Video",
+    "project.faf.tool_photo": "Photography",
+    "project.faf.tool_design": "Graphic design",
+    "project.faf.tool_print": "Print",
+    "project.faf.aria_discover": "Discover the Face à Face — Club de Muay Thaï project",
+
+    "project.placeholder.title_02": "Project 02 — Work in Progress",
+    "project.placeholder.title_03": "Project 03 — Work in Progress",
+    "project.placeholder.category": "Work in Progress",
+    "project.placeholder.description": "This project is currently in development. A selection of content and work will be added here soon.",
+    "project.placeholder.label": "Work in Progress",
+
+    /* ===================== EXPERTISE BAND (universe.html, between Hero and Projects) ===================== */
+    "expertise.section_label": "Vagabon areas of expertise",
+    "expertise.strategy": "Communication strategy",
+    "expertise.branding": "Identity & branding",
+    "expertise.direction": "Art direction",
+    "expertise.content": "Content creation",
+    "expertise.photo_video": "Photo & video",
+    "expertise.print_digital": "Print & digital",
+    "expertise.seo_sea": "SEO & SEA",
+
+    /* ===================== TESTIMONIALS (universe.html, between Project 03 and Contact) ===================== */
+    "testimonials.section_label": "Testimonials",
+    "testimonials.title": "They talk about it best.",
+    "testimonials.01.name": "Zohir Remidi",
+    "testimonials.01.quote": "“Virgil managed to turn our needs into communication that was clear, consistent and genuinely suited to Face à Face's identity. Beyond the visual creation itself, he took the time to understand how we work and what constraints we operate under, in order to deliver material that is as effective as it is polished.”",
+    "testimonials.02.name": "Jean-Marc Guillot",
+    "testimonials.02.quote": "[Testimonial coming soon — Jean-Marc Guillot's review will be added here later.]",
+    "testimonials.03.name": "Client — coming soon",
+    "testimonials.03.quote": "[Review coming soon.]",
+
+    "philosophy.eyebrow": "Philosophy",
+    "philosophy.title": "A thoughtful practice, never generic.",
+    "philosophy.text": "Every project starts with observation: of a context, an audience, a tension to resolve. Vagabon then builds a tailored response — identity, content or strategy — designed to last rather than to chase a trend. The studio favours the right pace: never faster, never slower than what the project truly calls for.",
+
+    /* ===================== "ABOUT ME" PAGE (qui-suis-je.html) ===================== */
+    "who.hero_eyebrow": "Who I am",
+    "who.portrait_placeholder": "Portrait coming soon",
+    "who.meta_description": "Introducing Virgil Boukraa, freelancer in communication strategy and art direction behind the Vagabon studio.",
+    "who.section01.number": "01",
+    "who.section01.eyebrow": "My profile",
+    "who.section01.title": "[Title coming soon]",
+    "who.section01.body": "[Text coming soon — introduce your background here, what led you to Vagabon, and the person behind the studio.]",
+    "who.section02.number": "02",
+    "who.section02.eyebrow": "My approach",
+    "who.section02.title": "[Title coming soon]",
+    "who.section02.body": "[Text coming soon — explain your approach to communication and creation here.]",
+    "who.section03.number": "03",
+    "who.section03.eyebrow": "Strategy & creation",
+    "who.section03.title": "[Title coming soon]",
+    "who.section03.body": "[Text coming soon — explain here why you bring strategic thinking, communication, visual identity and art direction together rather than treating them separately.]",
+    "who.section04.number": "04",
+    "who.section04.eyebrow": "How I work",
+    "who.section04.title": "[Title coming soon]",
+    "who.section04.body": "[Text coming soon — introduce here how you support a project, from understanding it to its visual translation and delivery.]",
+    "who.section04.step1": "[Step coming soon]",
+    "who.section04.step2": "[Step coming soon]",
+    "who.section04.step3": "[Step coming soon]",
+
+    /* ===================== RESOURCES SYSTEM (ressources.html + article pages) ===================== */
+    "nav.ressources": "Resources",
+    "ressources.hero_eyebrow": "Resources",
+    "ressources.hero_title": "Resources",
+    "ressources.hero_intro": "Reflections, methods and resources on communication, creativity and brand image.",
+    "ressources.meta_description": "Reflections, methods and resources on communication, creativity and brand image, by Vagabon.",
+    "ressources.filter.search_label": "Search an article",
+    "ressources.filter.search_placeholder": "Search an article…",
+    "ressources.filter.all_categories": "All categories",
+    "ressources.empty_state": "No article matches your search at the moment.",
+    "ressources.card.reading_time": "min read",
+    "ressources.back_link": "← Back to Resources",
+    "ressources.related_title": "You may also like",
+    "ressources.demo_notice": "Demo article — temporary content used to test the Resources system's structure, to be replaced with real content.",
+
+    "contact_section.title": "Let's talk about your next project.",
+    "contact_section.meta": "Reims · Paris · Lille · Nationwide, remote",
+
+    /* ===================== PAGE PROJET — FACE À FACE (face-a-face.html) ===================== */
+    "faf.eyebrow_opening": "Project 01 — Full production",
+    "faf.lede": "Art direction, content and visual identity for a Muay Thai club — a long-term collaboration spanning the logo, print materials, video and photography.",
+    "faf.section.context_eyebrow": "Context",
+    "faf.section.context_title": "One club, several disciplines to bring together under a single image.",
+    "faf.section.context_body": "Face à Face is a well-established Muay Thai club, led by coach Jean-Marc Guillot. The mission: support its communication on several fronts at once — video to capture the energy of training sessions, photography to document the practice, graphic identity and print materials for the club's events — with a single visual consistency from the first deliverable to the last.",
+    "faf.section.video_eyebrow": "Video production",
+    "faf.section.video_title": "Two shoots, one shared energy.",
+    "faf.section.video_meta": "Sony A7 IV — DJI Mic Mini — Premiere Pro",
+    "faf.section.video_body_1": "The first shoot was designed to announce the arrival of Zohir Remidi, the new coach for the children's section launched for the 2026–2027 season. To introduce his background, the natural choice was Jean-Marc Guillot, the club's founder and Zohir's former coach.",
+    "faf.section.video_body_2": "In a 50-second interview, Jean-Marc looks back on their shared history and explains why he chose to entrust Zohir with this new section. His account is paired with archive competition photographs from the time when Zohir was still a student at Face à Face.",
+    "faf.section.video_body_3": "Conceived as a teaser, the video gradually reveals their relationship and Zohir's journey, while keeping an element of mystery around the new coach's identity — building curiosity while giving meaning to the club's choice.",
+    "faf.video.sound_on": "Turn sound on",
+    "faf.video.sound_off": "Turn sound off",
+    "faf.video.play": "Play",
+    "faf.video.pause": "Pause",
+    "faf.section.zohir_title": "Zohir Remidi — at the heart of coaching.",
+    "faf.section.zohir_meta": "Sony A7 IV — DJI Mic Mini — Adobe Suite (Premiere Pro)",
+    "faf.section.zohir_body": "Footage captured during a coaching session led by Zohir Remidi at Face à Face. This second film focuses more on his coaching approach, his energy, and the relationship built with practitioners.",
+    "faf.section.identity_eyebrow": "Visual identity",
+    "faf.spotlight_caption": "A strong identity, carried across every touchpoint to keep the club's energy alive well beyond the ring.",
+    "faf.section.print_eyebrow": "Print materials",
+    "faf.section.print_title": "A communication that also exists offline.",
+    "faf.section.print_body": "For the 2026–2027 season, Face à Face asked me to design the back of their flyer to bring together a large volume of new information: coaches, sections, class times and membership plans. The challenge was to structure and prioritise this content within a tight space, while extending the visual world already established on the front. A balancing act between information density, readability and graphic consistency — making the piece instantly easy to read without losing its visual impact.",
+    "faf.section.digital_eyebrow": "Digital communication",
+    "faf.section.digital_title": "Clarifying the offer, guiding the choice.",
+    "faf.section.digital_body_1": "As part of the communication for the 2026–2027 season, two carousels were designed to clearly present the different offers available at Face à Face. The goal was to make it easier to understand the class times, venues, coaches and membership plans on offer, which vary from one section to another.",
+    "faf.section.digital_body_2": "Each carousel highlights one coach — Jean-Marc Guillot and Zohir Remidi — along with the information tied to them. Since the children's section is coached exclusively by Zohir Remidi, it was essential to make the differences between the plans immediately clear, helping people identify the one that best matches their practice.",
+    "faf.section.digital_body_3": "Particular attention was also given to the Premium plan, designed as the most complete offer. It grants access to every venue, class time and training session run by both coaches. The graphic design therefore had to organise a large amount of information while naturally drawing the eye toward this plan, without compromising the overall readability of the materials.",
+    "faf.pending_eyebrow": "Coming soon",
+    "faf.pending_text": "More visuals from the project — photographs, graphic design and additional mockups — will enrich this page as they are received.",
+
+    /* ===================== PAGE CONTACT (contact.html) ===================== */
+    "contact.hero_title_line1": "GOT AN IDEA?",
+    "contact.hero_title_line2": "LET'S BREAK THE ICE.",
+    "contact.hero_intro": "Tell me about your project, your vision, and what you're dreaming of building — I'll get back to you quickly to talk it through.",
+
+    /* ===================== PAGES LÉGALES ===================== */
+    "legal.last_updated": "Last updated: July 22, 2026",
+    "legal.mentions.link_label": "legal notice",
+    "legal.cookies_policy.link_label": "cookie policy",
+    "legal.cookies_manage.link_label": "cookie management page",
+
+    "legal.mentions.h1": "Legal notice",
+    "legal.mentions.h2_editor": "Site publisher",
+    "legal.mentions.editor_body": "The Vagabon website is published by Virgil Boukraa, an independent business based in Reims (France).",
+    "legal.mentions.editor_pending": "Legal structure, SIRET number and full legal address: information to be completed before going live.",
+    "legal.mentions.contact_prefix": "Contact:",
+    "legal.mentions.h2_director": "Publication director",
+    "legal.mentions.h2_hosting": "Hosting",
+    "legal.mentions.hosting_pending": "Host name, company name and address: information to be completed before going live.",
+    "legal.mentions.h2_ip": "Intellectual property",
+    "legal.mentions.ip_body": "All content on this site (text, visuals, graphic identity) is the property of Virgil Boukraa / Vagabon, unless otherwise stated, and may not be reproduced without prior authorization.",
+    "legal.mentions.h2_liability": "Liability",
+    "legal.mentions.liability_body": "Vagabon strives to ensure the accuracy of the information published on this site, without guaranteeing completeness. The publisher cannot be held liable for any errors or omissions in its content.",
+    "legal.mentions.h2_law": "Governing law",
+    "legal.mentions.law_body": "This site is governed by French law.",
+    "legal.mentions.contact_body": "For any question regarding this legal notice:",
+
+    "legal.privacy.h1": "Privacy policy",
+    "legal.privacy.h2_controller": "Controller",
+    "legal.privacy.controller_body": "Virgil Boukraa (Vagabon) is the data controller for this site. For any question regarding your data:",
+    "legal.privacy.h2_data": "Data actually collected",
+    "legal.privacy.data_body1": "This site is currently a static showcase site. No data-collection form is active on it: the only means of contact is a \"mailto\" link that opens your own email client — no data entered is sent to a server or stored by this site.",
+    "legal.privacy.data_body2": "The site uses your browser's local storage (localStorage) to remember one display preference: the selected language (FR/EN). This information stays on your device, is never transmitted, and does not allow any personal identification. See also the",
+    "legal.privacy.h2_basis": "Legal basis and purpose",
+    "legal.privacy.basis_body": "In the absence of personal data collection via a form or a tracking tool, no processing of personal data is currently carried out by this site within the meaning of the GDPR.",
+    "legal.privacy.h2_rights": "Your rights",
+    "legal.privacy.rights_body": "If this changes (addition of a contact form, an audience-measurement tool...), this page will be updated accordingly and will detail your rights of access, rectification, erasure and objection. You can already contact us at any time with any question:",
+    "legal.privacy.h2_hosting": "Data hosting",
+    "legal.privacy.hosting_body": "Host name and address for this site: information to be completed before going live (see also the",
+
+    "legal.cookies_policy.h1": "Cookie policy",
+    "legal.cookies_policy.h2_no_tracking": "This site does not use tracking cookies",
+    "legal.cookies_policy.body1": "Vagabon does not use advertising cookies, audience-measurement trackers, or third-party cookies (social networks, embedded videos...). This site only uses your browser's local storage (localStorage), which is not technically a cookie but plays a similar role for one preference:",
+    "legal.cookies_policy.item_lang": "— the display language selected (French / English).",
+    "legal.cookies_policy.body2": "This information is stored only on your device, is never transmitted to a server, and does not allow any identification. It is automatically deleted if you clear your browser's browsing data.",
+    "legal.cookies_policy.h2_why": "Why no consent banner?",
+    "legal.cookies_policy.why_body": "The local storage used here is strictly necessary for a display preference to function and does not require prior consent under the regulations applicable to cookies. No tracker requiring consent is present on this site to date.",
+    "legal.cookies_policy.h2_future": "If this changes",
+    "legal.cookies_policy.future_body": "If an audience-measurement tool or any other third-party cookie were added later, this page would be updated and an appropriate consent banner would be put in place before any activation.",
+    "legal.cookies_policy.manage_pre": "To manage or reset your current preference, see the",
+
+    "legal.cookies_manage.h1": "Cookie management",
+    "legal.cookies_manage.body1_pre": "This site does not use any third-party cookies or trackers requiring consent (see the",
+    "legal.cookies_manage.body1_post": "): there is therefore no consent banner to configure.",
+    "legal.cookies_manage.body2": "It only stores, in your browser's local storage, one display preference: the language (FR/EN). You can reset it at any time, directly from this page:",
+    "legal.cookies_manage.reset_button": "Reset my language preference",
+    "legal.cookies_manage.reset_status": "Preference reset. Reloading…",
+    "legal.cookies_manage.h2_browser": "Via your browser settings",
+    "legal.cookies_manage.browser_body": "You can also delete all site data stored by your browser (cookies and local storage) from its privacy settings — the exact procedure depends on the browser used (Chrome, Firefox, Safari, Edge...) and is usually accessible from its \"Privacy\" menu.",
+    "legal.cookies_manage.h2_questions": "Questions",
+    "legal.cookies_manage.questions_body": "For any question about how your data is managed:",
+  },
+};

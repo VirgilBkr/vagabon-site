@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="fr" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" href="assets/fonts/good-times/good-times.woff2" as="font" type="font/woff2" crossorigin>
+  <title>Univers — Vagabon | Virgil Boukraa, Reims</title>
+  <meta name="description" content="L'univers créatif de Vagabon : une sélection de projets, la philosophie du studio, et un moyen simple d'entrer en contact.">
+  <link rel="canonical" href="https://www.vagabon-exemple.fr/universe.html"><!-- Domaine à renseigner avant mise en ligne -->
+  <meta name="robots" content="noindex, nofollow"><!-- Contenu encore en placeholder (projets) : à retirer une fois les projets réels renseignés. -->
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vagabon">
+  <meta property="og:title" content="Univers — Vagabon">
+  <meta property="og:description" content="Une sélection de projets, la philosophie du studio, et un moyen simple d'entrer en contact.">
+  <meta property="og:url" content="https://www.vagabon-exemple.fr/universe.html">
+  <meta property="og:locale" content="fr_FR">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#05070B">
+
+  <link rel="stylesheet" href="css/reset.css?v=2">
+  <link rel="stylesheet" href="css/variables.css?v=2">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/layout.css?v=2">
+  <link rel="stylesheet" href="css/components.css?v=2">
+  <link rel="stylesheet" href="css/utilities.css?v=2">
+  <link rel="stylesheet" href="css/animations.css?v=2">
+  <link rel="stylesheet" href="css/responsive.css?v=2">
+  <link rel="stylesheet" href="css/pages/universe.css?v=39">
+</head>
+<body class="page-universe">
+  <a class="skip-link" href="#main-content">Aller au contenu</a>
+
+  <!-- Loader — composant partagé (js/loader.js), variante sombre en CSS
+       (voir css/pages/universe.css) pour une entrée sans flash clair. -->
+  <div class="loader" data-loader aria-hidden="false">
+    <div class="loader__mark" aria-hidden="true">V</div>
+    <p class="loader__wordmark">VAGABON</p>
+    <div class="loader__bar-track"><div class="loader__bar"></div></div>
+  </div>
+
+  <!-- Barre de progression de lecture, propre à cette page (data-progress-live,
+       voir js/universe.js). N'affecte pas [data-progress] sur index.html. -->
+  <div class="c-progress" data-progress data-progress-live aria-hidden="true"></div>
+
+  <!-- ======================= HEADER (structure partagée, palette sombre propre à cette page) ======================= -->
+  <header class="c-header" data-header>
+    <div class="l-container c-header__inner">
+      <!-- Retour discret vers la landing page : seul mot-symbole affiché sur
+           cette page (contrairement à index.html, qui n'en affiche pas
+           volontairement devant sa vidéo plein écran — voir home.css). -->
+      <a href="index.html" class="universe-brand" aria-label="Retour à l'accueil Vagabon">VAGABON</a>
+
+      <div class="c-header__actions">
+        <button type="button" class="c-icon-btn u-hide-mobile" data-lang-toggle aria-label="Switch to English">FR</button>
+        <!-- Bouton son masqué sur cette page (aucune vidéo) : voir
+             css/pages/universe.css, [data-audio-toggle]. Élément conservé
+             dans le DOM pour ne pas modifier le header partagé. -->
+        <button type="button" class="c-icon-btn u-hide-mobile" data-audio-toggle aria-label="Activer le son de la vidéo" data-i18n-attr="aria-label:nav.sound_video_label" aria-pressed="false" tabindex="-1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 8a5 5 0 010 8"/></svg>
+        </button>
+        <!-- Reconnecté à la nouvelle page contact.html (le lien "04 Contact"
+             du menu plein écran et le lien "Contact" du footer, eux, restent
+             volontairement sur #contact : ils naviguent vers la section
+             Contact interne de cette page, pas vers le bouton de prise de
+             contact). -->
+        <a href="contact.html" class="c-btn c-btn--secondary u-hide-mobile" data-i18n="nav.book_call">Réserver un appel</a>
+        <button type="button" class="c-menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="nav-fullscreen" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.menu.open">
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu plein écran — sections de cette page + retour à l'accueil. -->
+  <nav class="c-nav-fullscreen" id="nav-fullscreen" data-nav-menu data-open="false" aria-hidden="true" aria-label="Navigation de l'univers">
+    <div class="c-nav-fullscreen__grid">
+      <ul class="c-nav-fullscreen__list">
+        <li><a class="c-nav-fullscreen__link" href="#universe-intro"><span class="c-nav-fullscreen__link-number">01</span><span data-i18n="nav.menu.index">Index</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="#projets"><span class="c-nav-fullscreen__link-number">02</span><span data-i18n="nav.projects">Projets</span></a></li>
+        <!-- Ancienne destination "#philosophie" (section interne, déjà
+             désactivée/commentée plus bas sur cette page — voir section C)
+             remplacée par une page dédiée à part entière, à l'identique du
+             fonctionnement déjà en place pour "04 Contact" vs contact.html :
+             le style, la position dans la liste et le comportement du lien
+             (hover, focus, ouverture/fermeture du menu) restent strictement
+             ceux du composant partagé .c-nav-fullscreen__link, inchangé.
+             data-nav-link ajouté pour bénéficier du même marquage
+             aria-current automatique (js/navigation.js) que les autres liens
+             de ce menu qui pointent vers une page réelle plutôt qu'une
+             simple ancre interne. -->
+        <li><a class="c-nav-fullscreen__link" href="qui-suis-je.html" data-nav-link><span class="c-nav-fullscreen__link-number">03</span><span data-i18n="nav.menu.who">Qui suis-je</span></a></li>
+        <!-- Nouvelle entrée "Ressources" (demande explicite) — même
+             traitement visuel/comportemental que les autres liens vers une
+             page dédiée (qui-suis-je.html juste au-dessus) : style, hover,
+             focus et marquage aria-current automatique via data-nav-link
+             (js/navigation.js), rien de nouveau créé pour ce lien. Ajoutée
+             ici plutôt qu'en tête de liste pour respecter l'ordre demandé
+             (Projets / Qui suis-je / Ressources / Contact) tout en
+             conservant "01 Index" en première position, comme le reste du
+             menu n'a jamais été retiré ni réordonné ailleurs. -->
+        <li><a class="c-nav-fullscreen__link" href="ressources.html" data-nav-link><span class="c-nav-fullscreen__link-number">04</span><span data-i18n="nav.ressources">Ressources</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="#contact"><span class="c-nav-fullscreen__link-number">05</span><span data-i18n="nav.contact">Contact</span></a></li>
+      </ul>
+      <div class="c-nav-fullscreen__aside">
+        <div>
+          <p class="c-nav-fullscreen__meta"><span data-i18n="meta.location_line1">Reims · Paris · Lille</span><br><span data-i18n="meta.location_line2">France entière, à distance</span></p>
+          <p class="c-nav-fullscreen__meta u-mt-md"><a href="mailto:virgil.bkr51@outlook.fr" class="c-btn--ghost">virgil.bkr51@outlook.fr</a></p>
+          <p class="u-mt-md"><a href="index.html" class="universe-nav__back">← <span data-i18n="cta.back_home">Retour à l'accueil</span></a></p>
+        </div>
+        <div>
+          <a href="contact.html" class="c-btn c-btn--primary c-btn--block" data-menu-close data-i18n="nav.book_call">Réserver un appel</a>
+          <div class="c-nav-fullscreen__social u-mt-md" data-social-links aria-label="Réseaux sociaux"></div>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="c-icon-btn" data-menu-close style="position:absolute; top:24px; right:24px;" aria-label="Fermer le menu" data-i18n-attr="aria-label:nav.menu.close">✕</button>
+  </nav>
+
+  <div class="l-page">
+  <main id="main-content" tabindex="-1">
+
+    <!-- ======================= A. OUVERTURE — MANIFESTE ======================= -->
+    <section class="universe-intro" id="universe-intro" aria-labelledby="universe-intro-title">
+      <!-- Fond visuel unique (personnages + fumée + composition déjà
+           intégrés dans le fichier, voir css/pages/universe.css,
+           .universe-intro background-image). Remplace l'ancien système à
+           deux images superposées (portrait glacé + portrait actuel +
+           scrim), retiré. -->
+      <div class="universe-intro__inner">
+        <div class="universe-eyebrow" data-reveal data-i18n="nav.menu.index">Index</div>
+        <h1 id="universe-intro-title" class="universe-intro__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="universe.hero_title">Chaque projet est un univers à explorer.</h1>
+        <p class="universe-intro__text" data-reveal data-reveal-delay="2" data-i18n="universe.hero_text">Vagabon conçoit des identités, des univers visuels et des expériences numériques pensés comme des lieux : une entrée, une atmosphère, un rythme qui leur est propre.</p>
+        <!-- CTA déplacé À L'INTÉRIEUR de .universe-intro__inner (demande
+             explicite : "le bouton descend trop bas"). Cause réelle
+             diagnostiquée : .universe-intro (le conteneur flex parent)
+             appliquait un gap: var(--space-2xl) (112px) entre CE bloc et
+             .universe-intro__cta lorsque celui-ci en était un sibling
+             direct — un espacement pensé pour séparer des blocs majeurs,
+             pas un paragraphe de son bouton, et qui rapprochait
+             mécaniquement le CTA du repère "Défiler" (positionné en
+             absolute, ancré au bas du viewport, donc indépendant de cette
+             hauteur). En nichant le CTA ici, juste après le paragraphe, son
+             espacement devient une simple margin-top locale (voir
+             .universe-intro__cta dans universe.css, désormais
+             var(--space-xl) — le même palier que celui déjà utilisé entre
+             le titre et le paragraphe juste au-dessus, pour un rythme
+             cohérent), totalement découplée de la hauteur du Hero. Plus
+             aucun margin-top négatif ni valeur arbitraire : la structure
+             elle-même est corrigée. -->
+        <div class="universe-intro__cta" data-reveal data-reveal-delay="3">
+          <a href="#projets" class="universe-cta">
+            <span class="universe-cta__label" data-i18n="cta.discover_projects">Découvrir les projets</span>
+            <span class="universe-cta__arrow" aria-hidden="true">↓</span>
+          </a>
+        </div>
+      </div>
+      <div class="universe-intro__cue" aria-hidden="true">
+        <span class="universe-intro__cue-line"></span>
+        <span class="universe-intro__cue-label" data-i18n="universe.scroll_cue">Défiler</span>
+      </div>
+      <!-- Signature éditoriale rattachée à la composition photographique de
+           droite (demande explicite) — positionnement en absolute, en bas à
+           droite du Hero, symétrique du repère "Défiler" (bas-gauche) pour
+           une composition équilibrée. Se trouve dans la zone de fondu vers
+           --u-bg (voir .universe-intro::after) : le gris foncé #495359 déjà
+           utilisé pour le paragraphe/CTA de cette même section y reste
+           parfaitement lisible (contraste déjà vérifié sur --u-bg ailleurs
+           sur le site) — pas de blanc, conformément à la demande. Ni badge,
+           ni fond, ni cadre : deux lignes de texte seules. -->
+      <div class="universe-intro__signature" data-reveal data-reveal-delay="3">
+        <p class="universe-intro__signature-name" data-i18n="universe.signature_name">Virgil Boukraa</p>
+        <p class="universe-intro__signature-role" data-i18n="universe.signature_role">Freelance en stratégie de communication &amp; direction artistique</p>
+      </div>
+    </section>
+
+    <!-- ======================= A.1 BANDEAU D'EXPERTISES =======================
+         Nouvelle section, insérée UNIQUEMENT ici entre le Hero (A) et
+         Projets (B) — aucun des deux n'est modifié. Bandeau plein largeur
+         (volontairement hors de .universe-section__inner et de
+         --container-max, pour un effet bord à bord) présentant les
+         domaines d'expertise comme des mots-clés défilants plutôt qu'une
+         grille de services avec cards/pictogrammes.
+
+         MARQUEE CSS PUR (aucun JS ajouté, aucune dépendance à un système
+         de marquee existant : recherche effectuée au préalable, aucun
+         composant de ce type n'existait dans le projet — voir
+         css/components.css, qui ne contient qu'une animation de spinner
+         sans rapport). Technique standard : le contenu est dupliqué UNE
+         FOIS ci-dessous (deux ".expertise-band__set" identiques) à
+         l'intérieur d'un même track ; translateX(-50%) déplace le track
+         d'exactement la largeur d'un set (les deux sets ayant strictement
+         le même contenu), rendant la jonction entre la fin du premier set
+         et le début du second indétectable — boucle infinie sans coupure
+         visible. La seconde copie porte aria-hidden="true" (répétition
+         purement visuelle, sans valeur ajoutée pour les lecteurs d'écran)
+         et est entièrement masquée sous prefers-reduced-motion (voir
+         css/pages/universe.css) : il ne reste alors que le premier set,
+         affiché de façon statique et enroulé sur plusieurs lignes si
+         nécessaire — conformément à la demande explicite. -->
+    <section class="expertise-band" aria-label="Domaines d'expertise Vagabon" data-i18n-attr="aria-label:expertise.section_label">
+      <div class="expertise-band__track">
+        <div class="expertise-band__set">
+          <span class="expertise-band__item" data-i18n="expertise.strategy">Stratégie de communication</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.branding">Identité &amp; branding</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.direction">Direction artistique</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.content">Création de contenu</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.photo_video">Photo &amp; vidéo</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.print_digital">Print &amp; digital</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.seo_sea">SEO &amp; SEA</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+        </div>
+        <div class="expertise-band__set" aria-hidden="true">
+          <span class="expertise-band__item" data-i18n="expertise.strategy">Stratégie de communication</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.branding">Identité &amp; branding</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.direction">Direction artistique</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.content">Création de contenu</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.photo_video">Photo &amp; vidéo</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.print_digital">Print &amp; digital</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+          <span class="expertise-band__item" data-i18n="expertise.seo_sea">SEO &amp; SEA</span>
+          <span class="expertise-band__sep" aria-hidden="true">•</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= B. PROJETS =======================
+         Contenu volontairement en placeholder (aucune donnée projet réelle
+         n'existe dans le projet depuis le nettoyage du site). Chaque bloc
+         article est indépendant : remplacez le texte et l'image indiquée
+         par le repère "A REMPLACER" sans toucher au reste du fichier. Voir
+         aussi assets/images/projects/README.md. -->
+    <section class="universe-section" id="projets" aria-labelledby="projets-title">
+      <div class="universe-section__inner">
+        <!-- En-tête de section : défile normalement (le comportement
+             "épinglé" a été retiré, voir css/pages/universe.css). Le grand
+             titre "Mes projets." est désormais masqué visuellement (voir
+             #projets-title dans universe.css) : Face à Face possède son
+             propre titre bien plus visible juste en dessous
+             (.project-showcase__intro). Le h2 reste dans le DOM uniquement
+             pour fournir le nom accessible de la section via
+             aria-labelledby="projets-title" ci-dessus — retirer l'élément
+             casserait cette référence. -->
+        <div class="universe-projects__intro" data-scene>
+          <div class="universe-eyebrow" data-reveal data-i18n="nav.projects">Projets</div>
+          <h2 id="projets-title" class="universe-intro__title" style="font-size:clamp(1.8rem, 4vw, 3.2rem);" data-reveal data-reveal-delay="1" data-i18n="universe.projects_heading">Mes projets.</h2>
+        </div>
+
+        <div class="universe-projects__list">
+
+          <!-- Projet 01 — VITRINE SYNTHÉTIQUE (le carrousel interactif qui
+               vivait ici a été DÉPLACÉ tel quel, sans reconstruction, vers
+               face-a-face.html — voir ce fichier pour le retrouver identique
+               en tous points : dimensions, ratio, pile, slide, offsets,
+               interactions). Cette vignette n'est plus qu'une porte d'entrée
+               composée de vrais visuels du projet (photo, flyer, logo),
+               entièrement cliquable vers la page dédiée.
+               Composant réutilisable : .universe-project--showcase (voir
+               css/pages/universe.css) n'est câblé sur aucun projet en
+               particulier — les projets 02/03/04 pourront l'adopter plus
+               tard, une fois leur propre page dédiée créée, sans nouveau
+               CSS à écrire. -->
+          <!-- Vitrine PLEINE LARGEUR, CENTRÉE (remplace l'ancienne mise en
+               page 2 colonnes texte/visuel) : numéro + titre (une seule
+               ligne) + catégorie + description regroupés en haut
+               (.project-showcase__intro), puis la grande composition
+               centrée, puis "Découvrir →". La description a été remontée
+               au-dessus des médias (elle vivait auparavant dans un bloc
+               .project-showcase__footer sous la composition, supprimé pour
+               éviter tout doublon). Toujours UN SEUL lien cliquable
+               (.project-showcase__link, display: contents) englobant les
+               trois blocs — rien n'a quitté la zone cliquable, seul
+               l'ORDRE/la MISE EN PAGE a changé. Médias, classes et logique
+               de regroupement (carousels / flyer / vidéos) strictement
+               inchangés : voir css/pages/universe.css pour le détail de
+               chaque média, non retouché dans ce tour. -->
+          <article class="universe-project universe-project--showcase" data-reveal>
+            <a class="project-showcase__link" href="face-a-face.html" aria-label="Découvrir le projet Face à Face — Club de Muay Thaï" data-i18n-attr="aria-label:project.faf.aria_discover">
+              <div class="project-showcase__intro">
+                <span class="universe-project__number">01</span>
+                <!-- Logo Face à Face — signature de marque, juste au-dessus
+                     du titre (demande explicite : PAGE PRINCIPALE
+                     uniquement, pas la page dédiée). Même fichier PNG à
+                     fond transparent que celui déjà utilisé/vérifié sur
+                     face-a-face.html (canal alpha réel, recadré sur le
+                     tracé du logo — pas le fichier source brut avec son
+                     immense canevas vide). Classe DÉDIÉE
+                     .project-showcase__logo, volontairement distincte de
+                     .project-showcase__item (qui porte box-shadow +
+                     border-radius pour la composition de médias) : c'est
+                     précisément le fait de partager ce genre de traitement
+                     "média" qui avait produit le rectangle noir derrière le
+                     logo lors d'un essai précédent sur cette même vitrine.
+                     Ici : aucun fond, bordure ou ombre — juste l'image,
+                     posée directement sur le fond bleu de la section. -->
+                <img class="project-showcase__logo" src="assets/images/projects/face-a-face/logo-face-a-face.png" alt="Logo Face à Face">
+                <h3 class="universe-project__title">Face à Face — Club de Muay Thaï</h3>
+                <p class="universe-project__category" data-i18n="project.faf.category">Direction artistique — Contenu — Identité visuelle</p>
+                <p class="universe-project__text" data-i18n="project.faf.description">Accompagnement créatif du club Face à Face autour de son image et de sa communication : direction artistique, production vidéo, photographie, créations graphiques et supports print.</p>
+                <ul class="project-showcase__tools" aria-hidden="true">
+                  <li data-i18n="project.faf.tool_direction">Direction artistique</li>
+                  <li data-i18n="project.faf.tool_video">Vidéo</li>
+                  <li data-i18n="project.faf.tool_photo">Photographie</li>
+                  <li data-i18n="project.faf.tool_design">Design graphique</li>
+                  <li data-i18n="project.faf.tool_print">Print</li>
+                </ul>
+              </div>
+              <div class="project-showcase__visual" data-universe-parallax>
+                <!-- Composition HORIZONTALE (inspirée du principe de mise en
+                     scène Audi : un visuel principal, entouré de supports
+                     secondaires en profondeur — pas une copie de son design).
+                     Ancrage central : le verso complet du flyer (vrai fichier,
+                     non recadré, cf. commentaire sur project-showcase__item--verso
+                     ci-dessous). Jean-Marc et Zohir l'encadrent à gauche/droite ;
+                     les deux vignettes vidéo se nichent dans les coutures pour
+                     apporter de la profondeur sans ajouter de hauteur. Le recto
+                     du flyer n'est plus affiché ici (retiré à la demande). -->
+                <img class="project-showcase__item project-showcase__item--jm" src="assets/images/projects/face-a-face/jean-marc-carousel.jpg" alt="" loading="lazy" decoding="async">
+                <img class="project-showcase__item project-showcase__item--zohir" src="assets/images/projects/face-a-face/zohir-carousel.jpg" alt="" loading="lazy" decoding="async">
+                <!-- Verso COMPLET du flyer (fichier réel entier, aucun crop
+                     significatif) : ancrage central de la composition. -->
+                <img class="project-showcase__item project-showcase__item--verso" src="assets/images/projects/face-a-face/flyer-muay-thai-verso.jpg" alt="" loading="lazy" decoding="async">
+                <!-- Vignettes vidéo : simple frame + symbole de lecture, AUCUN
+                     autoplay ici (perf) — les vraies vidéos restent sur la
+                     page dédiée face-a-face.html. -->
+                <span class="project-showcase__item project-showcase__item--video-jm">
+                  <img src="assets/images/projects/face-a-face/video-jean-marc-poster.jpg" alt="" loading="lazy" decoding="async">
+                  <span class="project-showcase__play" aria-hidden="true"></span>
+                </span>
+                <span class="project-showcase__item project-showcase__item--video-zohir">
+                  <img src="assets/images/projects/face-a-face/video-zohir-poster.jpg" alt="" loading="lazy" decoding="async">
+                  <span class="project-showcase__play" aria-hidden="true"></span>
+                </span>
+              </div>
+              <!-- "Découvrir" est maintenant un vrai bouton : classes
+                   .c-btn .c-btn--secondary réutilisées telles quelles
+                   (même composant que "Réserver un appel" dans le header,
+                   voir css/components.css + son adaptation de couleurs
+                   scopée à body.page-universe dans ce fichier) plutôt
+                   qu'un nouveau style inventé. Toute la vignette reste
+                   cliquable via le <a> englobant ci-dessus : ce bouton est
+                   avant tout un renfort visuel de l'affordance, le clic
+                   fonctionne déjà partout sur la carte. -->
+              <span class="universe-project__discover c-btn c-btn--secondary"><span data-i18n="cta.discover">Découvrir</span> <span class="universe-project__discover-arrow" aria-hidden="true">→</span></span>
+            </a>
+          </article>
+
+          <!-- Projet 02 — PLACEHOLDER, structure calquée sur le Projet 01
+               ci-dessus (mêmes classes .universe-project--showcase /
+               .project-showcase__intro / .project-showcase__visual /
+               .universe-project__discover) pour appartenir au même système
+               éditorial, en prévision des projets 03/04/... à venir.
+               Remplace l'ancienne présentation "Zohir Remidi — Club Face à
+               Face" (vidéo réelle, mise en page 2 colonnes) : remplacement
+               demandé explicitement — le fichier Zohir%20Remidi.mp4 reste
+               sur le disque mais n'est plus référencé nulle part sur le
+               site.
+               Pas de médias définitifs pour l'instant : les 5 rôles de la
+               composition (duo gauche / pièce centrale / duo droite) sont
+               remplis par des PLACEHOLDERS neutres ("En cours"), positionnés
+               aux mêmes coordonnées/proportions/z-index EXACTES que les 5
+               médias réels du Projet 01, via des classes de position
+               GÉNÉRIQUES et nouvelles (.project-showcase__item--left-back /
+               --left-front / --center / --right-front / --right-back,
+               voir css/pages/universe.css) — les classes spécifiques à
+               Face à Face (--jm/--zohir/--verso/--video-jm/--video-zohir)
+               ne sont pas touchées, réutilisées uniquement en modèle. Aucun
+               <video>, aucun autoplay, aucun bouton Play : ce sont de
+               simples <div>.
+               Pas de page dédiée pour ce projet pour le moment : le
+               conteneur cliquable de Projet 01 était un <a href="...">
+               (display: contents) ; ici c'est un <div> portant la même
+               classe .project-showcase__link (même mise en page via
+               display: contents, voir CSS) mais SANS lien mort vers une
+               page qui n'existe pas encore. Le bouton "Découvrir" reste
+               affiché à l'identique (même composant .c-btn .c-btn--secondary
+               que le Projet 01, pour une vraie réutilisabilité), mais porte
+               aria-disabled="true" : visuellement estompé et non cliquable
+               (pointer-events: none, voir css/pages/universe.css), sans
+               jamais rediriger vers une fausse page.
+               Pas de logo : aucune identité de marque n'existe encore pour
+               ce projet (le Projet 01 en avait un fichier réel — voir
+               .project-showcase__logo — ce n'est pas le cas ici). Pas de
+               liste de disciplines (.project-showcase__tools) non plus,
+               pour éviter d'inventer des compétences qui ne correspondent
+               peut-être pas au futur projet réel — seule la catégorie
+               reste, en une ligne volontairement neutre. -->
+          <article class="universe-project universe-project--showcase" data-reveal>
+            <div class="project-showcase__link">
+              <div class="project-showcase__intro">
+                <span class="universe-project__number">02</span>
+                <h3 class="universe-project__title" data-i18n="project.placeholder.title_02">Projet 02 — En cours</h3>
+                <p class="universe-project__category" data-i18n="project.placeholder.category">Projet en cours</p>
+                <p class="universe-project__text" data-i18n="project.placeholder.description">Projet actuellement en cours de développement. Une sélection de contenus et réalisations viendra prochainement compléter cette présentation.</p>
+              </div>
+              <div class="project-showcase__visual" data-universe-parallax>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--left-back"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--left-front"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--center"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--right-front"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--right-back"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+              </div>
+              <span class="universe-project__discover c-btn c-btn--secondary" aria-disabled="true"><span data-i18n="cta.discover">Découvrir</span> <span class="universe-project__discover-arrow" aria-hidden="true">→</span></span>
+            </div>
+          </article>
+
+          <!-- Projet 03 — PLACEHOLDER, structure identique au Projet 02
+               ci-dessus (elle-même calquée sur le Projet 01) : mêmes
+               classes .universe-project--showcase / .project-showcase__intro
+               / .project-showcase__visual / .project-showcase__item
+               (--placeholder + --left-back/--left-front/--center/
+               --right-front/--right-back, déjà créées pour le Projet 02,
+               réutilisées telles quelles) / .universe-project__discover
+               (.c-btn .c-btn--secondary). Aucune nouvelle classe CSS
+               nécessaire : preuve que le système est bien réutilisable
+               pour les projets suivants (04, 05...) sans toucher au CSS
+               des projets 01/02.
+               REMPLACE les anciennes sections "Projet 03" et "Projet 04"
+               (ancienne mise en page 2 colonnes .universe-project__media/
+               __body, images de couverture manquantes
+               projet-03-couverture.jpg / projet-04-couverture.jpg avec
+               repli onerror, titres "Titre du projet à renseigner") —
+               retrait demandé explicitement pour ne pas rompre la
+               cohérence visuelle avec les Projets 01/02 ; ces deux anciens
+               blocs disparaissent entièrement (aucun "Projet 04" restant
+               pour l'instant, à recréer plus tard avec cette même
+               structure).
+               Comme pour le Projet 02 : pas de médias définitifs (5
+               placeholders "En cours", <div> et non <img>/<video>, aucun
+               autoplay ni bouton Play), pas de logo (aucune identité de
+               marque définie), pas de liste de disciplines (catégorie
+               neutre uniquement), pas de page dédiée donc conteneur en
+               <div> (pas de lien mort) et bouton "Découvrir" présent mais
+               aria-disabled="true" (visuel identique à Projet 01/02,
+               non cliquable). -->
+          <article class="universe-project universe-project--showcase" data-reveal>
+            <div class="project-showcase__link">
+              <div class="project-showcase__intro">
+                <span class="universe-project__number">03</span>
+                <h3 class="universe-project__title" data-i18n="project.placeholder.title_03">Projet 03 — En cours</h3>
+                <p class="universe-project__category" data-i18n="project.placeholder.category">Projet en cours</p>
+                <p class="universe-project__text" data-i18n="project.placeholder.description">Projet actuellement en cours de développement. Une sélection de contenus et réalisations viendra prochainement compléter cette présentation.</p>
+              </div>
+              <div class="project-showcase__visual" data-universe-parallax>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--left-back"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--left-front"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--center"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--right-front"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+                <div class="project-showcase__item project-showcase__item--placeholder project-showcase__item--right-back"><span class="project-showcase__placeholder-label" data-i18n="project.placeholder.label">En cours</span></div>
+              </div>
+              <span class="universe-project__discover c-btn c-btn--secondary" aria-disabled="true"><span data-i18n="cta.discover">Découvrir</span> <span class="universe-project__discover-arrow" aria-hidden="true">→</span></span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= B.1 TÉMOIGNAGES =======================
+         Nouvelle section, insérée UNIQUEMENT ici entre la fin de Projets/
+         Projet 03 (B, ci-dessus) et Contact (D, plus bas) — Hero, bandeau
+         d'expertises, Projets 01/02/03 et Contact ne sont pas modifiés.
+
+         Reprend le PRINCIPE du bandeau d'expertises (voir .expertise-band
+         dans css/pages/universe.css, section Hero → Projets) plutôt que de
+         créer un second moteur d'animation : même technique de boucle
+         infinie (contenu dupliqué une fois, translateX(-50%), jonction
+         invisible grâce à une margin-right portée par chaque set plutôt
+         qu'un gap sur le track), et réutilise LITTÉRALEMENT le même
+         @keyframes universe-expertise-marquee (translateX(0) → -50%,
+         générique, sans rapport avec son nom) — seule la durée change (very
+         nettement plus lente : il faut ici laisser le temps de lire des
+         phrases entières, pas seulement des mots-clés). Le bandeau
+         d'expertises lui-même n'est ni renommé ni modifié.
+
+         IMPORTANT — contenu des témoignages : les trois exemples ci-dessous
+         servent uniquement à tester la mise en page (demande explicite).
+         Voir data/translations.js pour le détail : seul "Zohir Remidi" est
+         un texte fictif fourni pour le gabarit (marqué comme tel), "Jean-
+         Marc Guillot" (personne réelle) n'a reçu AUCUNE citation inventée
+         — seulement un repère "[Témoignage à venir]" — et le troisième est
+         un emplacement générique pour un futur client. Aucun de ces trois
+         textes n'est présenté comme un avis authentiquement reçu.
+
+         Portraits : aucune photo client n'a été réutilisée depuis les
+         dossiers projets existants (ex. assets/images/projects/face-a-face/)
+         sans confirmation qu'elle est prévue pour ce rôle précis — voir
+         demande explicite à ce sujet. Chaque avatar est donc un placeholder
+         circulaire (initiales, pas d'icône générique), facilement
+         remplaçable par une vraie photo plus tard (voir .testimonial-band__avatar
+         dans le CSS pour la marche à suivre). -->
+    <section class="testimonial-band" aria-labelledby="testimonials-title">
+      <div class="testimonial-band__head universe-section__inner">
+        <div class="universe-eyebrow" data-reveal data-i18n="testimonials.section_label">Témoignages</div>
+        <h2 id="testimonials-title" class="testimonial-band__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="testimonials.title">Ce sont eux qui en parlent le mieux.</h2>
+      </div>
+      <div class="testimonial-band__viewport">
+        <div class="testimonial-band__track">
+          <div class="testimonial-band__set">
+            <div class="testimonial-band__item">
+              <div class="testimonial-band__person">
+                <!-- PLACEHOLDER PORTRAIT : remplacer par
+                     <img class="testimonial-band__avatar-img" src="…" alt="" width="112" height="112">
+                     à l'intérieur de .testimonial-band__avatar dès qu'une
+                     photo dédiée à ce témoignage sera disponible. -->
+                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">ZR</span></div>
+                <p class="testimonial-band__name" data-i18n="testimonials.01.name">Zohir Remidi</p>
+              </div>
+              <p class="testimonial-band__quote" data-i18n="testimonials.01.quote">« Virgil a su transformer nos besoins en une communication claire, cohérente et réellement adaptée à l'identité de Face à Face. Au-delà de la création visuelle, il a pris le temps de comprendre notre fonctionnement et nos contraintes afin de proposer des supports aussi efficaces qu'esthétiques. »</p>
+            </div>
+            <div class="testimonial-band__item">
+              <div class="testimonial-band__person">
+                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">JG</span></div>
+                <p class="testimonial-band__name" data-i18n="testimonials.02.name">Jean-Marc Guillot</p>
+              </div>
+              <p class="testimonial-band__quote" data-i18n="testimonials.02.quote">[Témoignage à venir — avis de Jean-Marc Guillot à intégrer ultérieurement.]</p>
+            </div>
+            <div class="testimonial-band__item">
+              <div class="testimonial-band__person">
+                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">—</span></div>
+                <p class="testimonial-band__name" data-i18n="testimonials.03.name">Client — À venir</p>
+              </div>
+              <p class="testimonial-band__quote" data-i18n="testimonials.03.quote">[Avis à venir.]</p>
+            </div>
+          </div>
+          <div class="testimonial-band__set" aria-hidden="true">
+            <div class="testimonial-band__item">
+              <div class="testimonial-band__person">
+                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">ZR</span></div>
+                <p class="testimonial-band__name" data-i18n="testimonials.01.name">Zohir Remidi</p>
+              </div>
+              <p class="testimonial-band__quote" data-i18n="testimonials.01.quote">« Virgil a su transformer nos besoins en une communication claire, cohérente et réellement adaptée à l'identité de Face à Face. Au-delà de la création visuelle, il a pris le temps de comprendre notre fonctionnement et nos contraintes afin de proposer des supports aussi efficaces qu'esthétiques. »</p>
+            </div>
+            <div class="testimonial-band__item">
+              <div class="testimonial-band__person">
+                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">JG</span></div>
+                <p class="testimonial-band__name" data-i18n="testimonials.02.name">Jean-Marc Guillot</p>
+              </div>
+              <p class="testimonial-band__quote" data-i18n="testimonials.02.quote">[Témoignage à venir — avis de Jean-Marc Guillot à intégrer ultérieurement.]</p>
+            </div>
+            <div class="testimonial-band__item">
+              <div class="testimonial-band__person">
+                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">—</span></div>
+                <p class="testimonial-band__name" data-i18n="testimonials.03.name">Client — À venir</p>
+              </div>
+              <p class="testimonial-band__quote" data-i18n="testimonials.03.quote">[Avis à venir.]</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= C. PHILOSOPHIE (TEMPORAIREMENT DÉSACTIVÉE) =======================
+         Désactivation demandée explicitement : la section est retirée du flux
+         (commentée) pour ne laisser AUCUN espace vide et pour que la section
+         Contact ci-dessous remonte naturellement à sa place. Le balisage est
+         conservé tel quel ci-dessous (inchangé) pour une réintégration future
+         facile — il suffit de retirer ce commentaire pour la réafficher.
+         Tant qu'elle est commentée : aucune hauteur, aucun margin/padding
+         résiduel, et data-reveal/data-scene ne s'exécutent sur aucun élément
+         puisqu'ils n'existent pas dans le DOM.
+
+    <section class="universe-section" id="philosophie" aria-labelledby="philosophie-title">
+      <div class="universe-section__inner" data-scene>
+        <div class="universe-eyebrow" data-reveal data-i18n="philosophy.eyebrow">Philosophie</div>
+        <div class="universe-philosophy__grid">
+          <h2 id="philosophie-title" class="universe-philosophy__statement" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="philosophy.title">Une pratique attentive, jamais générique.</h2>
+          <p class="universe-philosophy__text" data-reveal data-reveal-delay="2" data-i18n="philosophy.text">Chaque projet commence par une observation : celle d'un contexte, d'une audience, d'une tension à résoudre. Vagabon construit ensuite une réponse sur mesure — identité, contenu ou stratégie — pensée pour durer plutôt que pour suivre une tendance. Le studio privilégie le temps juste : ni plus vite, ni plus lent que ce que le projet demande réellement.</p>
+        </div>
+      </div>
+    </section>
+
+    -->
+
+    <!-- ======================= D. CONTACT ======================= -->
+    <section class="universe-section universe-contact" id="contact" aria-labelledby="contact-title">
+      <div class="universe-section__inner" data-scene>
+        <div class="universe-eyebrow" data-reveal data-i18n="nav.contact">Contact</div>
+        <h2 id="contact-title" class="universe-contact__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="contact_section.title">Parlons de votre prochain projet.</h2>
+        <a href="mailto:virgil.bkr51@outlook.fr" class="universe-contact__email" data-reveal data-reveal-delay="2">virgil.bkr51@outlook.fr</a>
+        <p class="universe-contact__meta" data-reveal data-reveal-delay="3" data-i18n="contact_section.meta">Reims · Paris · Lille · France entière, à distance</p>
+        <div class="universe-contact__social" data-social-links aria-label="Réseaux sociaux" data-reveal data-reveal-delay="3"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= PIED DE PAGE =======================
+       Conclusion discrète de l'expérience (pas un footer générique).
+       Les pages légales liées ci-dessous sont des pages minimales dédiées
+       (voir mentions-legales.html, politique-confidentialite.html,
+       politique-cookies.html, gestion-cookies.html) : aucune information
+       légale n'y est inventée, les champs manquants (SIRET, hébergeur,
+       adresse) y sont clairement marqués "à compléter avant mise en ligne". -->
+  <footer class="universe-footer">
+    <div class="universe-footer__inner">
+      <div>
+        <p class="universe-footer__brand">Vagabon</p>
+        <p class="universe-footer__role">Virgil Boukraa<br><span data-i18n="footer.role">Studio créatif indépendant · Communication freelance</span></p>
+      </div>
+      <div>
+        <p class="universe-footer__heading" data-i18n="footer.legal">Informations</p>
+        <nav class="universe-footer__list" aria-label="Informations légales">
+          <a href="mentions-legales.html" data-i18n="footer.link.mentions">Mentions légales</a>
+          <a href="politique-confidentialite.html" data-i18n="footer.link.privacy">Politique de confidentialité</a>
+          <a href="politique-cookies.html" data-i18n="footer.link.cookies_policy">Politique de cookies</a>
+          <a href="gestion-cookies.html" data-i18n="footer.link.cookies_manage">Gestion des cookies</a>
+          <a href="#contact" data-i18n="nav.contact">Contact</a>
+        </nav>
+      </div>
+      <div>
+        <p class="universe-footer__heading" data-i18n="footer.follow">Suivre</p>
+        <div class="universe-footer__social" data-social-links aria-label="Réseaux sociaux"></div>
+      </div>
+    </div>
+    <div class="universe-footer__bottom">
+      <p>© Vagabon — Virgil Boukraa</p>
+      <p data-i18n="footer.rights">Tous droits réservés.</p>
+    </div>
+  </footer>
+  </div>
+
+  <!-- Données (chargées avant les scripts qui en dépendent) -->
+  <script src="data/settings.js"></script>
+  <script src="data/translations.js"></script>
+
+  <script src="js/loader.js"></script>
+  <script src="js/accessibility.js" defer></script>
+  <script src="js/language.js" defer></script>
+  <script src="js/navigation.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/data-renderer.js" defer></script>
+  <script src="js/universe.js" defer></script>
+  <script src="js/universe-cursor.js?v=9" defer></script>
+  <script src="js/universe-hero-distortion.js?v=1" defer></script>
+  <script src="js/universe-media-stack.js?v=9" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

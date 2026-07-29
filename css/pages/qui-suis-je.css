@@ -1,0 +1,258 @@
+/* ==========================================================================
+   VAGABON — css/pages/qui-suis-je.css
+   Styles de qui-suis-je.html — page de présentation personnelle de
+   Virgil Boukraa, atteinte depuis l'entrée "Qui suis-je" du menu plein
+   écran de universe.html (ancienne entrée "Philosophie").
+
+   Ne redéfinit AUCUN jeton : réutilise entièrement la palette --u-* et les
+   classes de rythme (.universe-section, .universe-section__inner,
+   .universe-eyebrow) déjà déclarées dans css/pages/universe.css, chargé
+   avant ce fichier (voir qui-suis-je.html). Portée strictement limitée aux
+   classes préfixées "who-" ci-dessous : aucune règle ici ne modifie
+   universe.html, face-a-face.html, contact.html ou un composant partagé.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* A. Lien de retour — même traitement visuel que .project-page__back      */
+/* (face-a-face.css), redéclaré ici sous un nom propre à cette page plutôt */
+/* que de charger face-a-face.css pour une seule règle.                    */
+/* ---------------------------------------------------------------------- */
+.who-back {
+  position: absolute;
+  top: calc(var(--nav-height) + var(--space-lg));
+  left: clamp(24px, 5vw, 64px);
+  z-index: 2;
+  display: inline-flex;
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.04em;
+  color: var(--u-ink-subtle);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+.who-back:hover,
+.who-back:focus-visible {
+  color: var(--u-warm);
+  border-color: var(--u-warm-soft);
+}
+
+/* ---------------------------------------------------------------------- */
+/* B. Hero — identité de la page (nom + fonction) + emplacement portrait.  */
+/* ---------------------------------------------------------------------- */
+.who-hero {
+  position: relative;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding-top: var(--nav-height);
+  padding-bottom: var(--space-lg);
+}
+
+.who-hero__inner {
+  position: relative;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 96px);
+}
+
+.who-hero__title {
+  margin-top: var(--space-md);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 6.4vw, 5.2rem);
+  line-height: 1.05;
+  letter-spacing: var(--letter-spacing-display);
+  color: var(--u-ink);
+}
+
+.who-hero__role {
+  margin-top: var(--space-lg);
+  max-width: 42ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+/* Portrait — emplacement réservé. Ratio 3:4 aligné sur le fichier attendu
+   par assets/images/profile/README.md (1200×1600px). Même traitement
+   visuel que les placeholders déjà utilisés pour les projets à venir (voir
+   .project-showcase__item--placeholder dans universe.css) : un rectangle
+   discret, jamais une carte ou un cadre avec ombre. */
+.who-hero__portrait-frame {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--u-bg) 100%, black 10%);
+  border: 1px solid color-mix(in srgb, var(--u-bg) 100%, black 24%);
+  text-align: center;
+}
+
+.who-hero__portrait-label {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #495359;
+}
+
+/* Une fois assets/images/profile/virgil-portrait-01.webp disponible et
+   l'élément <img class="who-hero__portrait-img"> substitué au placeholder
+   (voir commentaire dans qui-suis-je.html) : remplit le même cadre 3:4,
+   recadré proprement, sans jamais déformer le portrait. */
+.who-hero__portrait-img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .who-hero__inner {
+    grid-template-columns: 1fr;
+  }
+  .who-hero__portrait-frame {
+    max-width: 360px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .who-back {
+    position: static;
+    display: inline-block;
+    margin: var(--space-lg) clamp(24px, 5vw, 64px) 0;
+  }
+  .who-hero {
+    padding-top: var(--space-lg);
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* C. Sections 01–04 — rythme partagé avec .universe-section /             */
+/* .universe-section__inner (padding vertical, largeur de contenu),        */
+/* seules les classes ci-dessous sont propres à cette page.                */
+/* ---------------------------------------------------------------------- */
+.who-section__number {
+  display: block;
+  margin-bottom: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.16em;
+  color: var(--u-ink-subtle);
+}
+
+.who-section__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 3.4vw, 2.8rem);
+  line-height: 1.16;
+  color: var(--u-ink);
+  max-width: 20ch;
+}
+
+.who-section__body {
+  margin-top: var(--space-md);
+  max-width: 52ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+/* --------------------------- Alternance gauche/droite ------------------- */
+.who-section__inner--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 96px);
+}
+
+.who-section--visual-left .who-section__visual {
+  order: -1;
+}
+
+/* Emplacement visuel réservé (image grand format à venir) — même famille
+   visuelle que le portrait du Hero (rectangle discret, sans cadre ni
+   ombre), en attendant un fichier réel pour ces sections. */
+.who-section__visual {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: color-mix(in srgb, var(--u-bg) 100%, black 10%);
+  border: 1px solid color-mix(in srgb, var(--u-bg) 100%, black 24%);
+}
+
+@media (max-width: 900px) {
+  .who-section__inner--split {
+    grid-template-columns: 1fr;
+  }
+  .who-section--visual-left .who-section__visual {
+    order: 0;
+  }
+}
+
+/* --------------------------- Rupture éditoriale (03) --------------------- */
+/* Bloc centré pleine largeur, dans l'esprit de .universe-philosophy —
+   volontairement différent des deux alternances qui l'entourent (demande
+   explicite d'alterner les compositions plutôt que de répéter le même
+   gabarit quatre fois). */
+.who-section--statement .who-section__inner {
+  text-align: center;
+}
+
+.who-section--statement .universe-eyebrow {
+  justify-content: center;
+}
+
+.who-section__statement {
+  margin-inline: auto;
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 4.4vw, 3.6rem);
+  line-height: 1.16;
+  color: var(--u-ink);
+}
+
+.who-section__body--centered {
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* --------------------------- Étapes discrètes (04) ------------------------ */
+/* Simple liste numérotée en ligne — jamais des cards : pas de fond, pas de
+   bordure, pas d'icône. Juste un repère chiffré, comme les numéros de
+   section eux-mêmes. */
+.who-section__steps {
+  margin-top: var(--space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg) var(--space-xl);
+  list-style: none;
+}
+
+.who-section__step {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: #495359;
+}
+
+.who-section__step-number {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.08em;
+  color: var(--u-ink-subtle);
+}

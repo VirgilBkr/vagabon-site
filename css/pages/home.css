@@ -1,0 +1,814 @@
+/* ==========================================================================
+   VAGABON — css/pages/home.css
+   Styles de la page d'accueil / landing (index.html).
+
+   Contient le système complet du Hero d'introduction (.home-hero /
+   .explore-button), avec vidéo d'arrière-plan plein écran. Composition
+   inspirée, dans sa seule LOGIQUE (écran plein, centre fort, cadre
+   décoratif, générique), d'une introduction cinématographique — aucun
+   asset, aucune classe et aucun texte n'est repris d'un site tiers. Tout
+   appartient à l'identité Vagabon (#008AC9, #000000, #FFFFFF). Ces styles
+   sont préfixés .home-hero / .explore-button et scoped à cette page : ils
+   ne modifient aucune autre page du site.
+
+   NETTOYAGE DU SITE : l'ancien portfolio (autres pages) et l'ancien univers
+   Marble (universe.html) ont été retirés du projet. Ce fichier ne sert plus
+   qu'à index.html, seule page restante — aucune règle de ce fichier n'a été
+   modifiée visuellement à cette occasion, seuls des commentaires devenus
+   obsolètes ont été mis à jour et un bloc CSS mort (#presentation, lié à
+   l'ancienne première section du site, qui n'existe plus) a été retiré.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Verrou de scroll — landing page (index.html), seule page du projet.      */
+/* La landing occupe 100% du viewport et ne doit jamais pouvoir défiler     */
+/* vers un contenu situé sous elle (il n'y en a d'ailleurs pas dans le DOM  */
+/* de cette page). N'affecte ni la vidéo, ni les textes, ni les animations, */
+/* ni les contrôles du Hero.                                                */
+/* ---------------------------------------------------------------------- */
+html.is-landing-locked,
+html.is-landing-locked body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Variables locales au Hero                                               */
+/* ---------------------------------------------------------------------- */
+
+.home-hero {
+  --hero-frame-offset: clamp(14px, 2.4vw, 32px);
+  --hero-corner-size: clamp(26px, 3.6vw, 52px);
+  --hero-accent-soft: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  --hero-accent-faint: color-mix(in srgb, var(--color-accent) 22%, transparent);
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-items: center;
+  overflow: hidden;
+  padding-top: var(--nav-height);
+  background: var(--color-background);
+  transition: opacity var(--duration-slow) var(--ease-standard);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Hero volontairement sombre dans les deux thèmes (décision documentée,   */
+/* voir le commentaire dans index.html, section 13 du brief) : la vidéo    */
+/* fournie est un plan large et lumineux (ciel/eau) qu'un overlay clair    */
+/* rendrait illisible. Redéclarer les jetons de couleur ICI, localement,   */
+/* suffit à figer tout le sous-arbre du Hero en apparence sombre — le      */
+/* reste du site continue de suivre normalement [data-theme].              */
+/*                                                                          */
+/* Depuis la refonte graphique "post-Hero" (nouvelle palette claire +       */
+/* échelle d'espacements légèrement augmentée sitewide), les jetons         */
+/* --space-* sont eux aussi redéclarés ICI, à leur valeur D'ORIGINE : le    */
+/* Hero doit rester pixel pour pixel identique à son état actuel, y        */
+/* compris ses espacements internes (metadata, bouton, marges), qui         */
+/* utilisent ces mêmes variables partagées. Consigne explicite : "ne pas   */
+/* toucher... à la structure générale du Hero". */
+/* ---------------------------------------------------------------------- */
+
+.home-hero--video {
+  --color-background: #000000;
+  --color-text: #FFFFFF;
+  --color-text-muted: #B5B5B5;
+  --color-text-subtle: #7D7D7D;
+  --color-border: rgba(255, 255, 255, 0.16);
+  --color-surface: #101010;
+  color-scheme: dark;
+
+  /* Espacements figés à leur valeur d'origine (avant l'augmentation
+     sitewide de la section "espaces" de la refonte post-Hero). */
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+}
+
+/* Légère sortie de scène lorsque le visiteur commence à défiler
+   (section 15 du brief) — appliquée par js/animations.js via
+   initHeroLeaveEffect(). Reste très subtile, transform/opacity uniquement. */
+.home-hero.is-leaving .home-hero__frame {
+  opacity: 0.35;
+}
+.home-hero.is-leaving .home-hero__bottom {
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Header — page d'accueil uniquement. Le header .c-header lui-même est    */
+/* partagé par toutes les pages (voir index.html, section commune) : sa    */
+/* structure, ses classes et son comportement JS (js/navigation.js,        */
+/* js/theme.js, js/language.js, js/audio.js) restent strictement           */
+/* inchangés. Seule cette règle, scoped à body.page-home, pousse le groupe */
+/* de contrôles vers la droite en donnant tout l'espace disponible au      */
+/* nouvel élément .c-header__spacer (vide, remplace l'ancien placeholder   */
+/* de logo). Aucune autre page n'est affectée : elles n'ont pas la classe  */
+/* page-home sur <body> et conservent leur logo + disposition d'origine.  */
+/* ---------------------------------------------------------------------- */
+
+/* Préservation explicite de l'apparence actuelle du header sur la page
+   d'accueil, suite à la refonte graphique claire du reste du site (nouvelle
+   palette par défaut : voir variables.css). Sans cette règle, le dégradé
+   du header basculerait aussi vers la nouvelle version claire ici — or la
+   consigne est explicite : "ne pas toucher... à son header [le Hero]".
+   Reproduit exactement les anciennes valeurs sombres codées en dur
+   (.c-header / .c-header.is-scrolled avant cette refonte). N'affecte que
+   cette page ; les autres pages suivent normalement le nouveau thème par
+   défaut et le bouton de thème. */
+body.page-home .c-header {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent);
+}
+body.page-home .c-header.is-scrolled {
+  background-color: rgba(0, 0, 0, 0.88);
+  border-bottom-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Bouton son : sans objet ici (la vidéo qu'il contrôlait a été remplacée
+   par l'univers Marble, sans piste audio pilotable). Masqué plutôt que
+   laissé visible sans effet — même traitement que sur universe.html
+   (voir css/pages/universe.css, [data-audio-toggle]). N'affecte que
+   cette page. */
+body.page-home [data-audio-toggle] {
+  display: none !important;
+}
+
+/* Le loader (js/loader.js) précède l'apparition du Hero : il fait partie
+   de "l'arrivée immersive, sombre, cinématographique" décrite comme
+   objectif du site (voir le brief) et doit donc rester sombre lui aussi
+   sur cette page, sans dépendre du nouveau thème clair par défaut du
+   reste du site. Mêmes valeurs qu'auparavant, codées en dur ici pour la
+   même raison que pour le header ci-dessus. */
+body.page-home .loader {
+  background: #000000;
+}
+body.page-home .loader__mark {
+  border-color: #008AC9;
+}
+body.page-home .loader__wordmark {
+  color: #B5B5B5;
+}
+body.page-home .loader__bar-track {
+  background: rgba(255, 255, 255, 0.16);
+}
+body.page-home .loader__bar {
+  background: #008AC9;
+}
+
+.page-home .c-header__spacer {
+  flex: 1 1 auto;
+}
+
+.page-home .c-header__actions {
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+/* Rapprochement du bord droit réel de l'écran (desktop uniquement, ≥769px) :
+   .c-header__inner hérite de .l-container (max-width: var(--container-max),
+   soit 1360px, centré) — sur un écran large, ça laisse une marge vide bien
+   plus grande que prévu entre le groupe de boutons et le bord de l'écran.
+   On retire ce plafond ICI SEULEMENT, et on pilote la distance au bord avec
+   un padding-right dédié (~30 à 50px, aligné visuellement sur le cadre
+   décoratif du Hero). Le padding gauche (inutilisé, rien à son contact)
+   reste celui de .l-container. Non scoped en dessous de 769px : le mobile
+   garde exactement son comportement actuel (voir responsive.css, inchangé). */
+@media (min-width: 769px) {
+  .page-home .c-header__inner {
+    max-width: none;
+    padding-right: clamp(30px, 3vw, 50px);
+  }
+}
+
+/* État visuel du bouton son du header une fois branché sur la vidéo du
+   Hero (voir initHeroVideoAudio() dans js/animations.js). Ces classes ne
+   sont posées que sur cette page (aucun autre gabarit n'a de vidéo Hero). */
+.page-home [data-audio-toggle].is-audio-on {
+  border-color: #008AC9;
+  background: rgba(0, 138, 201, 0.16);
+  color: #FFFFFF;
+}
+.page-home [data-audio-toggle].is-audio-unavailable {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Centrage précis de "EN"/"FR" et de l'icône son dans leurs boutons ronds
+   du header (page d'accueil uniquement — .c-icon-btn est une classe
+   partagée, on ne touche donc pas [data-theme-toggle] ni les autres pages).
+   .c-icon-btn centre déjà via inline-flex, mais le line-height hérité du
+   corps de texte décale légèrement le texte "EN"/"FR" du centre visuel —
+   même cause que pour "Réserver un appel". Largeur/hauteur (40px, définies
+   par .c-icon-btn) ne changent pas. */
+.page-home .c-header__actions [data-lang-toggle],
+.page-home .c-header__actions [data-audio-toggle] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  text-align: center;
+}
+
+/* Lisibilité du texte "FR" sur le header sombre du Hero (dégradé noir en
+   haut de page, voir body.page-home .c-header) : sans cette règle, le
+   texte hérite de la couleur sombre par défaut du site (--color-text),
+   peu lisible ici. Couleur uniquement — taille, position et bouton
+   inchangés (déjà gérés par la règle ci-dessus). */
+.page-home .c-header__actions [data-lang-toggle] {
+  color: #FFFFFF;
+}
+
+/* Un <svg> est inline par défaut : un léger espace lié à sa ligne de base
+   peut le décaler de 1-2px du centre exact du bouton rond. display:block
+   + flex:0 0 auto retire cette dépendance à la ligne de base ; la taille
+   (18px, déjà définie par .c-icon-btn svg) et le fonctionnement du bouton
+   son ne changent pas. */
+.page-home .c-header__actions [data-audio-toggle] svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+/* Centrage précis de "Réserver un appel" dans le header de la page
+   d'accueil. .c-btn centre déjà son contenu (display:inline-flex +
+   align-items/justify-content:center, voir components.css), mais le
+   line-height hérité de body (--line-height-body, pensé pour du texte
+   courant) agrandit la boîte de ligne du texte au-delà de ce dont une
+   seule ligne en majuscules a besoin : le texte paraît alors décalé d'un
+   ou deux pixels par rapport au centre visuel du bouton. line-height: 1
+   supprime cet espace superflu sans toucher au padding, à la largeur, à
+   la hauteur (min-height: 48px inchangée) ni à la bordure du bouton.
+   Scoped à cette seule instance (header, page d'accueil) : .c-btn reste
+   inchangé pour toutes les autres pages et les autres usages du bouton. */
+.page-home .c-header__actions .c-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Lisibilité du texte "Réserver un appel" sur le header sombre du Hero :
+   .c-btn--secondary hérite par défaut de color: var(--color-text)
+   (components.css), résolu ici à la couleur sombre globale du site (le
+   fond dégradé noir du header n'est pas dans le sous-arbre de
+   .home-hero--video, qui redéfinit --color-text en blanc uniquement pour
+   son propre contenu) — d'où un texte peu lisible. Couleur uniquement :
+   bordure, fond, dimensions et hover restent ceux de .c-btn--secondary. */
+.page-home .c-header__actions .c-btn--secondary {
+  color: #FFFFFF;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Curseur — page d'accueil uniquement. js/cursor.js ne crée plus les       */
+/* éléments .cursor-dot/.cursor-ring ici (voir isHomePage dans ce fichier)  */
+/* et pose déjà html.no-custom-cursor, qui les masque via la règle          */
+/* existante de components.css. Ces quelques règles rétablissent           */
+/* explicitement le curseur natif + le pointer sur les éléments cliquables, */
+/* y compris la carte projet qui avait cursor:none pour laisser place à     */
+/* l'ancien curseur personnalisé (.c-card-project[data-cursor-label], voir  */
+/* components.css) — sans quoi elle n'afficherait plus aucun curseur ici.   */
+/* Le composant .cursor-dot/.cursor-ring reste entièrement fonctionnel sur  */
+/* toutes les autres pages, js/cursor.js n'est pas supprimé. */
+body.page-home {
+  cursor: auto;
+}
+body.page-home a,
+body.page-home button,
+body.page-home [role="button"] {
+  cursor: pointer;
+}
+body.page-home .c-card-project[data-cursor-label] {
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Zone 1 — Univers 3D Marble en arrière-plan plein écran                  */
+/* (remplace l'ancienne vidéo — voir index.html pour l'historique)         */
+/* ---------------------------------------------------------------------- */
+
+.home-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  /* Fond de secours pendant le chargement du monde Marble (même image
+     poster qu'à l'époque de la vidéo, réutilisée telle quelle). */
+  background: #000 center / cover no-repeat url("../../assets/images/hero/vagabon-hero-poster-japon.webp");
+}
+
+/* Iframe Marble : remplit exactement .home-hero__media (donc tout le
+   Hero), à la place du couple width:100%/aspect-ratio:4/3 du snippet
+   Marble d'origine — ce ratio fixe est volontairement abandonné ici,
+   sinon l'iframe se retrouverait centrée avec des bandes visibles au
+   lieu de couvrir tout l'écran comme le faisait la vidéo. splatUrl,
+   mobileUrl et marbleWorldId (dans l'attribut src, voir index.html)
+   restent strictement ceux fournis, seul le dimensionnement change. */
+.home-hero__marble {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.home-hero__video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* Dégradé renforcé en haut (lisibilité du header) et en bas (lisibilité
+     de la phrase principale + du bouton, désormais tous deux en bas de
+     l'écran), plus un voile radial au centre — la vidéo fournie étant un
+     plan très clair (ciel/eau), un overlay hérité d'un fond sombre
+     générique ne suffirait pas seul. Légère teinte bleue en complément,
+     sans jamais obscurcir excessivement l'image ni masquer le monument. */
+  background:
+    radial-gradient(60% 55% at 50% 55%, rgba(0, 0, 0, 0.28), transparent 70%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.48) 0%, rgba(0, 0, 0, 0.22) 24%, rgba(0, 0, 0, 0.24) 52%, rgba(0, 0, 0, 0.56) 100%),
+    rgba(0, 20, 30, 0.07);
+}
+
+/* Surtitre "STUDIO CRÉATIF INDÉPENDANT" : couleur noire volontaire (au lieu
+   du blanc/gris clair utilisé pour le reste du Hero) car cette ligne se
+   superpose souvent à une zone claire du ciel/de l'eau de la vidéo — un
+   texte sombre y reste plus lisible. Seule la couleur change ici : police
+   Good Times, taille, letter-spacing et les deux lignes horizontales de
+   .home-hero__eyebrow-line restent inchangés (règles ci-dessus/dessous).
+   Pas d'ombre portée noire ici (contrairement aux autres textes du Hero,
+   blancs) : une ombre noire floutée de 20px derrière un texte déjà noir ne
+   sert à rien et créait un halo sombre visible en haut du Hero. */
+.home-hero--video .home-hero__eyebrow-text {
+  color: #212529;
+  text-shadow: none;
+}
+
+/* Filet de sécurité supplémentaire pour le texte blanc du Hero : reste
+   lisible quelle que soit la luminosité exacte de l'image vidéo à l'instant
+   T. Ne s'applique pas au surtitre (texte noir, voir règle ci-dessus) ni au
+   message sonore (texte noir aussi désormais, voir règle dédiée ci-dessous). */
+.home-hero--video .home-hero__metadata-label,
+.home-hero--video .home-hero__metadata-value,
+.home-hero--video .home-hero__statement {
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.55);
+}
+
+/* "Expérience optimale avec le son" : couleur noire demandée, en remplacement
+   du gris clair hérité de --color-text-subtle. Sélecteur spécifique
+   (body.page-home + classes) pour l'emporter sûrement sur la règle générale
+   ci-dessous, sans !important. Ce texte se trouve dans la zone la plus
+   assombrie de l'overlay (bas du Hero, pour la lisibilité du bouton) : un
+   texte noir y perdrait du contraste, d'où la légère ombre blanche en
+   filet — pas de fond opaque. Position, taille, police, espacement et
+   alignement ne changent pas (aucune autre propriété touchée). */
+body.page-home .home-hero__sound-message {
+  color: #212529;
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.45);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Zone 1bis — Cadre graphique décoratif (quatre coins indépendants)       */
+/* ---------------------------------------------------------------------- */
+
+.home-hero__frame {
+  position: absolute;
+  inset: var(--hero-frame-offset);
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity var(--duration-slow) var(--ease-standard);
+}
+
+.home-hero__corner {
+  position: absolute;
+  width: var(--hero-corner-size);
+  height: var(--hero-corner-size);
+  border: 1.5px solid var(--hero-accent-soft);
+}
+
+.home-hero__corner--top-left {
+  top: 0; left: 0;
+  border-right: none; border-bottom: none;
+  border-top-left-radius: 14px;
+}
+.home-hero__corner--top-right {
+  top: 0; right: 0;
+  border-left: none; border-bottom: none;
+  border-top-right-radius: 14px;
+}
+.home-hero__corner--bottom-left {
+  bottom: 0; left: 0;
+  border-right: none; border-top: none;
+  border-bottom-left-radius: 14px;
+}
+.home-hero__corner--bottom-right {
+  bottom: 0; right: 0;
+  border-left: none; border-top: none;
+  border-bottom-right-radius: 14px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Zone 3 + 6 — Contenu central (surtitre, H1 accessible, métadonnées)     */
+/* ---------------------------------------------------------------------- */
+
+.home-hero__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(var(--space-md), 5vw, var(--space-2xl));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(var(--space-md), 3vh, var(--space-lg));
+}
+
+/* Surtitre centré, lignes qui se déploient vers les côtés */
+.home-hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: min(100%, 640px);
+}
+
+.home-hero__eyebrow-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--hero-accent-soft));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 900ms var(--ease-standard);
+}
+.home-hero__eyebrow-line:last-child {
+  background: linear-gradient(270deg, transparent, var(--hero-accent-soft));
+}
+[data-reveal].is-visible .home-hero__eyebrow-line {
+  transform: scaleX(1);
+}
+
+.home-hero__eyebrow-text {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* Ligne de métadonnées (direction à gauche / localisation à droite). La
+   phrase principale ne vit plus ici (voir .home-hero__bottom plus bas) :
+   ces deux blocs restent seuls dans le tiers central, discrets, sans
+   chevaucher ni le monument ni la phrase désormais placée en bas. */
+.home-hero__metadata {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(var(--space-md), 4vw, var(--space-xl));
+  width: 100%;
+  max-width: 640px;
+}
+
+.home-hero__metadata-side {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-hero__metadata-side--right {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.home-hero__metadata-label {
+  /* Labels "DIRECTION" / "BASÉ À" en Good Times (charte section 24.6). */
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+/* "BASÉ À" (label du côté droit uniquement) rejoint la couleur #aec7d8
+   demandée pour l'ensemble de la phrase "Basé à Reims · France" — le
+   label "DIRECTION" du côté gauche n'est pas concerné et garde sa
+   couleur d'origine ci-dessus. Taille, police, espacement inchangés. */
+.home-hero__metadata-side--right .home-hero__metadata-label {
+  color: #aec7d8;
+}
+
+.home-hero__metadata-value {
+  font-size: var(--font-size-small);
+  /* #aec7d8 demandé pour "Virgil Boukraa" (côté gauche) et, avec la règle
+     ci-dessus, pour l'ensemble de "Basé à Reims · France" (côté droit,
+     valeur = "Reims · France"). Taille, graisse et emplacement inchangés. */
+  color: #aec7d8;
+  font-weight: 700;
+}
+
+/* Phrase principale : reste sous le monument visible dans la vidéo, juste
+   au-dessus du bouton d'exploration (voir .home-hero__bottom). En Stigsa
+   Display (charte section 24.6) : hérite de var(--font-body) depuis body,
+   ne pas ajouter font-family: Good Times ici. Largeur de lecture maîtrisée
+   pour rester confortable sur deux à trois lignes plutôt qu'une seule ligne
+   trop large ou un pavé trop étroit. */
+.home-hero__statement {
+  margin: 0;
+  max-width: 46ch;
+  font-size: clamp(1.05rem, 1.5vw, var(--font-size-body-lg));
+  line-height: 1.4;
+  color: var(--color-text);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Zone 7 + 8 — Phrase principale + bouton d'exploration + message sonore  */
+/* ---------------------------------------------------------------------- */
+
+.home-hero__bottom {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(var(--space-sm), 2vh, var(--space-md));
+  width: min(90vw, 760px);
+  margin-inline: auto;
+  padding-bottom: max(var(--space-xl), env(safe-area-inset-bottom));
+  padding-top: var(--space-md);
+  transition: opacity var(--duration-slow) var(--ease-standard),
+              transform var(--duration-slow) var(--ease-standard);
+}
+
+.explore-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: clamp(220px, 26vw, 300px);
+  min-height: 56px;
+  padding: var(--space-sm) var(--space-xl);
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  overflow: hidden;
+  transition: border-color var(--duration-base) var(--ease-standard),
+              background-color var(--duration-base) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard);
+}
+
+/* Renforcement du contraste du bouton sur fond vidéo (section 14 du
+   brief) : fond assombri + flou de verre, pour rester lisible quel que
+   soit le plan affiché à cet instant, sans devenir opaque au point de
+   masquer la vidéo. */
+.home-hero--video .explore-button {
+  background: rgba(0, 0, 0, 0.36);
+  border-color: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.explore-button:hover,
+.explore-button:focus-visible {
+  border-color: var(--hero-accent-soft);
+  background: color-mix(in srgb, var(--color-surface) 75%, transparent);
+}
+
+.home-hero--video .explore-button:hover,
+.home-hero--video .explore-button:focus-visible {
+  border-color: #008AC9;
+  background: rgba(0, 138, 201, 0.14);
+}
+
+.explore-button:active {
+  transform: scale(0.98);
+}
+
+.explore-button__label {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  /* Sans couleur explicite, ce texte héritait de la valeur déjà résolue
+     par body { color: var(--color-text) } (sombre, thème global) : même
+     si .home-hero--video redéfinit --color-text en blanc, cette
+     redéfinition ne s'applique qu'aux descendants qui RÉFÉRENCENT la
+     variable, pas à un héritage de couleur déjà calculée plus haut dans
+     l'arbre. D'où le texte peu lisible malgré le fond sombre du bouton. */
+  color: #FFFFFF;
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.explore-button:hover .explore-button__label,
+.explore-button:focus-visible .explore-button__label {
+  transform: translateX(2px);
+}
+
+/* Coins du bouton, même logique visuelle que le cadre du Hero */
+.explore-button__corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--hero-accent-soft);
+  transition: width var(--duration-base) var(--ease-standard),
+              height var(--duration-base) var(--ease-standard);
+}
+.explore-button__corner--top-left { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.explore-button__corner--top-right { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+.explore-button__corner--bottom-left { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+.explore-button__corner--bottom-right { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+.explore-button:hover .explore-button__corner,
+.explore-button:focus-visible .explore-button__corner {
+  width: 20px;
+  height: 20px;
+}
+
+/* Fine texture de grille + lumière balayant le bouton au survol */
+.explore-button__grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: repeating-linear-gradient(90deg, color-mix(in srgb, var(--color-text) 6%, transparent) 0px, transparent 1px, transparent 18px);
+  opacity: 0.5;
+}
+
+.explore-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-accent) 22%, transparent), transparent);
+  transform: skewX(-18deg);
+  transition: left 700ms var(--ease-standard);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.explore-button:hover::after,
+.explore-button:focus-visible::after {
+  left: 130%;
+}
+
+.home-hero__sound-message {
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Choréographie d'entrée (rejoue le système [data-reveal] global, avec   */
+/* un décalage propre au Hero piloté par --reveal-delay en style inline)  */
+/* ---------------------------------------------------------------------- */
+
+.home-hero [data-reveal] {
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Mouvement réduit                                                         */
+/* ---------------------------------------------------------------------- */
+
+/* (aucune règle CSS supplémentaire requise ici : reset.css neutralise déjà
+   globalement animation-duration / transition-duration sous
+   prefers-reduced-motion. L'ancienne pause JS de la vidéo sous
+   prefers-reduced-motion n'existe plus — voir js/animations.js — puisque
+   la vidéo a été remplacée par l'univers Marble ; son mouvement interne
+   n'est pas piloté par ce site.) */
+
+/* ---------------------------------------------------------------------- */
+/* Responsive — tablette                                                    */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+  .home-hero__metadata {
+    max-width: min(90vw, 520px);
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Responsive — mobile (ordre : surtitre, métadonnées, phrase, bouton,     */
+/* indication sonore — cf. section 8 de la demande de repositionnement)    */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .home-hero {
+    --hero-frame-offset: clamp(10px, 4vw, 18px);
+    --hero-corner-size: clamp(20px, 8vw, 32px);
+    padding-top: calc(var(--nav-height) - 8px);
+  }
+
+  .home-hero__content {
+    gap: var(--space-md);
+  }
+
+  /* Les informations latérales passent l'une sous l'autre plutôt que de
+     disparaître (aucune information n'est perdue sur mobile). */
+  .home-hero__metadata {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-sm);
+  }
+  .home-hero__metadata-side--right {
+    align-items: center;
+    text-align: center;
+  }
+
+  .home-hero__bottom {
+    width: min(94vw, 480px);
+  }
+
+  .explore-button {
+    min-width: min(86vw, 320px);
+  }
+}
+
+@media (max-width: 420px) {
+  .home-hero__eyebrow-text {
+    font-size: 0.65rem;
+  }
+  .home-hero__statement {
+    font-size: var(--font-size-body);
+  }
+}
+
+/* Pas de curseur personnalisé ni d'effet de survol sur tactile : le bouton
+   reste pleinement utilisable au doigt (cf. .c-btn / .filter-btn dans
+   responsive.css, même logique appliquée ici). */
+@media (hover: none) {
+  .explore-button:hover {
+    border-color: var(--color-border);
+    background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  }
+  .home-hero--video .explore-button:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.36);
+  }
+  .explore-button:hover .explore-button__corner {
+    width: 14px;
+    height: 14px;
+  }
+  .explore-button:hover::after {
+    left: -60%;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Responsive — mobile en orientation paysage, faible hauteur de viewport */
+/* (audit responsive) : sur un téléphone en paysage (ex. 844×390), le       */
+/* budget vertical disponible (hauteur du header + bloc de contenu +        */
+/* bloc du bas avec phrase/bouton/mention sonore) peut dépasser la hauteur  */
+/* réelle de l'écran. Comme .home-hero utilise overflow:hidden, le         */
+/* contenu excédentaire serait alors rogné plutôt que de créer un scroll.   */
+/* Cette règle resserre UNIQUEMENT les espacements verticaux (aucune        */
+/* police, couleur, structure ni image) et seulement dans ce cas précis :   */
+/* le portrait et le desktop ne sont pas concernés. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .home-hero {
+    padding-top: calc(var(--nav-height) - 28px);
+  }
+  .home-hero__content {
+    gap: var(--space-sm);
+  }
+  .home-hero__bottom {
+    padding-top: var(--space-sm);
+    padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+    gap: var(--space-2xs);
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bouton son du header — accessible aussi sur mobile (audit responsive).  */
+/* responsive.css masque volontairement .c-icon-btn (hors menu) ≤768px sur */
+/* TOUT le site, et .u-hide-mobile masque [data-audio-toggle] de la même   */
+/* façon : comportement sitewide intentionnel, non modifié ici. Mais sur   */
+/* cette page précise, le Hero affiche explicitement "Expérience optimale  */
+/* avec le son" juste sous le bouton d'exploration — priver les visiteurs  */
+/* mobiles du seul bouton permettant d'activer ce son rend cette phrase     */
+/* trompeuse. Cette règle, scoped à body.page-home uniquement, réaffiche    */
+/* seulement ce bouton précis sur mobile ; toutes les autres pages du site  */
+/* gardent exactement le même comportement mobile qu'avant (non touché). */
+@media (max-width: 768px) {
+  body.page-home .c-header__actions [data-audio-toggle] {
+    display: inline-flex;
+  }
+}

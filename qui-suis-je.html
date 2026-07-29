@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" href="assets/fonts/good-times/good-times.woff2" as="font" type="font/woff2" crossorigin>
+  <title>Qui suis-je — Vagabon | Virgil Boukraa, Reims</title>
+  <meta name="description" content="Présentation de Virgil Boukraa, freelance en stratégie de communication et direction artistique derrière le studio Vagabon.">
+  <link rel="canonical" href="https://www.vagabon-exemple.fr/qui-suis-je.html"><!-- Domaine à renseigner avant mise en ligne -->
+  <meta name="robots" content="noindex, nofollow"><!-- Contenu personnel encore en placeholder (voir sections 01 à 04) : à retirer une fois les textes définitifs renseignés. -->
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vagabon">
+  <meta property="og:title" content="Qui suis-je — Vagabon">
+  <meta property="og:description" content="Présentation de Virgil Boukraa, freelance en stratégie de communication et direction artistique derrière le studio Vagabon.">
+  <meta property="og:url" content="https://www.vagabon-exemple.fr/qui-suis-je.html">
+  <meta property="og:locale" content="fr_FR">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <!-- Contrairement à universe.html / face-a-face.html (#05070B — un Hero
+       plein écran sombre au tout premier affichage), cette page s'ouvre
+       directement sur le fond bleu clair --u-bg (#AEC8D8, voir
+       css/pages/universe.css) : aucune image de fond sombre en tête de
+       page ici. theme-color aligné sur cette réalité, comme contact.html. -->
+  <meta name="theme-color" content="#AEC8D8">
+
+  <link rel="stylesheet" href="css/reset.css?v=2">
+  <link rel="stylesheet" href="css/variables.css?v=2">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/layout.css?v=2">
+  <link rel="stylesheet" href="css/components.css?v=2">
+  <link rel="stylesheet" href="css/utilities.css?v=2">
+  <link rel="stylesheet" href="css/animations.css?v=2">
+  <link rel="stylesheet" href="css/responsive.css?v=2">
+  <!-- Réutilise universe.css TEL QUEL (identique à face-a-face.html) :
+       palette --u-*, header/menu plein écran, curseur glace, moteur de
+       révélation .universe-section / .universe-eyebrow / [data-word-reveal]
+       / [data-scene]. Rien n'est dupliqué depuis ce fichier partagé. -->
+  <link rel="stylesheet" href="css/pages/universe.css?v=39">
+  <!-- Styles propres à cette page (Hero + 4 sections de présentation). -->
+  <link rel="stylesheet" href="css/pages/qui-suis-je.css?v=1">
+</head>
+<body class="page-universe page-qui-suis-je">
+  <a class="skip-link" href="#main-content">Aller au contenu</a>
+
+  <div class="loader" data-loader aria-hidden="false">
+    <div class="loader__mark" aria-hidden="true">V</div>
+    <p class="loader__wordmark">VAGABON</p>
+    <div class="loader__bar-track"><div class="loader__bar"></div></div>
+  </div>
+
+  <div class="c-progress" data-progress data-progress-live aria-hidden="true"></div>
+
+  <!-- ======================= HEADER (structure partagée) =======================
+       Identique aux autres pages secondaires (voir contact.html) : pas de
+       bouton son [data-audio-toggle], cette page ne contenant aucune vidéo
+       (contrairement à universe.html / face-a-face.html). Logo, langue,
+       bouton de réservation, ouverture du menu : composant partagé
+       strictement inchangé. -->
+  <header class="c-header" data-header>
+    <div class="l-container c-header__inner">
+      <a href="index.html" class="universe-brand" aria-label="Retour à l'accueil Vagabon">VAGABON</a>
+
+      <div class="c-header__actions">
+        <button type="button" class="c-icon-btn u-hide-mobile" data-lang-toggle aria-label="Switch to English">FR</button>
+        <a href="contact.html" class="c-btn c-btn--secondary u-hide-mobile" data-i18n="nav.book_call">Réserver un appel</a>
+        <button type="button" class="c-menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="nav-fullscreen" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.menu.open">
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu plein écran — mêmes 3 destinations que face-a-face.html/contact.html
+       (Accueil / Univers / Contact), page courante non ajoutée en 4e entrée :
+       exactement le même choix déjà fait pour Face à Face, une autre page
+       atteinte depuis le menu de l'univers plutôt qu'une des 3 destinations
+       principales elles-mêmes. -->
+  <nav class="c-nav-fullscreen" id="nav-fullscreen" data-nav-menu data-open="false" aria-hidden="true" aria-label="Navigation principale">
+    <div class="c-nav-fullscreen__grid">
+      <ul class="c-nav-fullscreen__list">
+        <li><a class="c-nav-fullscreen__link" href="index.html" data-nav-link><span class="c-nav-fullscreen__link-number">01</span><span data-i18n="nav.home">Accueil</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="universe.html#projets" data-nav-link><span class="c-nav-fullscreen__link-number">02</span><span data-i18n="nav.projects">Projets</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="ressources.html" data-nav-link><span class="c-nav-fullscreen__link-number">03</span><span data-i18n="nav.ressources">Ressources</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="contact.html" data-nav-link><span class="c-nav-fullscreen__link-number">04</span><span data-i18n="nav.contact">Contact</span></a></li>
+      </ul>
+      <div class="c-nav-fullscreen__aside">
+        <div>
+          <p class="c-nav-fullscreen__meta"><span data-i18n="meta.location_line1">Reims · Paris · Lille</span><br><span data-i18n="meta.location_line2">France entière, à distance</span></p>
+          <p class="c-nav-fullscreen__meta u-mt-md"><a href="mailto:virgil.bkr51@outlook.fr" class="c-btn--ghost">virgil.bkr51@outlook.fr</a></p>
+          <p class="u-mt-md"><a href="universe.html" class="universe-nav__back">← <span data-i18n="cta.back_universe">Retour à l'univers</span></a></p>
+        </div>
+        <div>
+          <a href="contact.html" class="c-btn c-btn--primary c-btn--block" data-menu-close data-i18n="nav.book_call">Réserver un appel</a>
+          <div class="c-nav-fullscreen__social u-mt-md" data-social-links aria-label="Réseaux sociaux"></div>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="c-icon-btn" data-menu-close style="position:absolute; top:24px; right:24px;" aria-label="Fermer le menu" data-i18n-attr="aria-label:nav.menu.close">✕</button>
+  </nav>
+
+  <div class="l-page">
+  <main id="main-content" tabindex="-1">
+
+    <!-- ======================= A. HERO ======================= -->
+    <section class="who-hero" aria-labelledby="who-hero-title">
+      <a href="universe.html" class="who-back">← <span data-i18n="cta.back_universe">Retour à l'univers</span></a>
+
+      <div class="who-hero__inner">
+        <div class="who-hero__text">
+          <div class="universe-eyebrow" data-reveal data-i18n="who.hero_eyebrow">Qui suis-je</div>
+          <!-- Nom et fonction : mêmes clés que la signature du Hero de
+               universe.html (universe.signature_name / universe.signature_role)
+               plutôt qu'un doublon — cohérence garantie même si l'une des
+               deux devait être reformulée plus tard (demande explicite,
+               voir section 7 du brief). -->
+          <h1 id="who-hero-title" class="who-hero__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="universe.signature_name">Virgil Boukraa</h1>
+          <p class="who-hero__role" data-reveal data-reveal-delay="2" data-i18n="universe.signature_role">Freelance en stratégie de communication &amp; direction artistique</p>
+        </div>
+
+        <!-- Portrait — EMPLACEMENT RÉSERVÉ, aucun fichier réel disponible
+             pour l'instant. Vérification effectuée avant d'écrire ce
+             balisage : assets/images/hero/vagabon-hero-portrait*.webp
+             existent bien sur le disque mais ne sont RÉFÉRENCÉS PAR AUCUNE
+             page (le Hero de universe.html utilise désormais un visuel
+             unique et différent, vagabon-hero-background.webp — voir le
+             commentaire à ce sujet dans universe.html) : les réutiliser ici
+             aurait affiché un portrait daté/hors-contexte, contrairement à
+             la demande explicite de vérifier les assets avant réemploi. Un
+             dossier dédié existe déjà pour CETTE page précise :
+             assets/images/profile/ (voir son README.md), qui attend un
+             fichier "virgil-portrait-01.webp" (1200×1600px, ratio 3:4).
+             Dès que ce fichier sera fourni, remplacer le <div> ci-dessous
+             par :
+             <img class="who-hero__portrait-img" src="assets/images/profile/virgil-portrait-01.webp" alt="Portrait de Virgil Boukraa" width="1200" height="1600">
+             (conserver who-hero__portrait comme conteneur parent). -->
+        <div class="who-hero__portrait" data-reveal data-reveal-delay="3">
+          <div class="who-hero__portrait-frame">
+            <span class="who-hero__portrait-label" data-i18n="who.portrait_placeholder">Portrait à venir</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= B. 01 — MON PROFIL =======================
+         Contenu structurel uniquement : aucun parcours, diplôme, client ou
+         compétence n'a été inventé (demande explicite). Les textes entre
+         crochets sont des repères clairement identifiables, à remplacer par
+         les contenus définitifs transmis progressivement. -->
+    <section class="who-section universe-section" id="profil" aria-labelledby="profil-title">
+      <div class="who-section__inner universe-section__inner" data-scene>
+        <span class="who-section__number" aria-hidden="true" data-i18n="who.section01.number">01</span>
+        <div class="universe-eyebrow" data-reveal data-i18n="who.section01.eyebrow">Mon profil</div>
+        <h2 id="profil-title" class="who-section__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section01.title">[Titre à venir]</h2>
+        <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body">[Texte à venir — présentez ici votre parcours, ce qui vous a mené à Vagabon, et la personne derrière le studio.]</p>
+      </div>
+    </section>
+
+    <!-- ======================= C. 02 — MON APPROCHE =======================
+         Alternance gauche/droite : texte à gauche, emplacement visuel à
+         droite (image grand format à intégrer plus tard — voir
+         who-section__visual dans qui-suis-je.css). Composition en écho à
+         celle des pages projet (face-a-face.html), sans dupliquer leurs
+         classes (page indépendante). -->
+    <section class="who-section who-section--split universe-section" id="approche" aria-labelledby="approche-title">
+      <div class="who-section__inner who-section__inner--split universe-section__inner" data-scene>
+        <div class="who-section__text">
+          <span class="who-section__number" aria-hidden="true" data-i18n="who.section02.number">02</span>
+          <div class="universe-eyebrow" data-reveal data-i18n="who.section02.eyebrow">Mon approche</div>
+          <h2 id="approche-title" class="who-section__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section02.title">[Titre à venir]</h2>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section02.body">[Texte à venir — expliquez ici votre manière d'aborder la communication et la création.]</p>
+        </div>
+        <!-- Emplacement visuel réservé (image grand format à venir) — vide
+             pour l'instant, aucun visuel disponible : voir
+             who-section__visual dans qui-suis-je.css pour le traitement une
+             fois un fichier fourni. -->
+        <div class="who-section__visual" data-reveal data-reveal-delay="3" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- ======================= D. 03 — STRATÉGIE & CRÉATION =======================
+         Rupture de composition volontaire (demande explicite d'alterner les
+         mises en page) : retour à un bloc centré, pleine largeur, dans
+         l'esprit de la section Philosophie de universe.html — un temps fort
+         éditorial plutôt qu'une troisième alternance gauche/droite. -->
+    <section class="who-section who-section--statement universe-section" id="strategie-creation" aria-labelledby="strategie-creation-title">
+      <div class="who-section__inner universe-section__inner" data-scene>
+        <span class="who-section__number" aria-hidden="true" data-i18n="who.section03.number">03</span>
+        <div class="universe-eyebrow" data-reveal data-i18n="who.section03.eyebrow">Stratégie &amp; création</div>
+        <h2 id="strategie-creation-title" class="who-section__statement" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section03.title">[Titre à venir]</h2>
+        <p class="who-section__body who-section__body--centered" data-reveal data-reveal-delay="2" data-i18n="who.section03.body">[Texte à venir — expliquez ici pourquoi vous associez réflexion stratégique, communication, identité visuelle et direction artistique plutôt que de traiter ces disciplines séparément.]</p>
+      </div>
+    </section>
+
+    <!-- ======================= E. 04 — MA FAÇON DE TRAVAILLER =======================
+         Alternance inversée (visuel à gauche, texte à droite) + une liste
+         d'étapes discrète (pas des cards : simple numérotation textuelle en
+         ligne), pour esquisser un déroulé de méthode sans détailler un
+         processus qui n'a pas encore été rédigé. -->
+    <section class="who-section who-section--split who-section--visual-left universe-section" id="methode" aria-labelledby="methode-title">
+      <div class="who-section__inner who-section__inner--split universe-section__inner" data-scene>
+        <div class="who-section__visual" data-reveal data-reveal-delay="3" aria-hidden="true"></div>
+        <div class="who-section__text">
+          <span class="who-section__number" aria-hidden="true" data-i18n="who.section04.number">04</span>
+          <div class="universe-eyebrow" data-reveal data-i18n="who.section04.eyebrow">Ma façon de travailler</div>
+          <h2 id="methode-title" class="who-section__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section04.title">[Titre à venir]</h2>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section04.body">[Texte à venir — présentez ici votre manière d'accompagner un projet, depuis sa compréhension jusqu'à sa traduction visuelle et sa mise en œuvre.]</p>
+          <ol class="who-section__steps" data-reveal data-reveal-delay="3">
+            <li class="who-section__step"><span class="who-section__step-number">01</span><span data-i18n="who.section04.step1">[Étape à venir]</span></li>
+            <li class="who-section__step"><span class="who-section__step-number">02</span><span data-i18n="who.section04.step2">[Étape à venir]</span></li>
+            <li class="who-section__step"><span class="who-section__step-number">03</span><span data-i18n="who.section04.step3">[Étape à venir]</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= PIED DE PAGE (identique à universe.html / face-a-face.html) =======================
+       Composant partagé, non modifié. Lien "Contact" pointant vers
+       contact.html (comme sur face-a-face.html) : cette page n'a pas de
+       section #contact interne. -->
+  <footer class="universe-footer">
+    <div class="universe-footer__inner">
+      <div>
+        <p class="universe-footer__brand">Vagabon</p>
+        <p class="universe-footer__role">Virgil Boukraa<br><span data-i18n="footer.role">Studio créatif indépendant · Communication freelance</span></p>
+      </div>
+      <div>
+        <p class="universe-footer__heading" data-i18n="footer.legal">Informations</p>
+        <nav class="universe-footer__list" aria-label="Informations légales">
+          <a href="mentions-legales.html" data-i18n="footer.link.mentions">Mentions légales</a>
+          <a href="politique-confidentialite.html" data-i18n="footer.link.privacy">Politique de confidentialité</a>
+          <a href="politique-cookies.html" data-i18n="footer.link.cookies_policy">Politique de cookies</a>
+          <a href="gestion-cookies.html" data-i18n="footer.link.cookies_manage">Gestion des cookies</a>
+          <a href="contact.html" data-i18n="nav.contact">Contact</a>
+        </nav>
+      </div>
+      <div>
+        <p class="universe-footer__heading" data-i18n="footer.follow">Suivre</p>
+        <div class="universe-footer__social" data-social-links aria-label="Réseaux sociaux"></div>
+      </div>
+    </div>
+    <div class="universe-footer__bottom">
+      <p>© Vagabon — Virgil Boukraa</p>
+      <p data-i18n="footer.rights">Tous droits réservés.</p>
+    </div>
+  </footer>
+  </div>
+
+  <!-- Données (chargées avant les scripts qui en dépendent) -->
+  <script src="data/settings.js"></script>
+  <script src="data/translations.js"></script>
+
+  <script src="js/loader.js"></script>
+  <script src="js/accessibility.js" defer></script>
+  <script src="js/language.js" defer></script>
+  <script src="js/navigation.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/data-renderer.js" defer></script>
+  <script src="js/universe.js" defer></script>
+  <script src="js/universe-cursor.js?v=9" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

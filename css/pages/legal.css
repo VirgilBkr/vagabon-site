@@ -1,0 +1,374 @@
+/* ==========================================================================
+   VAGABON — css/pages/legal.css
+   Styles partagés par les 4 pages légales/informatives : mentions-legales.html,
+   politique-confidentialite.html, politique-cookies.html, gestion-cookies.html.
+
+   OBJECTIF : harmoniser leur PRÉSENTATION avec la nouvelle direction
+   artistique du site (fond bleu glacier, texte gris foncé, header/menu/
+   boutons identiques au reste du site) — le contenu juridique lui-même
+   n'est pas modifié par ce fichier.
+
+   ISOLATION : toutes les règles sont scopées à body.page-legal, ou à des
+   classes locales dédiées (.legal-brand, .legal-back) qui n'existent nulle
+   part ailleurs dans le projet. Aucune règle ici ne touche index.html,
+   universe.html, contact.html, face-a-face.html ou un composant partagé
+   au-delà de ce scope explicite.
+
+   MÊME RECETTE que css/pages/contact.css : tokens de couleur locaux plutôt
+   que de charger universe.css tel quel. Raison technique précise : les
+   jetons --u-* (utilisés par .universe-footer, les boutons, le menu...)
+   sont déclarés UNIQUEMENT à l'intérieur de body.page-universe dans
+   universe.css — si on chargeait ce fichier sans ajouter cette classe de
+   body, ces variables seraient indéfinies sur cette page et leur
+   comportement de repli deviendrait imprévisible. Cette page définit donc
+   ses propres jetons --lg-*, avec des valeurs IDENTIQUES (littéralement
+   les mêmes hexadécimaux) à celles déjà vérifiées ailleurs sur le site —
+   aucune nouvelle couleur n'est inventée.
+
+   CONTRASTE — vérifié par calcul (luminance relative WCAG), mêmes valeurs
+   que celles déjà validées dans contact.css pour un texte sombre sur ce
+   même fond clair (#AEC8D8) : #2B3236 ≈ 7.48:1 (titres), #495359 ≈ 4.52:1
+   (texte courant, labels, liens), #5A420F ≈ 5.43:1 (survol "chaud"). Les
+   tons clairs (--lg-menu-*) restent réservés au menu plein écran, seule
+   zone sombre de ces pages.
+   ========================================================================== */
+
+body.page-legal {
+  /* Fond de page + tons de texte SOMBRES (fond clair) */
+  --lg-bg: #AEC8D8;
+  --lg-ink: #2B3236;             /* 7.48:1 — grands titres (h1) */
+  --lg-ink-muted: #495359;       /* 4.52:1 — texte courant, h2/h3/h4, liens, labels */
+  --lg-line: rgba(43, 50, 54, 0.18);
+  --lg-line-strong: rgba(43, 50, 54, 0.32);
+  --lg-accent-soft: rgba(11, 93, 130, 0.1);
+  --lg-warm-text: #5A420F;       /* 5.43:1 — survol de texte (teinte "chaude") */
+  --lg-warm-soft: rgba(90, 66, 15, 0.14);
+
+  /* Tons CLAIRS — réservés au menu plein écran (fond sombre) */
+  --lg-surface: #0E131C;
+  --lg-menu-ink: #F3F1EA;
+  --lg-menu-ink-subtle: #82868D;
+  --lg-menu-line: rgba(243, 241, 234, 0.14);
+  --lg-menu-line-strong: rgba(243, 241, 234, 0.28);
+  --lg-menu-warm: #C7A34E;
+
+  background: var(--lg-bg);
+  color: var(--lg-ink);
+}
+
+body.page-legal .l-page {
+  background: var(--lg-bg);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Header — même variante glaciale que universe.css / contact.css          */
+/* (dégradé au repos + fond plus opaque une fois défilé). Ne modifie pas    */
+/* .c-header lui-même : override scopé, comportement/markup inchangés.     */
+/* ---------------------------------------------------------------------- */
+body.page-legal .c-header {
+  background: linear-gradient(to bottom, rgba(174, 200, 216, 0.85), transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+body.page-legal .c-header.is-scrolled {
+  background-color: rgba(174, 200, 216, 0.94);
+  border-bottom: 1px solid var(--lg-line);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body.page-legal .c-header .l-container {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: clamp(24px, 5vw, 64px);
+}
+
+body.page-legal .c-icon-btn,
+body.page-legal .c-menu-toggle {
+  border-color: #495359;
+  color: #495359;
+}
+
+body.page-legal .c-icon-btn:hover {
+  border-color: var(--lg-accent-soft);
+  background: rgba(11, 93, 130, 0.1);
+}
+
+body.page-legal [data-lang-toggle] {
+  line-height: 1;
+}
+
+/* .c-menu-toggle__bar utilise background: var(--color-text) en dur
+   (components.css, non modifié — partagé) : ne suit pas automatiquement
+   la couleur du bouton, d'où cet override explicite (même technique que
+   body.page-universe .c-menu-toggle__bar dans universe.css). */
+body.page-legal .c-menu-toggle__bar {
+  background: #495359;
+}
+
+/* Centrage du texte du bouton "Réserver un appel" — même diagnostic déjà
+   appliqué et validé sur universe.html/contact.html/la landing : .c-btn a
+   déjà display:inline-flex + align-items/justify-content:center
+   (components.css, non modifié), mais le texte en majuscules n'a pas de
+   jambage descendant alors que line-height:normal réserve cet espace,
+   décalant visuellement le texte vers le haut. line-height:1 corrige ;
+   aucun padding/largeur/hauteur/bordure n'est modifié. */
+body.page-legal .c-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
+}
+
+body.page-legal .c-btn--secondary {
+  border-color: #495359;
+  color: #495359;
+}
+
+body.page-legal .c-btn--secondary:hover {
+  border-color: var(--lg-warm-soft);
+  background: rgba(90, 66, 15, 0.08);
+  color: var(--lg-warm-text);
+}
+
+/* Logo — classe locale dédiée (même recette que .universe-brand /
+   .contact-brand) plutôt que le composant partagé .brand-logo, qui n'est
+   pas stylé pour un fond glacial. */
+.legal-brand {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  color: #495359;
+  text-transform: uppercase;
+  opacity: 0.92;
+  transition: opacity var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+
+.legal-brand:hover,
+.legal-brand:focus-visible {
+  opacity: 1;
+  color: var(--lg-warm-text);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Menu plein écran — fond sombre fixe, même choix que universe.html/      */
+/* contact.html : seule zone de ces pages où les tons CLAIRS sont utilisés. */
+/* Contenu et items du menu inchangés (Accueil / Univers) : uniquement les */
+/* couleurs sont harmonisées ici.                                          */
+/* ---------------------------------------------------------------------- */
+body.page-legal .c-nav-fullscreen {
+  background: var(--lg-surface);
+  color: var(--lg-menu-ink);
+}
+
+body.page-legal .c-nav-fullscreen__link {
+  color: var(--lg-menu-ink);
+  border-color: var(--lg-menu-line);
+}
+
+body.page-legal .c-nav-fullscreen__link:hover,
+body.page-legal .c-nav-fullscreen__link:focus-visible {
+  color: var(--lg-menu-warm);
+}
+
+body.page-legal .c-nav-fullscreen__meta {
+  color: var(--lg-menu-ink-subtle);
+}
+
+body.page-legal .c-nav-fullscreen [data-menu-close],
+body.page-legal .c-nav-fullscreen .c-icon-btn {
+  border-color: var(--lg-menu-line-strong);
+  color: var(--lg-menu-ink);
+}
+
+/* Le lien e-mail dans le menu (.c-btn--ghost) reste sur le style bleu
+   accent global (var(--color-accent), components.css) : il repose sur le
+   fond SOMBRE du menu plein écran, où ce bleu fonctionne bien et n'a
+   jamais été signalé comme un problème — seul le "bleu vif sur fond
+   clair" (le lien "Retour à l'univers" ci-dessous) est concerné par cette
+   demande. Aucune règle nécessaire ici : comportement déjà correct. */
+
+/* ---------------------------------------------------------------------- */
+/* Lien "← Retour à l'univers" — l'ancien bleu vif venait du composant     */
+/* partagé .c-btn--ghost (color: var(--color-accent), #008AC9), pensé pour */
+/* le fond sombre du menu plein écran, pas pour ce lien posé directement   */
+/* sur le contenu clair de la page. Modificateur dédié .legal-back (ne     */
+/* touche pas .c-btn--ghost lui-même, encore utilisé tel quel dans le menu */
+/* ci-dessus) : gris foncé de la charte, survol "chaud" cohérent avec le   */
+/* reste des liens de cette page.                                         */
+/* ---------------------------------------------------------------------- */
+.c-btn--ghost.legal-back {
+  color: var(--lg-ink-muted);
+}
+
+.c-btn--ghost.legal-back:hover,
+.c-btn--ghost.legal-back:focus-visible {
+  color: var(--lg-warm-text);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Contenu — paragraphes, texte discret, emphase, liens intégrés au texte. */
+/* Titres (h1-h6) : aucune règle de couleur nécessaire ici, ils héritent   */
+/* déjà de body.page-legal { color: var(--lg-ink); } (base.css ne fixe pas */
+/* de color propre à h1-h4, seulement font-family/line-height/spacing).   */
+/* ---------------------------------------------------------------------- */
+body.page-legal p {
+  color: var(--lg-ink-muted);
+}
+
+body.page-legal .u-text-subtle {
+  color: var(--lg-ink-muted);
+}
+
+/* "Informations à compléter" — l'ancien bleu vif (var(--color-accent),
+   base.css, em { color: var(--color-accent); font-style: normal; }) est
+   remplacé par le même gris foncé que le reste du texte ; l'italique est
+   réactivée pour conserver une distinction visuelle de ces mentions
+   provisoires (même langage déjà utilisé ailleurs sur le site pour du
+   contenu "à venir", voir .project-page__pending-text sur la page Face à
+   Face). Règle globale em { font-style: normal; } de base.css non
+   modifiée : override scopé à cette seule page. */
+body.page-legal main em {
+  color: var(--lg-ink-muted);
+  font-style: italic;
+}
+
+/* Liens intégrés au texte courant (mailto, renvois entre pages légales) —
+   même convention que .contact-form__privacy-note a (contact.css) : gris
+   foncé + soulignement discret pour rester repérables comme liens dans un
+   paragraphe, ton "chaud" au survol. Exclut .c-btn--ghost (le lien
+   "Retour à l'univers", traité séparément ci-dessus avec son propre
+   langage de bouton fantôme, sans soulignement). */
+body.page-legal main a:not(.c-btn--ghost) {
+  color: var(--lg-ink-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+body.page-legal main a:not(.c-btn--ghost):hover,
+body.page-legal main a:not(.c-btn--ghost):focus-visible {
+  color: var(--lg-warm-text);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Footer — reprend le markup et les couleurs EXACTES de .universe-footer  */
+/* (voir css/pages/universe.css, non chargé sur ces pages). Dupliqué ici   */
+/* plutôt qu'importé : les jetons --u-* utilisés par ce composant ne sont  */
+/* déclarés que dans body.page-universe, donc indisponibles sur ces pages  */
+/* — la duplication avec des valeurs LITTÉRALEMENT identiques garantit un  */
+/* rendu pixel-identique sans dépendre d'une variable indéfinie. Aucune    */
+/* valeur n'a été changée par rapport à l'original (y compris les fixes de */
+/* contraste déjà appliqués : #495359 / #5C4213 pour les liens de la       */
+/* colonne "Informations", voir universe.css pour l'historique).          */
+/* ---------------------------------------------------------------------- */
+.universe-footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(243, 241, 234, 0.14);
+  padding-block: var(--space-2xl) var(--space-lg);
+}
+
+.universe-footer__inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: var(--space-xl);
+}
+
+.universe-footer__brand {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #F3F1EA;
+}
+
+.universe-footer__role {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: #82868D;
+  line-height: var(--line-height-body);
+}
+
+.universe-footer__heading {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #82868D;
+  margin-bottom: var(--space-sm);
+}
+
+.universe-footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.universe-footer__list a {
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: #495359;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.universe-footer__list a:hover,
+.universe-footer__list a:focus-visible {
+  color: #5C4213;
+}
+
+.universe-footer__social {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-2xs);
+}
+
+.universe-footer__social .c-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-color: rgba(243, 241, 234, 0.28);
+  color: #C7C4BC;
+}
+
+.universe-footer__social .c-icon-btn:hover {
+  border-color: rgba(63, 169, 222, 0.35);
+  color: #F3F1EA;
+}
+
+.universe-footer__bottom {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(243, 241, 234, 0.14);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  color: #82868D;
+}
+
+@media (max-width: 860px) {
+  .universe-footer__inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .universe-footer__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  .universe-footer__bottom {
+    flex-direction: column;
+  }
+}

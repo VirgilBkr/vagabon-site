@@ -1,0 +1,783 @@
+/* ==========================================================================
+   VAGABON — css/pages/contact.css
+   Styles de contact.html — page dédiée ouverte depuis le bouton « Réserver
+   un appel » du header (partout sur le site). Prolonge la direction
+   artistique de l'univers (bleu glacier, minimalisme éditorial, grand
+   espace négatif) plutôt qu'un formulaire de contact générique.
+
+   ISOLATION : toutes les règles ci-dessous sont scopées à body.page-contact
+   (à l'exception des quelques overrides ciblés du composant partagé
+   .c-header, qui suivent la MÊME technique déjà utilisée par
+   body.page-universe .c-header dans universe.css — reprise ici sans la
+   modifier). Aucune règle ici ne touche index.html, universe.html, les
+   pages légales, ou un composant partagé au-delà de ce scope explicite.
+
+   CONTRASTE — POINT IMPORTANT : cette page affiche son contenu DIRECTEMENT
+   sur le fond bleu glacier clair (#AEC8D8), contrairement à universe.html
+   où le texte clair (--u-ink) repose presque toujours sur des zones sombres
+   (image de Hero, cartes projet, overlay du menu). Un texte quasi blanc
+   directement sur #AEC8D8 ne passerait pas le contraste minimal (mesuré :
+   ~1.5:1, très en dessous du seuil AA de 4.5:1). La palette ci-dessous a
+   donc été vérifiée par calcul (luminance relative WCAG) : les tons de
+   texte sont sombres (gris bleuté/anthracite, cohérents avec la teinte déjà
+   utilisée pour le texte du Hero d'universe.html, #495359, 4.52:1) partout
+   où le contenu repose sur le fond clair ; les tons clairs (--vc-menu-*)
+   restent réservés au menu plein écran, seule zone réellement sombre de
+   cette page. */
+
+body.page-contact {
+  /* Fond de page + tons de texte SOMBRES (fond clair) — vérifiés ≥ 4.5:1 */
+  --vc-bg: #AEC8D8;
+  --vc-ink: #2B3236;             /* 7.48:1 — titres, valeurs fortes */
+  --vc-ink-muted: #495359;       /* 4.52:1 — texte courant, labels, hints */
+  --vc-line: rgba(43, 50, 54, 0.18);
+  --vc-line-strong: rgba(43, 50, 54, 0.32);
+  --vc-accent: #0B5D82;          /* 4.15:1 — focus, accent de bordure/lien */
+  --vc-accent-soft: rgba(11, 93, 130, 0.14);
+  --vc-warm-text: #5A420F;       /* 5.43:1 — survol de texte (teinte "chaude") */
+  --vc-warm-soft: rgba(90, 66, 15, 0.14);
+  --vc-error: #8C2A2A;           /* 4.86:1 */
+
+  /* Tons CLAIRS — réservés au menu plein écran (fond sombre, voir plus bas) */
+  --vc-surface: #0E131C;
+  --vc-menu-ink: #F3F1EA;
+  --vc-menu-ink-subtle: #82868D;
+  --vc-menu-line: rgba(243, 241, 234, 0.14);
+  --vc-menu-line-strong: rgba(243, 241, 234, 0.28);
+  --vc-menu-warm: #C7A34E;
+
+  background: var(--vc-bg);
+  color: var(--vc-ink);
+}
+
+body.page-contact .l-page {
+  background: var(--vc-bg);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Header — même variante glaciale que universe.css (technique identique : */
+/* dégradé au repos + fond plus opaque une fois défilé). Ne modifie pas     */
+/* .c-header lui-même : override scopé, comportement/markup inchangés.     */
+/* Couleurs des boutons/icônes : #495359 (4.52:1 sur ce fond), déjà établi  */
+/* ailleurs sur le site pour la même raison de contraste.                   */
+/* ---------------------------------------------------------------------- */
+body.page-contact .c-header {
+  background: linear-gradient(to bottom, rgba(174, 200, 216, 0.85), transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+body.page-contact .c-header.is-scrolled {
+  background-color: rgba(174, 200, 216, 0.94);
+  border-bottom: 1px solid var(--vc-line);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body.page-contact .c-header .l-container {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: clamp(24px, 5vw, 64px);
+}
+
+body.page-contact .c-icon-btn,
+body.page-contact .c-menu-toggle {
+  border-color: #495359;
+  color: #495359;
+}
+
+body.page-contact .c-icon-btn:hover {
+  border-color: var(--vc-accent-soft);
+  background: rgba(11, 93, 130, 0.1);
+}
+
+/* Centrage du texte du bouton "Réserver un appel" — même diagnostic et
+   même correctif déjà appliqués et validés sur universe.html et la landing
+   (voir css/pages/universe.css, règle body.page-universe .c-btn, et
+   css/pages/home.css, .page-home .c-header__actions .c-btn) : .c-btn a
+   déjà display:inline-flex + align-items/justify-content:center
+   (components.css, non modifié), mais le texte "RÉSERVER UN APPEL" est en
+   majuscules (text-transform: uppercase hérité), donc sans jambage
+   descendant, alors que line-height: normal réserve un espace bas de
+   ligne inutilisé — la boîte de ligne que flexbox centre est alors plus
+   grande que nécessaire et décale visuellement le texte vers le haut.
+   line-height: 1 supprime cet espace résiduel ; aucun padding, largeur,
+   hauteur (min-height: 48px inchangée) ni bordure n'est modifié. */
+body.page-contact .c-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
+}
+
+body.page-contact .c-btn--secondary {
+  border-color: #495359;
+  color: #495359;
+}
+
+body.page-contact .c-btn--secondary:hover {
+  border-color: var(--vc-warm-soft);
+  background: rgba(90, 66, 15, 0.08);
+  color: var(--vc-warm-text);
+}
+
+/* Logo — classe locale dédiée (même recette que .universe-brand dans
+   universe.css) plutôt que le composant partagé .brand-logo, qui n'est pas
+   stylé pour un fond glacial. */
+.contact-brand {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  color: #495359;
+  text-transform: uppercase;
+  opacity: 0.92;
+  transition: opacity var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+
+.contact-brand:hover,
+.contact-brand:focus-visible {
+  opacity: 1;
+  color: var(--vc-warm-text);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Menu plein écran — fond sombre fixe (même choix que universe.html,      */
+/* cohérent avec une page dont l'identité reste glaciale quel que soit le  */
+/* thème clair/sombre sélectionné). Seule zone de cette page où les tons   */
+/* CLAIRS (--vc-menu-*) sont utilisés, puisque le fond y est sombre.       */
+/* ---------------------------------------------------------------------- */
+body.page-contact .c-nav-fullscreen {
+  background: var(--vc-surface);
+  color: var(--vc-menu-ink);
+}
+
+body.page-contact .c-nav-fullscreen__link {
+  color: var(--vc-menu-ink);
+  border-color: var(--vc-menu-line);
+}
+
+body.page-contact .c-nav-fullscreen__link:hover,
+body.page-contact .c-nav-fullscreen__link:focus-visible {
+  color: var(--vc-menu-warm);
+}
+
+body.page-contact .c-nav-fullscreen__meta {
+  color: var(--vc-menu-ink-subtle);
+}
+
+body.page-contact .c-nav-fullscreen [data-menu-close],
+body.page-contact .c-nav-fullscreen .c-icon-btn {
+  border-color: var(--vc-menu-line-strong);
+  color: var(--vc-menu-ink);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Retour discret vers l'accueil/l'univers — repère éditorial en haut du    */
+/* contenu, sous le header fixe. Fond CLAIR ici (contenu principal) :       */
+/* tons sombres --vc-ink-muted, pas --vc-menu-*.                            */
+/* ---------------------------------------------------------------------- */
+.contact-back {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  /* Réduit (était var(--nav-height) + var(--space-lg)) pour resserrer le
+     bloc "Retour / Contact / titre" — une marge sous le header reste
+     conservée (nav-height + space-sm), le contenu n'est jamais collé. */
+  margin-top: calc(var(--nav-height) + var(--space-sm));
+  margin-left: clamp(24px, 5vw, 64px);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.04em;
+  color: var(--vc-ink-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+.contact-back:hover,
+.contact-back:focus-visible {
+  color: var(--vc-warm-text);
+  border-color: var(--vc-warm-soft);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Grille principale — deux colonnes en desktop via grid-template-areas.   */
+/*                                                                          */
+/* CAUSE STRUCTURELLE DE L'ANCIEN ESPACE VIDE (identifiée, pas seulement    */
+/* compensée) : la version précédente utilisait 4 lignes de grille         */
+/* ("title" / "intro" / "coords" / "calendly"), et la zone "form" — bien    */
+/* plus haute que le titre, l'intro et les coordonnées réunis — s'étendait  */
+/* sur les 3 premières lignes ("grid-row: 1 / 4" implicite). Quand un       */
+/* élément de grille couvre plusieurs lignes "auto", le moteur de grille    */
+/* répartit l'excédent de hauteur nécessaire entre CES lignes pour que le   */
+/* formulaire tienne sans déborder — ce qui gonflait la ligne du TITRE      */
+/* bien au-delà de sa propre hauteur, repoussant mécaniquement l'intro et   */
+/* les coordonnées vers le bas. Rien à voir avec un padding/margin isolé :  */
+/* c'est la conséquence directe d'un élément qui chevauche plusieurs pistes */
+/* de grille dimensionnées automatiquement.                                 */
+/*                                                                          */
+/* CORRECTIF STRUCTUREL : le titre, l'intro et les coordonnées sont         */
+/* désormais regroupés dans UN SEUL conteneur (.contact-hero__left, voir    */
+/* contact.html) qui occupe UNE SEULE zone de grille, au même titre que     */
+/* "form". Plus aucune zone ne chevauche plusieurs lignes : chaque ligne    */
+/* se dimensionne uniquement sur son propre contenu, et à l'intérieur de    */
+/* .contact-hero__left, les 3 blocs s'enchaînent en flux normal (flex       */
+/* column), séparés uniquement par leurs propres margin-top existants.      */
+/*                                                                          */
+/* Le RÉORDONNANCEMENT MOBILE (titre → intro → coordonnées → formulaire,    */
+/* demandé explicitement) découle du même principe : "left" regroupe déjà   */
+/* les 3 blocs dans le bon ordre, il suffit de placer "form" juste après.   */
+/* ---------------------------------------------------------------------- */
+.contact-hero {
+  position: relative;
+  z-index: 1;
+  /* Réduit (était var(--space-xl) = 72px) : "left" ET "form" sont enfants
+     directs de .contact-hero__grid (align-items: start, même ligne de
+     grille) donc ce padding-top est la seule valeur qui contrôle le point
+     de départ vertical des DEUX colonnes à la fois. */
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-3xl);
+  padding-inline: clamp(24px, 5vw, 64px);
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+.contact-hero__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(48px, 6vw, 96px) clamp(48px, 6vw, 100px);
+  grid-template-areas:
+    "left form"
+    "calendly calendly";
+  align-items: start;
+}
+
+.contact-hero__left {
+  grid-area: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-hero__form-block { grid-area: form; }
+.contact-hero__calendly-block { grid-area: calendly; }
+
+@media (max-width: 960px) {
+  .contact-hero__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+    grid-template-areas:
+      "left"
+      "form"
+      "calendly";
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Colonne gauche — eyebrow, titre éditorial, intro, coordonnées.           */
+/* ---------------------------------------------------------------------- */
+.contact-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-eyebrow);
+  text-transform: uppercase;
+  color: var(--vc-ink-muted);
+  /* Réduit (était var(--space-lg)) pour resserrer le groupe eyebrow + titre. */
+  margin-bottom: var(--space-md);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s var(--ease-standard), transform 0.7s var(--ease-standard);
+}
+
+.contact-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--vc-warm-text);
+  opacity: 0.6;
+}
+
+.contact-eyebrow.is-visible { opacity: 1; transform: none; }
+
+.contact-hero__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  /* Taille réduite (était clamp(2.4rem, 6vw, 5.2rem)) : le titre reste un
+     élément fort de la composition sans occuper la moitié de l'écran. */
+  font-size: clamp(1.9rem, 3.2vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: var(--letter-spacing-display);
+  max-width: 16ch;
+  /* Blanc pur demandé explicitement (var(--color-white), déjà définie dans
+     variables.css) — ATTENTION CONTRASTE : sur le fond bleu clair
+     #AEC8D8, un blanc pur donne un contraste mesuré d'environ 1.4:1, bien
+     en dessous du seuil AA (3:1 même pour un grand texte). Appliqué tel
+     que demandé ; à surveiller si ce titre doit un jour rester lisible en
+     conditions de faible luminosité/écran reflétant. */
+  color: var(--color-white);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.8s var(--ease-standard) 0.08s, transform 0.8s var(--ease-standard) 0.08s;
+}
+
+.contact-hero__title.is-visible { opacity: 1; transform: none; }
+
+.contact-hero__intro-text {
+  margin-top: var(--space-lg);
+  max-width: 42ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  color: var(--vc-ink-muted);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.7s var(--ease-standard) 0.16s, transform 0.7s var(--ease-standard) 0.16s;
+}
+
+.contact-hero__intro-text.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-eyebrow,
+  .contact-hero__title,
+  .contact-hero__intro-text,
+  .contact-field {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* Détail graphique discret : trait vertical dégradé, purement décoratif,
+   même langage que .universe-intro__cue-line, adapté au fond clair. */
+.contact-hero__coords-block {
+  /* Réduit (était var(--space-2xl) = 112px) pour un rythme de respiration
+     cohérent avec celui déjà utilisé entre le titre et l'intro
+     (var(--space-lg)) : les coordonnées doivent rester visibles rapidement,
+     sans devoir descendre loin dans la page. */
+  margin-top: var(--space-lg);
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.contact-hero__coords-line {
+  flex-shrink: 0;
+  width: 1px;
+  height: auto;
+  background: linear-gradient(to bottom, var(--vc-line-strong), transparent);
+}
+
+.contact-coords__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.contact-coords__item { display: flex; flex-direction: column; gap: var(--space-3xs); }
+
+.contact-coords__label {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vc-ink-muted);
+}
+
+.contact-coords__value {
+  display: inline-block;
+  width: fit-content;
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  color: var(--vc-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--vc-line-strong);
+  padding-bottom: 2px;
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+a.contact-coords__value:hover,
+a.contact-coords__value:focus-visible {
+  color: var(--vc-warm-text);
+  border-color: var(--vc-warm-soft);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Formulaire — champs "soulignés", fond transparent, jamais de case       */
+/* blanche pleine. Respiration verticale généreuse entre les champs.       */
+/* ---------------------------------------------------------------------- */
+.contact-hero__form-block { position: relative; }
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s var(--ease-standard), transform 0.6s var(--ease-standard);
+}
+
+.contact-field.is-visible { opacity: 1; transform: none; }
+
+.contact-field__label {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--vc-ink-muted);
+}
+
+.contact-field__label .u-optional {
+  text-transform: none;
+  letter-spacing: normal;
+  opacity: 0.75;
+}
+
+.contact-field__hint {
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--vc-ink-muted);
+  font-style: italic;
+}
+
+.contact-field__control {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vc-line-strong);
+  padding: var(--space-xs) 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  color: var(--vc-ink);
+  transition: border-color var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.contact-field__control::placeholder { color: var(--vc-ink-muted); opacity: 0.65; }
+
+.contact-field__control:hover { border-color: #495359; }
+
+.contact-field__control:focus {
+  outline: none;
+  border-color: var(--vc-accent);
+  box-shadow: 0 1px 0 0 var(--vc-accent);
+}
+
+.contact-field__control[aria-invalid="true"] {
+  border-color: var(--vc-error);
+  box-shadow: 0 1px 0 0 var(--vc-error);
+}
+
+textarea.contact-field__control {
+  min-height: 132px;
+  resize: vertical;
+  border: 1px solid var(--vc-line-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+}
+
+textarea.contact-field__control:focus {
+  border-color: var(--vc-accent);
+  box-shadow: 0 0 0 1px var(--vc-accent);
+}
+
+textarea.contact-field__control[aria-invalid="true"] {
+  border-color: var(--vc-error);
+  box-shadow: 0 0 0 1px var(--vc-error);
+}
+
+/* Select — même langage graphique (ligne, pas de case), chevron discret en
+   SVG inline pour rester cohérent avec le style plutôt qu'un widget natif
+   par défaut. Couleur du chevron alignée sur --vc-ink-muted (#495359). */
+select.contact-field__control {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23495359' stroke-width='1.6'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  background-size: 18px;
+  padding-right: var(--space-lg);
+  cursor: pointer;
+}
+
+select.contact-field__control option {
+  background: #F7F7F7;
+  color: var(--vc-ink);
+}
+
+.contact-field__error {
+  display: none;
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--vc-error);
+}
+
+.contact-field__error.is-visible { display: block; }
+
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 560px) {
+  .contact-form__row { grid-template-columns: 1fr; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bouton d'envoi — pilule premium, même recette que .universe-cta         */
+/* (bordure fine, fond transparent, flèche qui glisse au survol).          */
+/* ---------------------------------------------------------------------- */
+.contact-form__submit {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-height: 52px;
+  padding-inline: clamp(28px, 4vw, 40px);
+  margin-top: var(--space-sm);
+  border: 1px solid var(--vc-ink);
+  border-radius: var(--radius-full);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vc-ink);
+  cursor: pointer;
+  transition: border-color var(--duration-base) var(--ease-standard),
+              background-color var(--duration-base) var(--ease-standard),
+              color var(--duration-base) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard);
+}
+
+.contact-form__submit:hover,
+.contact-form__submit:focus-visible {
+  border-color: var(--vc-warm-soft);
+  background: rgba(90, 66, 15, 0.1);
+  color: var(--vc-warm-text);
+  transform: translateY(-2px);
+}
+
+.contact-form__submit-arrow {
+  display: inline-block;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.contact-form__submit:hover .contact-form__submit-arrow,
+.contact-form__submit:focus-visible .contact-form__submit-arrow {
+  transform: translateX(4px);
+}
+
+.contact-form__submit[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact-form__submit-spinner {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: contact-spin 0.6s linear infinite;
+}
+
+.contact-form__submit.is-loading .contact-form__submit-spinner { display: inline-block; }
+.contact-form__submit.is-loading .contact-form__submit-label { opacity: 0.75; }
+
+@keyframes contact-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-form__submit-spinner { animation: none; }
+}
+
+.contact-form__privacy-note {
+  margin-top: calc(-1 * var(--space-sm));
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  color: var(--vc-ink-muted);
+}
+
+.contact-form__privacy-note a {
+  color: var(--vc-ink-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.contact-form__privacy-note a:hover,
+.contact-form__privacy-note a:focus-visible { color: var(--vc-warm-text); }
+
+.contact-form__global-error {
+  display: none;
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--vc-error);
+}
+
+.contact-form__global-error.is-visible { display: block; }
+
+/* ---------------------------------------------------------------------- */
+/* Panneau de confirmation — remplace le formulaire avec un léger fondu.   */
+/* Note "mode démonstration" volontairement distincte et honnête (voir     */
+/* js/forms.js) : jamais présentée comme la confirmation elle-même.        */
+/* ---------------------------------------------------------------------- */
+.contact-form,
+.contact-form__success {
+  transition: opacity 0.45s var(--ease-standard), transform 0.45s var(--ease-standard);
+}
+
+.contact-hero__form-block.is-success .contact-form {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.contact-form__success {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-md);
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.contact-hero__form-block.is-success .contact-form__success {
+  display: flex;
+  opacity: 1;
+  transform: none;
+}
+
+.contact-form__success-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1.15;
+  color: var(--vc-ink);
+}
+
+.contact-form__success-text {
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  color: var(--vc-ink-muted);
+}
+
+.contact-form__demo-note {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-2xs);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--vc-line-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--vc-ink-muted);
+  background: rgba(43, 50, 54, 0.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-form,
+  .contact-form__success { transition: none; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bande Calendly — pleine largeur, sous les deux colonnes.                 */
+/* ---------------------------------------------------------------------- */
+.contact-calendly {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-2xl);
+  border-top: 1px solid var(--vc-line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+
+.contact-calendly__text {
+  max-width: 46ch;
+}
+
+.contact-calendly__title {
+  font-family: var(--font-body);
+  font-size: var(--font-size-h4);
+  color: var(--vc-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.contact-calendly__subtitle {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--vc-ink-muted);
+}
+
+.contact-calendly__button {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-height: 52px;
+  padding-inline: clamp(28px, 4vw, 40px);
+  border: 1px solid var(--vc-line-strong);
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vc-ink);
+  text-decoration: none;
+  transition: border-color var(--duration-base) var(--ease-standard),
+              background-color var(--duration-base) var(--ease-standard),
+              color var(--duration-base) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard);
+}
+
+.contact-calendly__button:hover,
+.contact-calendly__button:focus-visible {
+  border-color: var(--vc-accent-soft);
+  background: rgba(11, 93, 130, 0.1);
+  color: var(--vc-accent);
+  transform: translateY(-2px);
+}
+
+.contact-calendly__button[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contact-calendly__button[aria-disabled="true"]:hover {
+  transform: none;
+  background: transparent;
+  border-color: var(--vc-line-strong);
+  color: var(--vc-ink);
+}
+
+.contact-calendly__note {
+  display: none;
+  margin-top: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  color: var(--vc-ink-muted);
+  width: 100%;
+}
+
+.contact-calendly__note.is-visible { display: block; }
+
+@media (max-width: 960px) {
+  .contact-calendly { flex-direction: column; align-items: flex-start; }
+}

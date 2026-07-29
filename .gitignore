@@ -1,0 +1,38 @@
+# VAGABON — fichiers volontairement exclus du dépôt Git du site public.
+
+# Le dossier cms/ (schéma Sanity, code des Workers Cloudflare, node_modules,
+# documentation d'architecture) ne fait pas partie du site public et n'a
+# aucune raison d'être poussé sur GitHub / servi par Cloudflare Pages : les
+# Workers sont déployés indépendamment via Wrangler CLI depuis ce dossier,
+# resté uniquement local sur cette machine. Voir cms/README.md.
+cms/
+
+# Fichiers système courants (macOS, éditeurs) sans rapport avec le site.
+.DS_Store
+.vscode/
+.idea/
+
+# Fichiers de travail / sources bruts trouvés à la racine du projet,
+# vérifiés un par un (grep sur tout le HTML/CSS/JS du site) : aucun n'est
+# effectivement chargé par une page réelle, contrairement à
+# "Teaser-Jean-Marc Guillot.mp4" et "Zohir Remidi.mp4" qui, eux, SONT
+# référencés comme <source> réelles dans face-a-face.html et restent donc
+# volontairement suivis par Git. Ces fichiers restent intacts sur le
+# disque, seulement exclus du dépôt/du déploiement.
+Caroussel - Jean-Marc Guillot - Planning/
+Caroussel - Zohir Remidi - Planning/
+Flyer Verso*/
+Interview-Zohir-Remidimp4.mp4
+Good Times Rg.otf
+good_times.zip
+ChatGPT Image*.png
+Plan de travail 4.png
+Fond d*.png
+Logo Face*.png
+40876898b4f47578894ffdbd9ea4205c.jpg
+
+# Vidéos originales non compressées (528 Mo / 379 Mo), conservées intactes
+# ici en local pour archive/retouche future — jamais poussées sur GitHub.
+# Les versions optimisées pour le web (mêmes noms, à la racine du projet,
+# ~26 Mo / ~30 Mo) sont celles réellement chargées par face-a-face.html.
+videos-originales-non-web/

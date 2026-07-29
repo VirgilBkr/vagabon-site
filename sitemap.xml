@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  VAGABON — sitemap.xml
+  Domaine placeholder "https://www.vagabon-exemple.fr" à remplacer par le
+  nom de domaine réel avant mise en ligne (voir README.md).
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.vagabon-exemple.fr/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <!-- Contenu projet encore en placeholder, voir universe.html (meta robots noindex en attendant) -->
+    <loc>https://www.vagabon-exemple.fr/universe.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.vagabon-exemple.fr/contact.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <!-- Contenu personnel encore en placeholder, voir qui-suis-je.html
+         (meta robots noindex en attendant les textes définitifs) -->
+    <loc>https://www.vagabon-exemple.fr/qui-suis-je.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <!-- Contenu enrichi progressivement (visuels transmis par lots), voir
+         meta robots noindex en attendant dans face-a-face.html. -->
+    <loc>https://www.vagabon-exemple.fr/face-a-face.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.vagabon-exemple.fr/ressources.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- RESSOURCES_SITEMAP_START — repère utilisé par
+       cms/workers/shared/renderRessourcesPage.js pour ajouter/retirer
+       automatiquement les entrées d'articles à chaque publication,
+       modification de slug ou archivage, sans toucher au reste du fichier.
+       Ne pas retirer ce commentaire.
+       Les 3 entrées ci-dessous sont un contenu de démonstration TEMPORAIRE
+       (voir cms/README.md) : elles seront remplacées automatiquement dès
+       que le CMS Sanity sera connecté. -->
+  <url>
+    <loc>https://www.vagabon-exemple.fr/ressources/construire-strategie-communication-coherente/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.vagabon-exemple.fr/ressources/identite-visuelle-plus-qu-un-logo/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.vagabon-exemple.fr/ressources/seo-contenu-visibilite-long-terme/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <!-- RESSOURCES_SITEMAP_END -->
+  <url>
+    <loc>https://www.vagabon-exemple.fr/mentions-legales.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.vagabon-exemple.fr/politique-confidentialite.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.vagabon-exemple.fr/politique-cookies.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.vagabon-exemple.fr/gestion-cookies.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

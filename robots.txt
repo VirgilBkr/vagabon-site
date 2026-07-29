@@ -1,0 +1,11 @@
+# VAGABON — robots.txt
+# Autorise l'indexation complète du site en production.
+# Domaine à mettre à jour dans sitemap.xml avant la mise en ligne définitive.
+
+User-agent: *
+Allow: /
+Disallow: /legal.html
+Disallow: /privacy.html
+Disallow: /404.html
+
+Sitemap: https://www.vagabon-exemple.fr/sitemap.xml

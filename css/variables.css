@@ -1,0 +1,175 @@
+/* ==========================================================================
+   VAGABON — VARIABLES.CSS
+   Design tokens (charte graphique officielle Vagabon, section 6 du brief).
+   Toutes les couleurs, typographies, espacements et rythmes du site
+   passent par ces variables CSS. Aucune couleur ne doit être codée en dur
+   ailleurs dans le projet : modifiez uniquement ce fichier pour changer
+   l'identité visuelle globale.
+   ========================================================================== */
+
+:root {
+  /* ---- Couleurs de marque officielles (section 6.2) -------------------- */
+  --color-vagabon-blue: #008AC9;
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+
+  /* ---- Thème clair éditorial (par défaut depuis la refonte "post-Hero") -
+     Palette officielle demandée : fond #F2F2F2, titres #212529, texte
+     courant #343A40, texte secondaire #595959, texte discret #7F7F7F,
+     placeholder #A5A5A5, lignes #CCCCCC, accent Vagabon #008AC9 conservé
+     comme SEULE couleur d'accent (jamais dominante). Le Hero vidéo de la
+     page d'accueil fige ses propres couleurs localement (voir
+     .home-hero--video dans css/pages/home.css) : il ne dépend d'aucune de
+     ces variables et n'est donc pas affecté par ce changement. Le bouton
+     de thème permet de repasser à l'ancien thème sombre, conservé plus bas
+     sous [data-theme="dark"]. */
+  --color-background: #F2F2F2;
+  --color-background-secondary: #F7F7F7;
+  --color-surface: #F7F7F7;
+  --color-surface-elevated: #FFFFFF;
+  --color-text: #212529;           /* titres, texte primaire */
+  --color-text-muted: #343A40;     /* texte courant (paragraphes) */
+  --color-text-subtle: #7F7F7F;    /* texte discret / tertiaire */
+  --color-text-secondary: #595959; /* niveau intermédiaire (légendes, métadonnées) */
+  --color-placeholder: #A5A5A5;    /* placeholders de formulaire, détails de séparateurs */
+  --color-accent: #008AC9;
+  --color-accent-hover: #006B9C;
+  --color-accent-dark: #00577D;
+  --color-border: #CCCCCC;               /* lignes / séparateurs principaux */
+  --color-border-detail: #A5A5A5;        /* détails de séparateurs, plus discrets */
+  --color-border-accent: rgba(0, 138, 201, 0.4);
+  --color-card-border: rgba(33, 37, 41, 0.08); /* bordure de carte, volontairement quasi invisible */
+  --color-focus: #008AC9;
+  --color-overlay: rgba(255, 255, 255, 0.85);
+  --color-success: #2FBF71;
+  --color-error: #E5484D;
+
+  /* Boutons principaux : fond sombre discret plutôt que le bleu (qui reste
+     réservé au hover / boutons secondaires, voir .c-btn--secondary et
+     .c-btn--primary:hover dans components.css). */
+  --color-button-primary-bg: #212529;
+  --color-button-primary-text: #F2F2F2;
+  --color-button-primary-hover-bg: #343A40;
+
+  /* ---- Typographies (section 24 — charte typographique officielle) -----
+     Good Times (titres, surtitres, labels forts) et Stigsa Display (textes
+     courants) sont la charte officielle. Les fichiers ne sont pas encore
+     fournis : des @font-face commentés attendent dans base.css, avec des
+     fallbacks sûrs en attendant (voir assets/fonts/README.md). Ces deux
+     variables sont la SEULE source de vérité typographique du site : ne
+     jamais coder un nom de police en dur ailleurs que dans une déclaration
+     @font-face. */
+  --font-display: "Good Times", "Arial Narrow", "Arial Black", sans-serif;
+  --font-body: "Stigsa Display", Georgia, "Times New Roman", serif;
+
+  /* ---- Échelle typographique responsive (section 6.4) -------------------
+     Titres réduits d'environ 30 à 40% (demande explicite : "élégant, pas
+     massif") pour laisser respirer la mise en page éditoriale. Toujours en
+     Good Times (var(--font-display), voir base.css). Les tailles de texte
+     courant (body/small/xs, Stigsa Display) ne changent volontairement pas
+     — seuls les titres sont concernés. */
+   --font-size-display-xl: clamp(1.95rem, 4.9vw, 4.35rem);
+   --font-size-display-lg: clamp(1.6rem, 3.5vw, 3.15rem);
+   --font-size-h1: clamp(2.1rem, 3.5vw, 3.5rem);
+   --font-size-h2: clamp(1.54rem, 2.1vw, 2.24rem);
+   --font-size-h3: clamp(1.12rem, 1.4vw, 1.54rem);
+   --font-size-h4: clamp(0.8rem, 1.05vw, 1.05rem);
+  --font-size-body-lg: clamp(1.125rem, 1.4vw, 1.375rem);
+  --font-size-body: 1rem;
+  --font-size-small: 0.875rem;
+  --font-size-xs: 0.75rem;
+
+  --line-height-tight: 1.05;
+  --line-height-heading: 1.15;
+  --line-height-body: 1.55; /* réglage recommandé pour Stigsa Display, section 24.7 */
+
+  --letter-spacing-display: 0.01em;
+  --letter-spacing-eyebrow: 0.18em;
+
+  /* ---- Espacements --------------------------------------------------------
+     Légèrement augmentés (section 5 : "le site doit respirer") par rapport
+     à l'origine, surtout sur les paliers utilisés pour le rythme vertical
+     des sections (lg/xl/2xl/3xl). Les petits paliers (3xs à sm), utilisés
+     dans des zones denses (boutons, formulaires, header), ne bougent pas
+     pour éviter toute régression de mise en page. */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.75rem;
+  --space-lg: 2.75rem;
+  --space-xl: 4.5rem;
+  --space-2xl: 7rem;
+  --space-3xl: 10rem;
+
+  /* ---- Structure --------------------------------------------------------- */
+  --container-max: 1360px;
+  --container-narrow: 860px;
+  --nav-height: 88px;
+  --nav-height-scrolled: 72px;
+
+  /* ---- Rayons & bordures --------------------------------------------------
+     --radius-lg réduit (20px → 14px) : "border-radius discret" demandé pour
+     les cartes (section 7), plus proche d'Apple/Linear/Notion que d'un
+     arrondi prononcé façon template. */
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+  --border-width: 1px;
+
+  /* ---- Ombres --------------------------------------------------------------
+     Ombres très légères et neutres (rgba(33,37,41,…), teinte du texte
+     principal plutôt que noir pur) pour un rendu "papier premium" plutôt
+     qu'un effet plaqué. */
+  --shadow-sm: 0 2px 12px rgba(33, 37, 41, 0.06);
+  --shadow-md: 0 12px 40px rgba(33, 37, 41, 0.10);
+  --shadow-accent: 0 0 0 1px var(--color-border-accent), 0 20px 60px rgba(0, 138, 201, 0.12);
+
+  /* ---- Transitions ------------------------------------------------------- */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+
+  /* ---- Niveaux de superposition (z-index) --------------------------------- */
+  --z-base: 1;
+  --z-header: 500;
+  --z-progress: 550;
+  --z-cursor: 900;
+  --z-menu: 800;
+  --z-loader: 1000;
+  --z-toast: 950;
+}
+
+/* ---- Thème sombre (compatibilité) -------------------------------------------
+    Les anciennes valeurs sombres masquaient les changements visuels lorsque
+    data-theme="dark" restait mémorisé dans le navigateur. Pour garantir
+    l'application effective de la direction artistique claire sur tout le
+    site (hors Hero qui est figé dans home.css), on aligne les jetons du mode
+    dark sur la palette active. */
+[data-theme="dark"] {
+   --color-background: #F2F2F2;
+   --color-background-secondary: #F7F7F7;
+   --color-surface: #F7F7F7;
+   --color-surface-elevated: #FFFFFF;
+   --color-text: #212529;
+   --color-text-muted: #343A40;
+   --color-text-subtle: #7F7F7F;
+   --color-text-secondary: #595959;
+   --color-placeholder: #A5A5A5;
+  --color-accent: #008AC9;
+   --color-accent-hover: #006B9C;
+   --color-accent-dark: #00577D;
+   --color-border: #CCCCCC;
+   --color-border-detail: #A5A5A5;
+   --color-border-accent: rgba(0, 138, 201, 0.4);
+   --color-card-border: rgba(33, 37, 41, 0.08);
+  --color-focus: #008AC9;
+   --color-overlay: rgba(255, 255, 255, 0.85);
+   --color-button-primary-bg: #212529;
+   --color-button-primary-text: #F2F2F2;
+   --color-button-primary-hover-bg: #343A40;
+   --shadow-sm: 0 2px 12px rgba(33, 37, 41, 0.06);
+   --shadow-md: 0 12px 40px rgba(33, 37, 41, 0.10);
+}

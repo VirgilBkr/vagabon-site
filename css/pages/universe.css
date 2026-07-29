@@ -1,0 +1,2870 @@
+/* ==========================================================================
+   VAGABON — css/pages/universe.css
+   Styles de universe.html — l'expérience éditoriale qui s'ouvre après le
+   bouton « Entrer dans l'univers » de la landing page (index.html).
+
+   Remplace l'ancienne intégration Marble / World Labs (iframe 3D, retirée
+   du projet). Structure inspirée, dans sa seule LOGIQUE (rythme des
+   sections, alternance image/texte, numérotation des projets, sobriété),
+   d'un site éditorial japonais premium — aucun texte, image, police, code
+   ou asset n'est repris d'un site tiers. Toute la direction artistique
+   (palette, typographies var(--font-display)/var(--font-body), contenus)
+   appartient à Vagabon.
+
+   Portée : toutes les règles sont scoped à body.page-universe. Aucune
+   règle ici ne modifie index.html, home.css, ou un composant partagé.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Palette locale — sombre, bleu profond, rehauts chauds discrets.         */
+/* Même technique d'isolation que .home-hero--video dans home.css : ces    */
+/* jetons sont redéclarés localement et n'affectent aucune autre page.     */
+/* Cette page reste volontairement sombre en toutes circonstances, comme   */
+/* le Hero de la landing — décision cohérente avec l'identité cinématographique). */
+/* ---------------------------------------------------------------------- */
+body.page-universe {
+  --u-bg: #AEC8D8;
+  --u-bg-elevated: #0B0F16;
+  --u-surface: #0E131C;
+  --u-ink: #F3F1EA;
+  --u-ink-muted: #C7C4BC;
+  --u-ink-subtle: #82868D;
+  --u-line: rgba(243, 241, 234, 0.14);
+  --u-line-strong: rgba(243, 241, 234, 0.28);
+  --u-accent: #3FA9DE;
+  --u-accent-soft: rgba(63, 169, 222, 0.35);
+  --u-warm: #C7A34E;
+  --u-warm-soft: rgba(199, 163, 78, 0.4);
+  --u-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+
+  background: var(--u-bg);
+  color: var(--u-ink);
+  /* Empêche le navigateur (notamment macOS/Safari) d'interpréter un geste
+     horizontal de trackpad comme un rebond de bord de page ou un geste de
+     navigation historique (swipe précédent/suivant) — cause structurelle
+     probable du déplacement ponctuel de toute la page constaté sur le
+     carrousel du projet 01. N'affecte pas le rebond vertical natif. Scopé à
+     .page-universe, donc sans effet sur index.html. */
+  overscroll-behavior-x: none;
+}
+
+body.page-universe .l-page {
+  background: var(--u-bg);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Texture atmosphérique — grain très subtil, décoratif uniquement.        */
+/* Un seul élément fixe, aucune dépendance externe (bruit généré en SVG    */
+/* inline). Opacité volontairement faible : sensation de pellicule, jamais */
+/* visible comme un "effet".                                               */
+/* OPTIMISATION PERFORMANCE : mix-blend-mode a été retiré. Un blend-mode   */
+/* sur un calque plein écran fixe force le navigateur à recomposer ce       */
+/* calque avec TOUT ce qui défile en dessous à chaque frame — un coût GPU  */
+/* qui grandit avec la richesse visuelle de la page, ressenti comme un     */
+/* scroll saccadé. Sur un fond aussi sombre que celui de cette page, un    */
+/* recouvrement classique (sans blend-mode) produit un rendu visuellement  */
+/* quasi identique, sans jamais avoir besoin d'être recomposé.             */
+/* ---------------------------------------------------------------------- */
+body.page-universe::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------------------------------------------------------------------- */
+/* Header & menu — variante sombre de ce composant, propre à cette page.   */
+/* ---------------------------------------------------------------------- */
+/* backdrop-filter ajouté UNIQUEMENT ici, sur l'état de repos (haut de
+   page, avant scroll) — pas sur .c-header.is-scrolled ci-dessous, où il
+   avait été explicitement retiré pour une raison de performance mesurée
+   (voir commentaire plus bas) : cette dernière concerne le flou d'un
+   calque fixe pendant que du contenu défile activement dessous, un coût
+   par frame. Ici, le Hero est statique (aucune image ne bouge sous le
+   header tant qu'on n'a pas commencé à scroller) : le flou n'est donc
+   calculé qu'une fois, pas en continu, et disparaît de toute façon dès
+   que .is-scrolled prend le relais. Dégradé et couleurs inchangés. */
+body.page-universe .c-header {
+  background: linear-gradient(to bottom, rgba(174, 200, 216, 0.85), transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Le header partage .l-container avec le reste du site (centré via
+   margin-inline: auto autour de --container-max = 1360px — voir
+   css/layout.css, non modifié pour ne jamais affecter la landing page).
+   CORRECTIF : la première version de cette règle ne mettait que
+   margin-right à 0, ce qui poussait TOUT le conteneur (donc aussi
+   "VAGABON", premier enfant à gauche) vers la droite — effet de bord non
+   voulu, à l'origine du logo trop décalé signalé ensuite. Cette version
+   retire complètement la logique de centrage (max-width + margin-inline)
+   et réutilise le MÊME padding-inline: clamp(24px, 5vw, 64px) que le
+   contenu principal (.universe-intro__inner / .universe-section__inner) :
+   "VAGABON" (aligné à gauche du conteneur) retrouve exactement le même
+   retrait que le grand titre, et le groupe de boutons (aligné à droite du
+   conteneur, justify-content: space-between sur .c-header__inner) se
+   rapproche symétriquement du bord droit — sans dépendre du plafond de
+   1360px, réservé au seul contenu éditorial. */
+body.page-universe .c-header .l-container {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: clamp(24px, 5vw, 64px);
+}
+
+/* OPTIMISATION PERFORMANCE : backdrop-filter: blur() retiré. Un flou de
+   fond sur un élément fixe (le header) oblige le navigateur à ré-échantillonner
+   ce qui défile juste en dessous à chaque frame — l'un des effets CSS les
+   plus coûteux en continu pendant un scroll. Compensé par un fond plus
+   opaque (0.94 au lieu de 0.86) pour garder une lisibilité équivalente
+   sans avoir besoin de flou. backdrop-filter: none explicite ci-dessous
+   (plutôt qu'une simple absence de déclaration) : la nouvelle règle de
+   repos ci-dessus pose désormais un blur — sans ce reset, il resterait
+   actif pendant le scroll actif et réintroduirait précisément le coût
+   qu'on a mesuré et évité ici. */
+body.page-universe .c-header.is-scrolled {
+  background-color: rgba(174, 200, 216, 0.94);
+  border-bottom: 1px solid var(--u-line);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Contours + contenu (icônes/texte) en #495359 pour ce groupe de boutons
+   du header (FR/EN, menu) : couleur demandée explicitement, propre
+   à cette page. */
+body.page-universe .c-icon-btn,
+body.page-universe .c-menu-toggle {
+  border-color: #495359;
+  color: #495359;
+}
+
+body.page-universe .c-icon-btn:hover {
+  border-color: var(--u-accent-soft);
+  background: rgba(63, 169, 222, 0.12);
+}
+
+/* Centrage de "FR" dans le bouton rond de langue. .c-icon-btn a déjà
+   display:inline-flex + align-items/justify-content:center (voir
+   components.css, non modifié — partagé avec la landing page), diamètre
+   40px inchangé. Aucun padding, position, transform ni pseudo-élément ne
+   décale ce bouton. Même cause que pour les boutons "Réserver un appel" :
+   le texte "FR" est en majuscules (text-transform hérité), sans jambage
+   descendant, alors que line-height: normal réserve cet espace inutilisé
+   et décale la boîte de ligne que flexbox centre. Même correctif déjà
+   appliqué et validé pour ce même bouton sur la landing page (voir
+   css/pages/home.css, règle .page-home .c-header__actions
+   [data-lang-toggle]) — repris ici à l'identique. */
+body.page-universe [data-lang-toggle] {
+  line-height: 1;
+}
+
+body.page-universe .c-menu-toggle__bar {
+  background: #495359;
+}
+
+/* Bouton son : sans objet ici (aucune vidéo sur cette page). Masqué plutôt
+   que laissé visible sans effet — n'affecte que cette page. */
+body.page-universe [data-audio-toggle] {
+  display: none !important;
+}
+
+/* Centrage du texte des boutons — diagnostic complet (re-vérifié) :
+   - .c-btn a déjà display:inline-flex + align-items:center +
+     justify-content:center (css/components.css, non modifié — partagé
+     avec la landing page). padding est horizontal uniquement (0
+     var(--space-lg)), aucune asymétrie verticale.
+   - Aucun JS ne touche ce bouton (vérifié : aucune manipulation de
+     style/transform/padding sur .c-btn dans js/*.js).
+   - Aucune autre règle plus spécifique que celle-ci ne redéfinit
+     line-height pour ce bouton sur cette page (vérifié par recherche
+     exhaustive dans tous les fichiers CSS).
+   - La cause réelle : le texte est en majuscules (text-transform:
+     uppercase, hérité de .c-btn), donc sans jambage descendant, alors que
+     line-height: normal (hérité du corps de texte) réserve un espace bas
+     de ligne prévu pour ces jambages — la boîte de ligne que flexbox
+     centre est alors plus grande que nécessaire, décalant visuellement le
+     texte vers le haut du bouton.
+   - Ce même diagnostic et le même correctif (line-height: 1) ont déjà été
+     appliqués et validés pour ce bouton sur la landing page (voir
+     css/pages/home.css, règle .page-home .c-header__actions .c-btn) —
+     technique reprise ici à l'identique, propriétés explicitement
+     redéclarées pour éliminer toute ambiguïté de cascade.
+   - Point important : cette page utilise actuellement la police de
+     repli "Georgia"/"Times New Roman" (voir --font-body dans
+     variables.css) car les fichiers de la police prévue "Stigsa Display"
+     ne sont pas encore livrés dans le projet — cette police de repli a
+     des métriques (ascendant/descendant) différentes de la police finale
+     et peut encore laisser un très léger écart optique résiduel (1-2px)
+     tant que la vraie police n'est pas installée. Aucun padding, largeur,
+     hauteur (min-height: 48px inchangée), typographie, taille de texte ni
+     bordure n'est modifié. */
+body.page-universe .c-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
+}
+
+body.page-universe .c-btn--secondary {
+  border-color: #495359;
+  color: #495359;
+}
+
+body.page-universe .c-btn--secondary:hover {
+  border-color: var(--u-accent-soft);
+  background: rgba(63, 169, 222, 0.1);
+}
+
+/* Bouton primaire (menu plein écran, "Réserver un appel") : abandon du
+   fond sombre précédent (--color-button-primary-bg) au profit du même
+   principe graphique que .universe-cta ("Découvrir les projets") —
+   intérieur clair, contour + texte foncés — avec les valeurs littérales
+   demandées : #AEC7D8 / #647279 / #647279. Dimensions, rayon de bordure,
+   position et typographie du bouton ne sont pas touchés (aucune règle de
+   layout ci-dessous, uniquement des couleurs) ; le centrage du texte
+   reste assuré par la règle .c-btn plus haut (display:inline-flex;
+   align-items:center; justify-content:center; line-height:1). */
+body.page-universe .c-btn--primary {
+  background-color: #AEC7D8;
+  border-color: #647279;
+  color: #647279;
+}
+
+/* Inversion au survol/focus, dans la même palette à deux couleurs,
+   symétrique de l'état par défaut. */
+body.page-universe .c-btn--primary:hover,
+body.page-universe .c-btn--primary:focus-visible {
+  background-color: #647279;
+  border-color: #647279;
+  color: #AEC7D8;
+}
+
+body.page-universe .c-btn--ghost {
+  color: var(--u-accent);
+}
+
+body.page-universe .c-btn--ghost:hover {
+  color: var(--u-warm);
+}
+
+/* Mot-symbole discret, seul et unique lien de retour permanent vers la
+   landing page (en plus de l'entrée "Accueil" du menu plein écran). */
+.universe-brand {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  color: var(--u-ink);
+  text-transform: uppercase;
+  opacity: 0.9;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+
+.universe-brand:hover,
+.universe-brand:focus-visible {
+  opacity: 1;
+}
+
+/* Menu plein écran — harmonisation avec la nouvelle identité visuelle.
+   Palette imposée (valeurs HEX littérales, demandées explicitement plutôt
+   que des variables) : fond #AEC7D8, textes/contours/icônes #647279.
+   La hiérarchie visuelle qui existait déjà (liens principaux vs
+   numéros/meta/sous-labels plus discrets) n'était pas portée par de
+   l'opacité mais par des tokens de couleur distincts (--color-text-muted
+   vs --color-text-subtle) : elle est donc recréée ici avec la MÊME
+   couleur de base #647279 pour tout, et de l'opacité pour les niveaux
+   secondaires/tertiaires — exactement le mécanisme suggéré par la
+   consigne ("utilise #647279 comme couleur de base et conserve
+   éventuellement les niveaux d'opacité nécessaires"). Aucune autre
+   couleur (blanc, noir, bleu accent, ancien #495359) ne subsiste. */
+body.page-universe .c-nav-fullscreen {
+  background: #AEC7D8;
+}
+
+body.page-universe .c-nav-fullscreen__link {
+  color: #647279;
+  opacity: 0.72;
+}
+
+body.page-universe .c-nav-fullscreen__link:hover,
+body.page-universe .c-nav-fullscreen__link:focus-visible {
+  opacity: 1;
+}
+
+/* Lien de la page courante : plus aucun accent bleu (hors palette).
+   Distinction conservée via opacité pleine + le poids de police déjà
+   défini par ailleurs pour [aria-current], sans ajouter de couleur. */
+body.page-universe .c-nav-fullscreen__link[aria-current="page"] {
+  color: #647279;
+  opacity: 1;
+}
+
+body.page-universe .c-nav-fullscreen__link-number,
+body.page-universe .c-nav-fullscreen__link-sub,
+body.page-universe .c-nav-fullscreen__meta {
+  color: #647279;
+  opacity: 0.6;
+}
+
+/* Bouton fermer (X) et boutons sociaux : scindés du reste des
+   .c-icon-btn de la page (header : FR, luminosité, menu-toggle, qui
+   restent en #495359 comme fixé précédemment) via le sélecteur
+   .c-nav-fullscreen, pour ne modifier QUE l'intérieur du menu. */
+body.page-universe .c-nav-fullscreen [data-menu-close] {
+  border-color: #647279;
+  color: #647279;
+}
+
+body.page-universe .c-nav-fullscreen .c-icon-btn {
+  border-color: #647279;
+  color: #647279;
+  background: transparent;
+}
+
+body.page-universe .c-nav-fullscreen [data-menu-close]:hover,
+body.page-universe .c-nav-fullscreen [data-menu-close]:focus-visible,
+body.page-universe .c-nav-fullscreen .c-icon-btn:hover,
+body.page-universe .c-nav-fullscreen .c-icon-btn:focus-visible {
+  background: #647279;
+  color: #AEC7D8;
+  border-color: #647279;
+}
+
+.universe-nav__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: #647279;
+  opacity: 0.72;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+
+.universe-nav__back:hover,
+.universe-nav__back:focus-visible {
+  opacity: 1;
+}
+
+/* Barre de progression de lecture — discrète, dégradé bleu → chaud.       */
+/* Ne concerne que cette page : sur index.html, l'élément [data-progress]  */
+/* reste inerte comme aujourd'hui (aucune règle globale modifiée).        */
+body.page-universe .c-progress {
+  background: linear-gradient(90deg, var(--u-accent), var(--u-warm));
+  z-index: calc(var(--z-progress) + 1);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Loader — variante sombre, pour une entrée dans l'univers sans flash      */
+/* clair (le composant partagé utilise var(--color-background), clair par  */
+/* défaut ailleurs sur le site : sans cette règle, un flash clair d'environ */
+/* une seconde apparaîtrait avant le contenu sombre de cette page).         */
+/* ---------------------------------------------------------------------- */
+body.page-universe .loader {
+  background: var(--u-bg);
+}
+
+body.page-universe .loader__mark {
+  border-color: var(--u-warm);
+  color: var(--u-ink);
+}
+
+body.page-universe .loader__wordmark {
+  color: var(--u-ink-muted);
+}
+
+body.page-universe .loader__bar-track {
+  background: var(--u-line);
+}
+
+body.page-universe .loader__bar {
+  background: var(--u-warm);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Rythme général des sections                                             */
+/* ---------------------------------------------------------------------- */
+.universe-section {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--space-3xl);
+}
+
+.universe-section__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+}
+
+.universe-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-eyebrow);
+  text-transform: uppercase;
+  color: var(--u-ink-subtle);
+  margin-bottom: var(--space-lg);
+}
+
+.universe-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--u-warm-soft);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Utilitaire — révélation "mot par mot" des grands titres.                */
+/* Découpage effectué par js/universe.js (initWordReveal), sur les         */
+/* éléments [data-word-reveal]. Déclenchement via la classe .is-visible    */
+/* déjà posée par l'observateur générique [data-reveal] (js/animations.js) */
+/* — ces titres portent aussi data-reveal, aucun observateur en plus.      */
+/* Dégradation neutre : sans JS ou sous prefers-reduced-motion, le texte   */
+/* reste un nœud de texte normal (le découpage n'a jamais lieu).           */
+/* ---------------------------------------------------------------------- */
+.u-word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em; /* évite de rogner les jambages (g, j, p...) */
+  margin-bottom: -0.08em;
+}
+
+.u-word-mask__inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+html.js [data-word-reveal] .u-word-mask__inner {
+  transform: translateY(115%);
+  transition: transform 900ms var(--ease-standard);
+}
+
+html.js [data-word-reveal].is-visible .u-word-mask__inner {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-word-reveal] .u-word-mask__inner {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Utilitaire — entrée "en scène" des grandes sections ([data-scene]).     */
+/* Léger scale + fondu, indépendant des révélations internes plus fines : */
+/* adoucit la frontière entre deux sections (pas de rupture brutale).      */
+/* Piloté par js/universe.js (initSceneReveal), observateur dédié.         */
+/* ---------------------------------------------------------------------- */
+[data-scene] {
+  opacity: 1;
+  transform: none;
+}
+
+html.js [data-scene] {
+  opacity: 0;
+  transform: scale(0.97) translateY(28px);
+  transition: opacity 1100ms var(--ease-standard), transform 1100ms var(--ease-standard);
+}
+
+html.js [data-scene].is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-scene] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* A. Ouverture — manifeste                                                 */
+/* ---------------------------------------------------------------------- */
+.universe-intro {
+  position: relative;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  /* gap: var(--space-2xl) RETIRÉ — c'était la cause réelle du CTA "trop
+     bas" (voir commentaire détaillé sur .universe-intro__cta dans
+     universe.html et ci-dessous) : ce gap s'appliquait entre
+     .universe-intro__inner et .universe-intro__cta tant que ce dernier en
+     était un sibling direct. Le CTA vit désormais À L'INTÉRIEUR de
+     .universe-intro__inner (son espacement avec le paragraphe est géré
+     localement par sa propre margin-top) : .inner est donc le SEUL enfant
+     de ce conteneur flex encore présent dans le flux normal (.cue et
+     .signature sont en position:absolute, hors flux) — un gap entre un
+     unique élément flex et rien n'aurait de toute façon aucun effet. */
+  padding-top: var(--nav-height);
+  /* padding-bottom réduit de var(--space-3xl) (160px) à var(--space-lg)
+     (44px) — DIAGNOSTIC : le Hero garde min-height: 100dvh (toujours
+     plein écran tant qu'on le regarde, inchangé, comme demandé) et son
+     contenu reste centré verticalement (justify-content: center,
+     inchangé — composition interne du Hero non retouchée). Le "grand vide
+     bleu" signalé après le Hero ne venait donc pas d'un manque d'espace
+     dans #projets (déjà resserré, voir plus bas) mais de CE
+     padding-bottom : à hauteur de viewport égale, cette valeur fixe
+     s'ajoutait systématiquement en bas du Hero, décalant d'autant le
+     début visuel de #projets, quel que soit le contenu déjà centré
+     au-dessus. Avec box-sizing: border-box (voir css/reset.css) et
+     min-height fixe, réduire ce padding ne raccourcit pas le Hero à
+     l'écran — il redistribue simplement l'espace interne (le contenu
+     centré gagne une bande légèrement plus haute des deux côtés) tout en
+     réduisant nettement le tampon fixe juste avant #projets. Pas de
+     margin-top négatif : la cause réelle (ce padding) est corrigée
+     directement, pas contournée. */
+  padding-bottom: var(--space-lg);
+  /* Garde-fou : conservé même si le fond est maintenant une image unique
+     dimensionnée en contain — évite tout débordement résiduel si jamais
+     le ratio du viewport diffère fortement de celui du fichier. */
+  overflow: hidden;
+  /* Fond visuel unique : personnages, fumée et composition sont déjà
+     intégrés dans ce fichier (plus de calques séparés à superposer).
+     background-size: contain (jamais cover) : garantit qu'aucune partie
+     de la composition — visages compris — n'est jamais recadrée, quel que
+     soit le ratio du viewport, conformément à la consigne explicite de ne
+     pas rogner les personnages. Sur un viewport plus large (en ratio) que
+     le fichier 16:9 — cas fréquent en desktop, la hauteur du Hero étant
+     limitée par la fenêtre du navigateur — contain cale l'image sur la
+     HAUTEUR disponible, ce qui laisse un espace horizontal excédentaire à
+     répartir. background-position: center le répartissait à parts égales
+     à gauche ET à droite, d'où la bande bleue visible entre le personnage
+     et le bord droit de l'écran. right center reporte tout cet excédent du
+     seul côté gauche (déjà réservé au texte, donc sans impact visuel) et
+     ancre le bord droit de l'image exactement sur le bord droit du Hero.
+     background-color ci-dessous reprend le bleu EXACT du fichier
+     (#9EBDD2, légèrement plus soutenu que --u-bg #AEC8D8) pour que cet
+     espace gauche reste invisible, plutôt que d'introduire un nouveau
+     voile coloré sur l'image elle-même. Taille, ratio, hauteur du Hero :
+     rien d'autre ne change. Aucun filtre, blur, opacité ou
+     mix-blend-mode : couleurs du fichier affichées telles quelles. */
+  background-image: url("../../assets/images/hero/vagabon-hero-background.webp");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: contain;
+  background-color: #9EBDD2;
+}
+
+/* Voile de lisibilité en haut du Hero — pur CSS (::before), aucun élément
+   HTML ajouté. Ne couvre que les ~200px du haut (là où vivent le header,
+   VAGABON, INDEX et les boutons FR/Réserver un appel/menu), fondu à
+   transparent bien avant d'atteindre le titre. Couleur : var(--u-bg-elevated)
+   (#0B0F16, déjà utilisée ailleurs sur cette page) à seulement 30%
+   d'opacité en haut — un bleu-noir très discret, pas un nouveau voile
+   coloré arbitraire. N'affecte ni l'image, ni sa position, ni sa taille :
+   c'est une fine couche décorative au-dessus, sans interaction possible
+   (pointer-events: none) et sous le texte (z-index: 1 < 2). */
+.universe-intro::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 200px;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--u-bg-elevated) 30%, transparent), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Fondu bas du Hero — dissout progressivement l'image (et le personnage
+   qu'elle contient) dans le bleu #AEC8D8 de la section suivante, pour
+   supprimer la démarcation nette actuellement visible au bas du Hero.
+   N'affecte pas l'image elle-même (position, taille, cadrage) : c'est une
+   couche décorative superposée, comme le voile du haut ci-dessus.
+   - Hauteur volontairement généreuse (jusqu'à ~460px, jamais une simple
+     bande de 20-30px) pour une transition réellement progressive plutôt
+     qu'un cache-misère localisé sur la ligne de coupure.
+   - Reste transparent sur son premier cinquième (0-18%) : le fondu
+     commence visuellement plus haut que la ligne de coupure elle-même,
+     mais de façon quasi imperceptible au début, pour ne jamais donner
+     l'impression de trancher net à travers le personnage — l'intensité
+     n'augmente que progressivement ensuite.
+   - Couleur cible : var(--u-bg) (#AEC8D8, la couleur exacte de la section
+     suivante) plutôt que le background-color propre du Hero (#9EBDD2) :
+     la fusion se fait avec ce que l'œil voit APRÈS le Hero, ce qui masque
+     au passage le léger écart entre les deux teintes de bleu.
+   - z-index: 1, identique au voile du haut : au-dessus de l'image/du
+     canvas de distorsion (z-index: 0), sous le texte/CTA/repère de scroll
+     (z-index: 2 partout) qui restent donc parfaitement lisibles.
+   - pointer-events: none, position: absolute + inset : ne participe à
+     aucun calcul de mise en page, aucun coût pendant le scroll (une seule
+     couche peinte une fois, non animée, non re-déclenchée). Pas de
+     backdrop-filter, pas de blur, pas de JS. */
+.universe-intro::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: clamp(260px, 34vh, 460px);
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 18%,
+    color-mix(in srgb, var(--u-bg) 22%, transparent) 42%,
+    color-mix(in srgb, var(--u-bg) 55%, transparent) 66%,
+    color-mix(in srgb, var(--u-bg) 85%, transparent) 86%,
+    var(--u-bg) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Canvas WebGL de déformation locale au passage du curseur (voir
+   js/universe-hero-distortion.js). Se superpose exactement à l'image de
+   fond CSS ci-dessus (même box, même z-index de base que celle-ci — sous
+   le voile de lisibilité [z-index:1] et sous le contenu texte/CTA
+   [z-index:2]) : quand aucune distorsion n'est active, son rendu est
+   visuellement identique à l'image CSS restée en dessous. Si WebGL est
+   indisponible ou l'image ne charge pas, ce canvas n'est jamais créé et
+   l'image de fond CSS s'affiche seule, sans aucune différence visible. */
+.universe-intro__distortion-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.universe-intro__inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--container-max);
+  /* margin-left: 0 (au lieu de auto) : le bloc n'est plus centré dans son
+     conteneur pleine largeur, il colle au bord gauche disponible — seul
+     l'espacement de sécurité existant (padding-inline ci-dessous, inchangé)
+     reste comme marge visible. margin-right: auto absorbe l'espace restant
+     à droite, sans jamais élargir le bloc au-delà de --container-max. Sur
+     mobile/tablette (viewport < 1360px), ce changement est invisible : le
+     bloc occupe déjà toute la largeur disponible, margin-inline: auto n'y
+     avait de toute façon aucun effet. */
+  margin-left: 0;
+  margin-right: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+  width: 100%;
+}
+
+/* TAILLE RÉDUITE (demande explicite) — le titre empiétait de façon
+   excessive sur le portrait glacé de l'image de fond (voir capture de
+   référence transmise). Les trois valeurs du clamp() sont réduites de
+   façon proportionnelle (~12-15% chacune : 2.2→2rem, 6.4→5.6vw,
+   5.6→4.8rem) plutôt qu'une seule valeur isolée — le titre reste ainsi
+   cohérent sur toute la plage de largeurs de viewport, jamais juste "plus
+   petit sur mon écran". Il reste malgré tout, de loin, le plus grand
+   élément typographique du Hero (4.8rem = 76.8px au plafond, contre
+   font-size-body-lg pour le paragraphe) : son impact visuel comme titre
+   principal n'est pas compromis, seule sa présence sur l'image de fond est
+   atténuée pour lui laisser plus de respiration. line-height (1.08) et
+   max-width (16ch) inchangés : la réduction de font-size seule suffit à
+   corriger le chevauchement signalé, sans risquer de modifier le nombre de
+   lignes du titre (donc sa hauteur totale) ni sa largeur relative. */
+/* DIAGNOSTIC (capture d'écran fournie) : le mot "EST" (fin de la première
+   ligne "CHAQUE PROJET EST") venait recouvrir le visage du portrait glacé
+   en arrière-plan. Cause : max-width: 16ch laissait le bloc de titre
+   s'étendre assez loin à droite pour que sa première ligne atteigne la
+   zone du visage — un problème de LARGEUR du bloc, pas de position de
+   l'image (le fond, background-position: right center, n'a pas été
+   touché). Double correctif, dans l'esprit "réduire plutôt que faire
+   traverser le visage" demandé explicitement :
+   1) max-width resserré de 16ch à 13.5ch (~15% plus étroit) : "EST"
+      redescend naturellement sur la ligne suivante, et plus généralement
+      TOUTES les lignes du titre voient leur bord droit reculer d'autant,
+      quel que soit l'endroit précis où le texte se coupe (max-width en ch
+      contraint la largeur du bloc entier, pas seulement le mot en cause) ;
+   2) clamp() légèrement abaissé sur ses trois paliers (min/préféré/max),
+      dans la continuité de la précédente réduction : le titre reste
+      l'élément dominant du Hero, juste un peu plus petit, pour donner de
+      la marge entre le bloc de texte et le visage à toutes les largeurs
+      de viewport (vw et ch sont tous deux relatifs à la fenêtre/à la
+      police, donc cet équilibre se maintient du mobile au grand desktop,
+      sans breakpoint supplémentaire nécessaire).
+   line-height, letter-spacing et color inchangés. */
+.universe-intro__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.85rem, 5vw, 4.3rem);
+  line-height: 1.08;
+  letter-spacing: var(--letter-spacing-display);
+  max-width: 13.5ch;
+  color: var(--u-ink);
+}
+
+.universe-intro__text {
+  margin-top: var(--space-xl);
+  max-width: 46ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  /* Couleur demandée explicitement (contraste insuffisant avec var(--u-ink-muted)
+     sur le fond clair actuel) — typographie, taille et interlignage inchangés. */
+  color: #495359;
+}
+
+/* ---------------------------------------------------------------------- */
+/* CTA principal de l'ouverture — désormais NICHÉ à l'intérieur de         */
+/* .universe-intro__inner, juste après le paragraphe (voir universe.html   */
+/* et le commentaire sur .universe-intro plus haut pour le diagnostic      */
+/* complet du problème "bouton trop bas" que ce changement corrige).       */
+/* padding-inline RETIRÉ : ce bouton hérite désormais directement du       */
+/* padding-inline déjà posé sur .universe-intro__inner (son parent), donc  */
+/* son bord gauche tombe naturellement au même retrait que le titre et le  */
+/* paragraphe sans avoir besoin de reposer la même valeur ici. margin-top  */
+/* (var(--space-xl), 72px) REMPLACE l'ancien gap de section (112px) comme  */
+/* unique source d'espacement avec le paragraphe : même palier que celui   */
+/* déjà utilisé entre le titre et le paragraphe juste au-dessus (rythme    */
+/* cohérent, "élégant sans être collé"). Bouton lui-même (.universe-cta)   */
+/* inchangé : taille, bordure, couleur, typographie et centrage interne    */
+/* du texte restent identiques.                                            */
+/* ---------------------------------------------------------------------- */
+.universe-intro__cta {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin-top: var(--space-xl);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+}
+
+.universe-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-2xs);
+  min-height: 48px;
+  padding-inline: clamp(28px, 4vw, 40px);
+  border: 1px solid #495359;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #495359;
+  transition: border-color var(--duration-base) var(--ease-standard),
+              background-color var(--duration-base) var(--ease-standard),
+              color var(--duration-base) var(--ease-standard);
+}
+
+.universe-cta:hover,
+.universe-cta:focus-visible {
+  border-color: var(--u-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--u-warm);
+}
+
+.universe-cta__arrow {
+  display: inline-block;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.universe-cta:hover .universe-cta__arrow,
+.universe-cta:focus-visible .universe-cta__arrow {
+  transform: translateY(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .universe-cta:hover .universe-cta__arrow { transform: none; }
+}
+
+.universe-intro__cue {
+  position: absolute;
+  z-index: 2;
+  left: clamp(24px, 5vw, 64px);
+  bottom: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.universe-intro__cue-line {
+  width: 1px;
+  height: 52px;
+  background: linear-gradient(to bottom, var(--u-line-strong), transparent);
+  overflow: hidden;
+}
+
+html.js .universe-intro__cue-line::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 40%;
+  background: var(--u-warm);
+  animation: universe-cue-drop 2.4s var(--ease-standard) infinite;
+}
+
+@keyframes universe-cue-drop {
+  0% { transform: translateY(-100%); }
+  60%, 100% { transform: translateY(250%); }
+}
+
+.universe-intro__cue-label {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--u-ink-subtle);
+  writing-mode: vertical-rl;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .universe-intro__cue-line::after { animation: none; transform: translateY(120%); }
+}
+
+@media (max-width: 768px) {
+  .universe-intro__cue { display: none; }
+}
+
+/* Signature éditoriale (nom + fonction) rattachée à la composition
+   photographique de droite (demande explicite) — voir universe.html pour
+   le détail du positionnement retenu. Ancrée en absolute, bas-droite,
+   symétrique du repère "Défiler" ci-dessus (bas-gauche, même
+   bottom: var(--space-xl)) : les deux éléments secondaires du Hero
+   partagent ainsi la même ligne de base, une composition équilibrée plutôt
+   que deux ancrages arbitraires différents. right: clamp(24px, 5vw, 64px) —
+   même valeur que le padding-inline de .universe-intro__inner, pour un
+   retrait visuellement cohérent avec le reste du Hero.
+   COULEUR — #495359 (déjà utilisé pour le paragraphe et le CTA de cette
+   même section, contraste vérifié sur --u-bg ≈4.52:1) plutôt que du blanc :
+   ce bloc se trouve dans la zone de fondu vers --u-bg (voir
+   .universe-intro::after juste au-dessus dans ce fichier), où le blanc
+   perdrait en lisibilité à mesure que le fond s'éclaircit — demande
+   explicite du client, confirmée par cette analyse.
+   HIÉRARCHIE — le nom (600, taille courante) reste sobre mais plus affirmé
+   que la fonction (taille xs, poids normal) : deux paliers déjà existants
+   dans l'échelle typographique, aucune valeur inventée. Aucun badge, fond,
+   bordure ni carte : deux lignes de texte seules, purement éditoriales. */
+/* DEMANDE EXPLICITE (nouvelle passe, maquette de référence) : intégration
+   complètement revue de ce bloc — superposé à l'angle inférieur droit du
+   portrait principal, avec un voile diffus localisé derrière le texte
+   plutôt qu'un encadré. Position (right/bottom) INCHANGÉE — déjà
+   suffisamment marginée du bord droit, du bas du viewport et du visage,
+   validé lors de la passe précédente — seule l'intégration visuelle change
+   ci-dessous. */
+.universe-intro__signature {
+  position: absolute;
+  z-index: 2;
+  right: clamp(24px, 5vw, 64px);
+  bottom: var(--space-xl);
+  /* Légèrement élargi (300px → 320px) pour absorber l'agrandissement
+     supplémentaire du nom ci-dessous sans forcer "Virgil Boukraa" à se
+     couper sur deux lignes. */
+  max-width: min(60vw, 320px);
+  text-align: right;
+}
+
+/* VOILE DIFFUS LOCALISÉ — demande explicite : "aucune carte opaque, aucun
+   rectangle clairement délimité, aucun contour".
+   CORRECTIF (capture d'écran fournie par le client) : une première version
+   combinait ce dégradé avec backdrop-filter: blur(). Le résultat réel à
+   l'écran montrait exactement le défaut à éviter — une zone floutée avec
+   un bord PARFAITEMENT visible (un "pilule" nette), car backdrop-filter
+   floute uniformément toute la boîte de l'élément puis s'arrête net à sa
+   bordure (ici arrondie par border-radius: 999px) : le dégradé posé
+   PAR-DESSUS s'estompait bien, mais le flou en dessous, lui, ne s'estompait
+   jamais — il n'existe aucune propriété CSS native pour "faire fondre" un
+   backdrop-filter en dehors d'un mask-image, technique plus fragile et
+   invérifiable ici faute de navigateur réel dans cet environnement.
+   backdrop-filter est donc retiré : seul subsiste un radial-gradient à
+   PLUSIEURS paliers (0% → 30% → 55% → 80%, jamais un simple "centre/bord"
+   en deux temps) pour un assombrissement progressif, sans aucune étape de
+   flou dont la limite serait visible. L'effet reste fidèle à la demande —
+   "l'image s'assombrit naturellement derrière le texte" — la seule partie
+   qui disparaît est la diffusion/flou proprement dite (explicitement
+   marquée "éventuellement" dans la demande initiale), au profit d'un rendu
+   dont le comportement est garanti sans avoir besoin d'être vérifié à
+   l'écran. Taille également resserrée (le halo précédent débordait bien
+   au-delà du texte lui-même, visible sur la capture) : les inset négatifs
+   ci-dessous restent proches du bloc de texte réel.
+   z-index: -1 le place sous le nom/la fonction (enfants normaux, sans
+   z-index propre) mais reste au-dessus du fond de .universe-intro
+   (canvas/dégradés), qui vit dans un contexte d'empilement différent.
+   pointer-events: none : purement décoratif, ne bloque aucune interaction. */
+.universe-intro__signature::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: clamp(-24px, -3.5vw, -40px);
+  right: clamp(-14px, -2vw, -22px);
+  bottom: clamp(-18px, -2.6vw, -30px);
+  left: clamp(-36px, -5.5vw, -64px);
+  background: radial-gradient(
+    ellipse at 66% 60%,
+    rgba(11, 15, 22, 0.32) 0%,
+    rgba(11, 15, 22, 0.22) 30%,
+    rgba(11, 15, 22, 0.1) 55%,
+    rgba(11, 15, 22, 0) 80%
+  );
+  pointer-events: none;
+}
+
+/* NOM — "Virgil Boukraa" : agrandi davantage (demande explicite : "taille
+   suffisamment importante pour être immédiatement identifiable"), tout en
+   restant nettement sous le titre du Hero (.universe-intro__title, jusqu'à
+   4.3rem) et sous les titres de section (jusqu'à 2.2rem pour
+   .testimonial-band__title) — clamp(1.35rem, 2vw, 1.75rem) occupe
+   proprement l'échelon suivant, sans valeur arbitraire déconnectée du
+   reste de la charte.
+   Couleur : EXACTEMENT var(--u-warm) (#C7A34E) — la même variable que
+   .universe-cta:hover (voir plus bas), aucune nouvelle nuance de doré créée,
+   et volontairement PAS une variante plus claire (demande explicite : "ne
+   pas utiliser un doré trop clair qui manquerait de contraste"). Le voile
+   ci-dessus assombrit légèrement l'image juste derrière ce texte pour que
+   ce doré s'y détache ; le text-shadow sombre reste un filet de sécurité
+   supplémentaire (même technique que sur index.html/home.css). */
+.universe-intro__signature-name {
+  position: relative;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  line-height: var(--line-height-body);
+  color: var(--u-warm);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+}
+
+/* Petite ligne dorée à gauche du nom (demande explicite, "comme sur la
+   référence") : inline-block placé AVANT le texte dans le flux — comme le
+   bloc reste aligné à droite (text-align: right hérité), la ligne suit
+   naturellement le nom plutôt que de nécessiter un positionnement absolu
+   séparé. Même logique que .universe-eyebrow::before (trait horizontal
+   fin), simplement réutilisée ici avec var(--u-warm) plein plutôt que
+   --u-warm-soft, pour un peu plus de présence à côté d'un nom déjà agrandi. */
+.universe-intro__signature-name::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  margin-right: var(--space-2xs);
+  margin-bottom: 0.2em;
+  background: var(--u-warm);
+  vertical-align: middle;
+}
+
+/* FONCTION — CORRECTIF (demande explicite, capture d'écran fournie) : le
+   gris anthracite #495359 manquait de contraste sur l'image derrière lui.
+   Remplacé par EXACTEMENT var(--u-ink) (#F3F1EA, le même blanc cassé que
+   .universe-intro__title, aucune nouvelle nuance créée) — la hiérarchie
+   reste claire via la taille (var(--font-size-small), plus petite que le
+   nom) et le poids (normal, contre 600 sur le nom), pas via la couleur.
+   Le text-shadow passe en conséquence de clair à SOMBRE (même traitement
+   que .universe-intro__signature-name juste au-dessus, cohérent avec du
+   texte clair sur cette même zone assombrie par le voile) — un halo clair
+   sur du texte déjà clair n'aurait plus aucun effet. Voile et position
+   inchangés. */
+.universe-intro__signature-role {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-body);
+  color: var(--u-ink);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Mobile / tablette : le repère "Défiler" disparaît déjà à cette largeur
+   (voir règle ci-dessus) — la signature, elle, reste affichée (c'est une
+   information réelle, pas une simple décoration), mais son retrait droit
+   suit celui, déjà réduit, de .universe-intro__inner à cette largeur, et sa
+   largeur maximale se resserre légèrement pour ne jamais risquer de
+   toucher le bord de l'écran sur les téléphones les plus étroits. Le voile
+   se resserre dans les mêmes proportions (valeurs clamp déjà responsives,
+   aucun changement nécessaire ici), et reste toujours loin du visage : la
+   composition (portrait principal en bas à droite, visage bien au-dessus
+   de cette zone) ne change pas avec la largeur d'écran. */
+@media (max-width: 560px) {
+  .universe-intro__signature {
+    max-width: min(52vw, 240px);
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* A.1 Bandeau d'expertises — transition Hero → Projets                     */
+/* ---------------------------------------------------------------------- */
+/* Section insérée entre le Hero (A) et Projets (B), sans toucher à l'un ou
+   l'autre. Volontairement HORS de .universe-section / .universe-section__inner
+   (padding-block 160px + max-width 1360px) : ce bandeau doit rester bas
+   (pas une section pleine hauteur) et s'étendre bord à bord (pas de plafond
+   de largeur), pour un vrai ruban horizontal plutôt qu'une section de
+   contenu de plus.
+
+   Rythme Hero → Bandeau → Projets : .universe-intro se termine par
+   padding-bottom: var(--space-lg) (44px, voir plus haut) et #projets
+   commence par padding-top: var(--space-md) (28px, volontairement resserré
+   pour coller directement APRÈS le Hero — voir le commentaire détaillé de
+   #projets ci-dessous). Le bandeau ajoute son propre padding-block de
+   var(--space-xl) (72px) de chaque côté : ni collé au Hero (72px avant, sur
+   un fond déjà stabilisé en --u-bg), ni un grand vide avant Projets (72px,
+   comparable au reste du rythme de la page — même valeur que
+   .universe-intro__cta ou .universe-contact__email plus haut). Aucune des
+   deux sections voisines n'a eu besoin d'être modifiée. */
+.expertise-band {
+  position: relative;
+  padding-block: var(--space-xl);
+  border-top: 1px solid var(--u-line);
+  border-bottom: 1px solid var(--u-line);
+  /* Empêche toute possibilité de scroll horizontal involontaire de la page :
+     le track ci-dessous est deux fois plus large que le bandeau (voir plus
+     bas), ce overflow le rogne proprement aux bords de la section. */
+  overflow: hidden;
+}
+
+.expertise-band__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: universe-expertise-marquee 64s linear infinite;
+}
+
+/* Chaque "set" est une copie identique et complète de la liste des sept
+   expertises. Les deux sets mis bout à bout forment le track ; comme ils
+   ont une largeur strictement identique, translateX(-50%) déplace le track
+   d'exactement un set — la fin du premier et le début du second sont donc
+   rigoureusement à la même position visuelle : aucune coupure perceptible
+   au moment de la boucle.
+   IMPORTANT : l'espacement entre la fin d'un set et le début du suivant est
+   posé en margin-right sur .expertise-band__set lui-même (jamais en `gap`
+   sur .expertise-band__track) : un `gap` au niveau du track s'ajouterait
+   UNE SEULE FOIS entre les deux sets, ce qui décalerait le point exact de
+   50% de la largeur totale (et donc translateX(-50%)) par rapport à la
+   largeur réelle d'un set — provoquant un micro-saut visible à chaque
+   boucle. En rendant cette marge partie intégrante de la largeur de CHAQUE
+   set (les deux sets étant identiques, y compris cette marge), les deux
+   moitiés du track restent rigoureusement égales et translateX(-50%)
+   retombe exactement là où il faut. */
+.expertise-band__set {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: var(--space-lg);
+  margin-right: var(--space-lg);
+}
+
+/* Typographie : police d'affichage (var(--font-display), Good Times — la
+   même que les grands titres du site) pour la présence demandée, mais à une
+   taille nettement inférieure à un titre de Hero (voir clamp ci-dessous,
+   plafonné à 1.5rem) et en gris foncé de la charte (#495359, déjà utilisé
+   pour tout texte destiné à être réellement lu sur fond --u-bg — voir
+   .universe-intro__text, .universe-philosophy__text, etc.) plutôt qu'en
+   blanc cassé : ces intitulés doivent être "immédiatement lisibles" (demande
+   explicite), pas seulement décoratifs comme un très grand titre. Aucune
+   nouvelle couleur, aucune nouvelle police introduite. */
+.expertise-band__item {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #495359;
+  white-space: nowrap;
+}
+
+/* Séparateur très minimal (demande explicite), dans la teinte chaude déjà
+   utilisée pour les petites accroches graphiques du site (voir
+   .universe-eyebrow::before, même var(--u-warm-soft)) plutôt qu'une
+   nouvelle couleur. */
+.expertise-band__sep {
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--u-warm-soft);
+}
+
+@keyframes universe-expertise-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Respect strict de prefers-reduced-motion (déjà la convention de cette
+   page, voir .universe-intro__cue-line::after plus haut) : le marquee est
+   désactivé, la copie dupliquée (aria-hidden="true", purement visuelle)
+   est retirée de l'affichage, et le set restant s'enroule normalement sur
+   plusieurs lignes — les expertises restent alors affichées de façon
+   statique, exactement comme demandé. Le bandeau retrouve à cette occasion
+   un retrait horizontal aligné sur le reste du contenu éditorial (au lieu
+   du bord à bord réservé à l'effet de défilement). */
+@media (prefers-reduced-motion: reduce) {
+  .expertise-band {
+    padding-inline: clamp(24px, 5vw, 64px);
+  }
+  .expertise-band__track {
+    animation: none;
+    transform: none;
+    width: 100%;
+  }
+  .expertise-band__set {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--space-sm);
+    /* La marge de jonction entre sets (voir commentaire sur
+       .expertise-band__set plus haut) n'a plus lieu d'être ici : la copie
+       dupliquée est masquée (règle suivante) et il ne reste qu'un seul set,
+       affiché statiquement. */
+    margin-right: 0;
+  }
+  .expertise-band__set[aria-hidden="true"] {
+    display: none;
+  }
+  /* Dernier séparateur du set restant : utile pour amorcer la boucle en
+     mode marquee, superflu (une puce en fin de liste statique) une fois le
+     défilement désactivé. */
+  .expertise-band__set:not([aria-hidden="true"]) > .expertise-band__sep:last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .expertise-band {
+    padding-block: var(--space-lg);
+  }
+  .expertise-band__track {
+    animation-duration: 40s;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* B. Projets                                                               */
+/* ---------------------------------------------------------------------- */
+
+/* Rapproche le début de la section Projets du Hero — DEUXIÈME passe.
+   Cause résiduelle identifiée après la première réduction (padding-top
+   160px → var(--space-xl), 72px) : l'espace qui restait "quasiment vide"
+   signalé par l'utilisateur venait ensuite de la CHAÎNE de marges/paddings
+   qui suit immédiatement, chacune modeste individuellement mais cumulée :
+   padding-top #projets (72px) + margin-bottom de l'eyebrow "Projets" (var
+   (--space-lg), 44px) + hauteur du h2 "Mes projets." (~50-70px de texte)
+   + son padding-bottom (var(--space-md), 28px) + margin-top de la liste
+   (var(--space-2xl), 112px) ≈ 300px+ de vide avant même le premier
+   pixel du projet 01. Double correctif : (1) le h2 "Mes projets." est
+   désormais masqué visuellement (règle #projets-title plus bas) — Face à
+   Face affiche son propre titre juste après, le doublon disparaît ; (2)
+   les espacements restants sont resserrés ci-dessous. Override scopé à
+   #projets uniquement (sélecteur ID, sans effet sur #philosophie/#contact).
+   Ne modifie ni le Hero, ni son fondu, ni le carrousel.
+
+   TROISIÈME passe : resserré une nouvelle fois de var(--space-lg) (44px)
+   à var(--space-md) (28px), en complément de la réduction du padding-bottom
+   du Hero (voir .universe-intro plus haut) — les deux côtés de la
+   "couture" Hero → Projets sont maintenant traités, pas seulement l'un
+   des deux.
+
+   QUATRIÈME passe — couture Projets → Contact : #projets n'avait jamais
+   reçu de padding-bottom propre, il héritait donc du padding-block
+   générique de .universe-section (var(--space-3xl), 160px). #contact
+   (voir .universe-contact plus bas) héritait du même padding-top générique
+   (160px également). Les deux cumulés créaient ~320px de vide entre le
+   bouton "Découvrir" du dernier projet et le label "Contact", sans qu'aucun
+   min-height/100vh ni positionnement artificiel ne soit en cause : une
+   simple addition de deux paddings hérités. Chaque côté de la couture est
+   maintenant réduit à var(--space-lg) (44px), soit ~88px cumulés — bien
+   distinct mais nettement plus compact. N'affecte ni le rythme interne des
+   projets (gap de .universe-projects__list, inchangé), ni l'espacement
+   interne de la section Contact (voir .universe-contact plus bas, dont
+   seul le padding-top de la section elle-même est concerné, jamais ses
+   éléments internes). */
+#projets {
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-lg);
+}
+
+/* En-tête de section : défile désormais normalement avec la page (plus
+   d'épinglage). L'ancien comportement "pinned" (position: sticky; top;
+   z-index: 2) maintenait ce bloc — et son fond — visibles au-dessus des
+   projets pendant tout le scroll de la liste, ce qui recouvrait la vidéo
+   du projet 01. Retiré : position/top/z-index. Le fond est laissé tel
+   quel (var(--u-bg), identique au fond général #AEC8D8) car il est
+   désormais purement décoratif et scrolle avec le bloc — aucune
+   incidence visuelle, aucun seam. padding-bottom resserré (var(--space-md)
+   → var(--space-sm)) : le h2 qu'il espaçait du contenu suivant est
+   maintenant masqué visuellement, cette respiration n'a plus besoin
+   d'être aussi généreuse. */
+.universe-projects__intro {
+  background: var(--u-bg);
+  padding-bottom: var(--space-sm);
+}
+
+/* Réduit la marge de l'eyebrow "Projets" (générique, var(--space-lg) par
+   défaut dans .universe-eyebrow) UNIQUEMENT dans ce contexte précis — la
+   règle générique .universe-eyebrow (utilisée aussi par le Hero) reste
+   intacte. */
+.universe-projects__intro .universe-eyebrow {
+  margin-bottom: var(--space-sm);
+}
+
+/* Grand titre "Mes projets." — MASQUÉ VISUELLEMENT (jamais affiché), à la
+   demande explicite : Face à Face affiche désormais son propre titre bien
+   plus visible juste en dessous (.project-showcase__intro). L'élément
+   reste dans le DOM (voir universe.html) uniquement pour fournir le nom
+   accessible de la section via aria-labelledby="projets-title" sur
+   <section id="projets"> — le supprimer casserait cette référence pour les
+   lecteurs d'écran. Technique standard "visually hidden" (jamais
+   display:none, qui le retirerait aussi de l'arbre d'accessibilité) :
+   la boîte est réduite à 1×1px et son débordement masqué, sans laisser le
+   moindre espace dans la mise en page — pas un simple opacity: 0, qui
+   aurait laissé son plein encombrement vide. */
+#projets-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.universe-projects__list {
+  display: flex;
+  flex-direction: column;
+  /* Resserré de clamp(64px, 10vw, 140px) à clamp(48px, 6vw, 88px) — sur un
+     desktop courant (~1440px), le gap réel passait d'environ 140px (10vw
+     plafonné) à environ 86px : c'est cette valeur qui créait la grande
+     zone vide entre la fin du Projet 01 (bouton "Découvrir" compris,
+     resserré séparément ci-dessus) et le début du Projet 02, plus que le
+     Hero ou #projets déjà traités dans une passe précédente. Reste fluide
+     (clamp, pas une valeur fixe) et ne descend jamais sous 48px : les
+     projets restent visuellement distincts, jamais collés. */
+  gap: clamp(48px, 6vw, 88px);
+  /* Resserré de var(--space-lg) (44px) à var(--space-md) (28px) — même
+     passe de resserrement que #projets/.universe-intro ci-dessus. */
+  margin-top: var(--space-md);
+  /* Filet de sécurité défensif pour la pile de médias glissable du projet 01
+     (overflow: visible plus haut dans l'arbre) : par construction (voir
+     .universe-project__media--stack) le dépassement voulu reste toujours
+     dans la colonne de grille déjà réservée, donc cette règle ne devrait
+     jamais rien couper visuellement — elle garantit simplement qu'aucune
+     barre de défilement horizontale ne peut apparaître si un cas de figure
+     imprévu se présentait. N'affecte pas le défilement vertical de la page. */
+  overflow-x: hidden;
+}
+
+@media (max-width: 900px) {
+  .universe-projects__intro {
+    position: static;
+    background: none;
+    padding-bottom: 0;
+  }
+}
+
+.universe-project {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: clamp(32px, 5vw, 80px);
+}
+
+/* Alternance des compositions : une colonne sur deux inverse l'ordre visuel
+   (image / texte devient texte / image) pour éviter l'effet "grille
+   générique" — voir la demande explicite de composition éditoriale. */
+.universe-project--reverse {
+  direction: rtl;
+}
+
+.universe-project--reverse > * {
+  direction: ltr;
+}
+
+.universe-project__media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background:
+    radial-gradient(120% 140% at 20% 0%, rgba(63, 169, 222, 0.16), transparent 60%),
+    linear-gradient(160deg, var(--u-surface), var(--u-bg-elevated));
+  box-shadow: var(--u-shadow);
+}
+
+/* ------------------------------------------------------------------------ */
+/* Pile de médias glissable (projet 01 uniquement — voir                    */
+/* js/universe-media-stack.js). Modificateur scoped : n'affecte pas les     */
+/* projets 02/03/04, qui gardent .universe-project__media tel quel          */
+/* (overflow: hidden, aspect-ratio 4/5 notamment). overflow: visible ici    */
+/* est nécessaire pour que les cartes suivantes puissent "dépasser"         */
+/* légèrement sur la droite — chaque carte a son propre overflow: hidden /  */
+/* border-radius, donc rien ne déborde jamais de façon non maîtrisée.       */
+/*                                                                          */
+/* aspect-ratio: 9/16 remplace ici le 4/5 hérité de .universe-project__media */
+/* pour retrouver le ratio réel de la vidéo source (2160×3840px, soit         */
+/* exactement 9:16). width est fixé explicitement (plutôt que max-width) :  */
+/* aspect-ratio dérive alors la hauteur de cette largeur sans jamais         */
+/* déformer le média. --stack-peek-step est lu par JS (une fois à l'init +  */
+/* au resize, jamais par frame) pour positionner les cartes suivantes.      */
+/*                                                                          */
+/* CAUSE RÉELLE DU DÉBORDEMENT VERTICAL (diagnostiquée, pas seulement        */
+/* compensée) : le précédent réglage desktop (width: clamp(420px, 40vw,      */
+/* 520px)) ne dépendait QUE de la largeur de viewport. Or la hauteur réelle  */
+/* du média se déduit de cette largeur via aspect-ratio (9:16) : à 520px de  */
+/* large, la carte mesure ~924px de haut — sur un écran desktop standard     */
+/* (souvent 800-950px de hauteur utile une fois le header et les paddings    */
+/* de section déduits), ce média dépassait donc systématiquement la zone     */
+/* visible, obligeant à défiler pour voir le bas de la vidéo. Rien à voir    */
+/* avec un recadrage : la vidéo source (2160×3840) correspond déjà            */
+/* exactement au ratio 9:16 de la boîte, donc object-fit: cover ne rognait   */
+/* rien ici (les deux ratios sont identiques) — object-fit: contain est       */
+/* néanmoins ajouté ci-dessous par précaution/cohérence avec la demande,     */
+/* sans changement visuel pour cette vidéo précise.                          */
+/*                                                                            */
+/* FIX : width n'est plus dérivé QUE de vw/px, mais aussi d'une valeur en vh */
+/* convertie algébriquement pour plafonner la HAUTEUR résultante (puisque    */
+/* aspect-ratio calcule toujours hauteur = largeur × 16/9, plafonner la       */
+/* largeur à H_max × 9/16 revient exactement à plafonner la hauteur à        */
+/* H_max) : 34vh de large ⇒ jamais plus d'environ 60vh de haut, quel que      */
+/* soit le viewport. min() retient la plus petite des trois options (px, vw, */
+/* vh) : sur un desktop standard, c'est désormais généralement la contrainte */
+/* vh qui l'emporte, garantissant que le média tient sous le viewport aux    */
+/* côtés du label/titre/texte — tout en restant un élément visuel imposant   */
+/* (plus petit qu'avant, jamais miniature). Une seule dimension (width) est   */
+/* pilotée : la proportionnalité largeur/hauteur reste donc garantie par      */
+/* construction (aspect-ratio dérive toujours l'autre dimension), sans        */
+/* jamais déformer le média — pas de risque de conflit entre une largeur ET   */
+/* une hauteur fixées indépendamment.                                        */
+/*                                                                            */
+/* Les paliers responsives (901-1150px, ≤900px, ≤560px) sont réduits          */
+/* proportionnellement pour rester cohérents avec le nouveau format desktop ; */
+/* la contrainte vh n'est volontairement PAS reprise sur tablette/mobile :    */
+/* y faire défiler une pile de médias verticale est un usage normal et         */
+/* attendu sur ces formats (ce n'est pas le problème signalé, qui concernait  */
+/* explicitement "un écran desktop standard"), et l'ajouter aurait pu           */
+/* rendre le média trop petit sur téléphone. --stack-peek-step est réduit      */
+/* dans la même proportion que la largeur pour garder un décalage entre        */
+/* cartes visuellement cohérent avec le nouveau format, plus compact.          */
+/* ------------------------------------------------------------------------ */
+.universe-project__media--stack {
+  overflow: visible;
+  aspect-ratio: 9 / 16;
+  width: min(380px, 30vw, 34vh);
+  --stack-peek-step: 36px;
+}
+
+@media (min-width: 901px) and (max-width: 1150px) {
+  .universe-project__media--stack {
+    width: min(300px, 28vw, 34vh);
+    --stack-peek-step: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .universe-project__media--stack {
+    width: clamp(280px, 40vw, 360px);
+    --stack-peek-step: 26px;
+  }
+}
+
+@media (max-width: 560px) {
+  .universe-project__media--stack {
+    width: clamp(210px, 50vw, 280px);
+    --stack-peek-step: 16px;
+  }
+}
+
+.universe-project__stack {
+  position: absolute;
+  inset: 0;
+  /* Laisse le défilement vertical natif de la page fonctionner sans accroc
+     au doigt ; seul un geste clairement horizontal est intercepté par JS
+     (voir universe-media-stack.js), qui n'appelle preventDefault() qu'à ce
+     moment précis — jamais de listener de scroll ajouté. */
+  touch-action: pan-y;
+}
+
+.universe-project__stack-card {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background:
+    radial-gradient(120% 140% at 20% 0%, rgba(63, 169, 222, 0.16), transparent 60%),
+    linear-gradient(160deg, var(--u-surface), var(--u-bg-elevated));
+  box-shadow: var(--u-shadow);
+  will-change: transform, opacity;
+  /* Promotion de composition ciblée sur la carte elle-même (l'élément qui
+     bouge réellement pendant le glissement) — évite un repaint du "dos" du
+     calque pendant les transforms/transitions, sans rien changer au rendu
+     visuel. N'a aucun effet sur le contenu vidéo, qui ne doit plus porter
+     son propre transform (voir plus bas). */
+  backface-visibility: hidden;
+  /* Positionnement de repos (profondeur dans la pile) posé par JS via
+     style.transform / style.opacity / style.zIndex — ces valeurs inline
+     sont volontairement les seules à changer pendant le glissement et les
+     transitions de règlement, jamais de propriété qui déclenche un reflow. */
+}
+
+/* .is-active = carte actuellement au premier plan (posée par JS, ne dépend
+   pas de l'ordre DOM qui reste fixe — seul l'ordre visuel change). */
+.universe-project__stack-card.is-active {
+  cursor: grab;
+}
+
+.universe-project__stack-card.is-active:active {
+  cursor: grabbing;
+}
+
+/* Image (ou vidéo, ex. projet 01 — même traitement visuel exact) :
+   scale(1) par défaut (sans JS, rien ne bouge). Avec JS, elle démarre
+   légèrement agrandie (masquée par le rideau ci-dessous de toute façon)
+   puis se détend lentement vers scale(1) à l'entrée en vue — mouvement
+   volontairement lent et discret (1400ms). Le survol ajoute un zoom
+   supplémentaire, indépendant et plus rapide. */
+.universe-project__media img,
+.universe-project__media video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 1400ms var(--ease-standard);
+}
+
+/* Pile de médias (projet 01, .universe-project__media--stack) : object-fit
+   passe de cover à contain, à la demande explicite, pour garantir que
+   l'intégralité du média reste visible (aucun rognage haut/bas), quelle
+   que soit sa proportion réelle. Sélecteur composé (deux classes) pour
+   l'emporter sur la règle générique juste au-dessus à spécificité égale,
+   sans dépendre de l'ordre dans le fichier ni d'un !important. Scopé à
+   .universe-project__media--stack uniquement (exclusif à cette page, voir
+   commentaire plus haut) : les projets 02/03/04 gardent object-fit: cover
+   sur leurs images, inchangé. Dans les faits, la vidéo source de ce
+   carrousel (2160×3840px) correspond déjà exactement au ratio 9:16 de sa
+   boîte : ce changement ne produit donc aucune différence visuelle pour
+   elle aujourd'hui, mais protège contre tout rognage si un futur média de
+   ratio différent venait à être ajouté dans la pile. */
+.universe-project__media.universe-project__media--stack img,
+.universe-project__media.universe-project__media--stack video {
+  object-fit: contain;
+}
+
+html.js .universe-project__media img,
+html.js .universe-project__media video {
+  transform: scale(1.08);
+  will-change: transform;
+}
+
+html.js [data-reveal].universe-project.is-visible .universe-project__media img,
+html.js [data-reveal].universe-project.is-visible .universe-project__media video {
+  transform: scale(1);
+  transition-delay: 160ms;
+}
+
+.universe-project:hover .universe-project__media img,
+.universe-project:hover .universe-project__media video {
+  transform: scale(1.05);
+  transition: transform 900ms var(--ease-standard);
+}
+
+/* Même sélecteur "renforcé" que la règle .is-visible ci-dessus (spécificité
+   équivalente) afin que le survol continue de fonctionner une fois le
+   projet révélé — sans cette règle, la transition d'entrée (plus
+   spécifique) empêcherait le zoom au survol de s'appliquer. */
+html.js [data-reveal].universe-project.is-visible:hover .universe-project__media img,
+html.js [data-reveal].universe-project.is-visible:hover .universe-project__media video {
+  transform: scale(1.05);
+  transition: transform 900ms var(--ease-standard);
+}
+
+/* ------------------------------------------------------------------------ */
+/* Fluidité de lecture vidéo dans la pile (projet 01) : le <video> ne doit   */
+/* plus porter AUCUN transform/transition/will-change qui lui soit propre.  */
+/*                                                                          */
+/* Cause du saccadement diagnostiquée : les règles ci-dessus (partagées     */
+/* avec les projets 02/03/04, où le média est une simple image statique)    */
+/* appliquent un zoom décoratif au survol + une mise à l'échelle d'entrée   */
+/* directement sur l'élément <video>, avec un will-change: transform        */
+/* permanent. Or la zone de survol qui pilote désormais le glissement du    */
+/* carrousel (voir js/universe-media-stack.js, zoneEl = .universe-project)  */
+/* est la MÊME zone que celle qui déclenche ce :hover — donc survoler la    */
+/* pile pour la faire glisser déclenchait EN MÊME TEMPS le zoom décoratif   */
+/* de la vidéo, ajoutant un second transform concurrent directement sur     */
+/* l'élément vidéo, en plus du transform déjà appliqué par JS sur la carte  */
+/* qui la contient, avec une couche de composition forcée en permanence.    */
+/* Combiné à un fichier source disproportionné pour l'affichage réel (voir  */
+/* le rapport d'encodage transmis à l'utilisateur), ce travail de           */
+/* composition superflu suffisait à faire perdre des frames de décodage.    */
+/*                                                                          */
+/* Le mouvement reste entièrement porté par la CARTE (transform posé par    */
+/* JS, voir .universe-project__stack-card) ; le rideau de révélation        */
+/* (.universe-project__media::after, sur le conteneur, pas sur la vidéo)    */
+/* continue de fonctionner normalement. Seul l'effet de zoom décoratif      */
+/* (survol + entrée en vue) disparaît spécifiquement pour la vidéo de la    */
+/* pile — les images des projets 02/03/04 gardent ce traitement intact.     */
+/*                                                                          */
+/* !important ciblé et documenté : les règles génériques ci-dessus ont une  */
+/* spécificité plus élevée qu'un sélecteur descendant simple ne peut        */
+/* dépasser sans les dupliquer intégralement (5 sélecteurs, contextes       */
+/* html.js/[data-reveal]/.is-visible/:hover imbriqués) ; ce serait plus     */
+/* fragile à maintenir que cette unique règle explicite.                   */
+/* ------------------------------------------------------------------------ */
+.universe-project__stack-card video {
+  transform: none !important;
+  transition: none !important;
+  will-change: auto !important;
+}
+
+/* Voile de révélation façon "rideau" : masque l'image jusqu'à ce que le
+   bloc entre dans le viewport (piloté par la classe .is-visible, ajoutée
+   par le même IntersectionObserver que le reste du site — voir
+   js/animations.js, [data-reveal]). Dégradation neutre si JS est
+   désactivé : l'image reste simplement visible (voir animations.css).
+   Léger délai (160ms) pour que le rideau s'ouvre juste après l'apparition
+   du numéro/titre plutôt que simultanément — voir la séquence complète
+   plus bas (numéro → titre → image → description). */
+.universe-project__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--u-bg);
+  transform-origin: left;
+  transform: scaleX(0); /* état par défaut : image visible si JS est désactivé */
+  z-index: 1;
+  will-change: transform;
+}
+
+html.js [data-reveal].universe-project .universe-project__media::after {
+  transition: transform 900ms var(--ease-standard);
+}
+
+html.js [data-reveal].universe-project:not(.is-visible) .universe-project__media::after {
+  transform: scaleX(1);
+}
+
+html.js [data-reveal].universe-project.is-visible .universe-project__media::after {
+  transform: scaleX(0);
+  transition-delay: 160ms;
+}
+
+.universe-project--reverse .universe-project__media::after { transform-origin: right; }
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal].universe-project .universe-project__media::after { transition: none; transform: scaleX(0); }
+  html.js .universe-project__media img,
+  html.js .universe-project__media video,
+  html.js [data-reveal].universe-project.is-visible .universe-project__media img,
+  html.js [data-reveal].universe-project.is-visible .universe-project__media video { transform: none; transition: none; }
+  .universe-project:hover .universe-project__media img,
+  .universe-project:hover .universe-project__media video { transform: none; }
+}
+
+.universe-project__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.universe-project__number {
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.1em;
+  color: var(--u-warm);
+}
+
+.universe-project__category {
+  margin-top: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--u-ink-subtle);
+}
+
+/* Logo Face à Face RETIRÉ du layout (demande explicite : plus aucun
+   élément, y compris un placeholder invisible, ne doit occuper d'espace à
+   cet endroit). .universe-project__title-row et .universe-project__brand-logo
+   ont donc été supprimés ici ET dans le HTML (universe.html) — pas de
+   opacity: 0 qui aurait laissé un vide dans la mise en page. Le fichier
+   assets/images/projects/face-a-face/logo-face-a-face.png reste disponible
+   sur le disque si le logo doit être réintégré autrement plus tard. */
+
+.universe-project__title {
+  margin-top: var(--space-sm);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--u-ink);
+}
+
+.universe-project__text {
+  margin-top: var(--space-md);
+  max-width: 40ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--u-ink-muted);
+}
+
+.universe-project__discover {
+  margin-top: var(--space-lg);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.04em;
+  color: var(--u-ink-subtle);
+}
+
+.universe-project__discover-arrow {
+  display: inline-block;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.universe-project:hover .universe-project__discover-arrow {
+  transform: translateX(6px);
+}
+
+/* ------------------------------------------------------------------------ */
+/* Vignette "vitrine" — composant RÉUTILISABLE (pas câblé sur un projet en   */
+/* particulier) : une composition collage de plusieurs vrais visuels du     */
+/* projet plutôt qu'un unique média, entièrement cliquable vers une page     */
+/* dédiée. N'importe quel futur projet pourra utiliser ce même modificateur  */
+/* .universe-project--showcase une fois sa propre page créée.               */
+/*                                                                           */
+/* NOUVELLE mise en page (remplace le grid 2 colonnes texte/visuel des      */
+/* versions précédentes) : une seule colonne centrée — numéro, titre (une   */
+/* seule ligne), catégorie et description groupés en haut dans             */
+/* .project-showcase__intro, puis la GRANDE composition centrée en         */
+/* dessous, puis "Découvrir →" — pour se rapprocher de la présentation      */
+/* Audi de référence (plusieurs supports, une composition qui occupe la    */
+/* quasi-totalité de la largeur disponible) tout en donnant au visiteur     */
+/* le contexte du projet AVANT la preuve visuelle. .universe-project        */
+/* impose display:grid en base : on repasse explicitement en flex ici      */
+/* (grid-template-columns n'a alors plus d'effet, mais display:flex prend   */
+/* le dessus par cascade). */
+/* gap uniforme retiré (était var(--space-lg) entre CHAQUE paire d'enfants,
+   donc aussi bien intro↔visuel que visuel↔bouton) : la demande explicite
+   est de rapprocher UNIQUEMENT le bouton "Découvrir" de la composition,
+   sans toucher à l'espace intro↔visuel. Remplacé par un margin-top
+   explicite sur chaque enfant concerné (voir .project-showcase__visual et
+   .universe-project__discover plus bas), ce qui permet un espacement
+   asymétrique propre plutôt qu'un margin négatif appliqué par-dessus un
+   gap uniforme. */
+.universe-project--showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* display: contents : le <a> disparaît de l'arbre de boîtes (aucune boîte
+   propre, aucun impact visuel) mais laisse ses enfants (.project-showcase__intro,
+   .project-showcase__visual, .universe-project__discover) devenir directement
+   les items du conteneur flex .universe-project--showcase, exactement comme
+   avant l'ajout de ce lien. Le clic reste géré au niveau DOM (une seule
+   cible couvrant tout le contenu), donc toute la vignette — titre, visuels,
+   texte, zones vides — ouvre bien face-a-face.html, sans JavaScript dédié. */
+.project-showcase__link {
+  display: contents;
+}
+
+/* --- Bloc titre + description, au-dessus de la composition --- */
+/* max-width retiré ici (était 62ch) : titre et description ont maintenant
+   des besoins de largeur très différents (titre sur une seule ligne vs.
+   description sur 1-2 lignes bien plus larges) et sont donc contraints
+   individuellement plus bas plutôt qu'uniformément au niveau du bloc. */
+.project-showcase__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Logo Face à Face — signature de marque affichée juste au-dessus du
+   titre, sur la vitrine de la PAGE PRINCIPALE (universe.html) uniquement.
+   .project-showcase__intro est déjà display:flex + align-items:center
+   (voir ci-dessus) : le logo se centre donc naturellement, sans besoin de
+   margin-inline:auto. Discret mais lisible, nettement plus petit que le
+   titre en dessous, aucun fond/bordure/ombre — contrairement à
+   .project-showcase__item (média de la composition, qui porte lui
+   box-shadow + border-radius) : c'est volontaire, pour ne surtout pas
+   recréer le rectangle noir déjà rencontré par le passé sur cette même
+   vitrine avec ce même logo.
+   Taille : clamp(64px, 6vw, 96px) → clamp(80px, 7.5vw, 120px), soit +25%
+   sur les trois bornes (demande explicite : logo légèrement trop petit,
+   +15-25% de présence visuelle, sans revenir à la taille beaucoup trop
+   imposante d'un essai précédent). Toujours très en dessous de la largeur
+   du titre (jusqu'à ~993px, voir .project-showcase__intro
+   .universe-project__title plus bas) : le titre reste largement l'élément
+   dominant.
+   Espacement : margin-top réduit à var(--space-2xs) (était var(--space-sm))
+   pour rapprocher le logo du numéro "01" juste au-dessus — l'espace
+   logo → titre est réduit symétriquement via un sélecteur de sibling
+   adjacent (.project-showcase__logo + .universe-project__title, voir plus
+   bas, var(--space-2xs) également), de sorte que 01/logo/titre forment un
+   bloc resserré et cohérent plutôt que trois éléments visuellement
+   indépendants. Ce sélecteur adjacent ne s'applique QUE si un logo est
+   réellement présent : un projet sans logo (Projet 02, par exemple) garde
+   l'espacement générique numéro → titre, inchangé. */
+.project-showcase__logo {
+  display: block;
+  margin-top: var(--space-2xs);
+  width: clamp(80px, 7.5vw, 120px);
+  height: auto;
+}
+
+/* Titre agrandi spécifiquement dans ce contexte (il tient maintenant le
+   rôle de titre principal de toute la vitrine, plus seulement d'un titre
+   de colonne de texte) — ET contraint pour tenir SUR UNE SEULE LIGNE sur
+   desktop (demande explicite). Valeur recalculée par mesure réelle de la
+   largeur du texte "Face à Face — Club de Muay Thaï" (police de secours
+   Arial-compatible, puisqu'aucune police custom n'est chargée sur le
+   site) : l'ancien clamp(2.1rem, 4.8vw, 4.4rem) pouvait exiger jusqu'à
+   ~1278px de large, largement au-dessus de la largeur utile du conteneur
+   (~1200px max) — d'où le retour à la ligne observé. Le nouveau clamp
+   plafonne à 3.4rem (~993px de large au maximum), avec une marge
+   confortable à toutes les largeurs desktop réalistes (1024px, 1440px,
+   1600px+ vérifiés). Toujours nettement en dessous du titre du Hero (voir
+   .universe-intro__title). La règle générique .universe-project__title
+   (taille, police, couleur) reste inchangée pour les projets 03/04 (mise
+   en page générique 2 colonnes). Le Projet 02 (nouvelle vitrine, voir
+   plus bas dans universe.html) utilise cette même règle : sa taille de
+   police et sa contrainte une-seule-ligne sont donc cohérentes avec le
+   Projet 01, même si son titre "Projet 02 — En cours" est plus court. */
+.project-showcase__intro .universe-project__title {
+  font-size: clamp(1.8rem, 3.4vw, 3.4rem);
+  max-width: none;
+  white-space: nowrap;
+}
+
+/* Resserre l'espace UNIQUEMENT quand le titre suit directement le logo
+   (sélecteur de sibling adjacent, pas un scope sur .project-showcase__intro
+   en général) : le Projet 01 (numéro → logo → titre) en profite ; le
+   Projet 02 (numéro → titre, pas de logo pour l'instant) garde donc
+   naturellement le margin-top générique de .universe-project__title
+   (var(--space-sm)) — l'espacement correct entre un numéro et un titre —
+   sans qu'il faille dupliquer ou complexifier la règle ci-dessus. Dès
+   qu'un projet futur reçoit un logo, cette règle s'applique automatiquement. */
+.project-showcase__logo + .universe-project__title {
+  margin-top: var(--space-2xs);
+}
+
+/* Description repositionnée SOUS le titre (avant la composition, demande
+   explicite) : elle a besoin de sa propre largeur, bien plus généreuse que
+   les 40ch génériques (pensés pour une colonne de texte étroite à côté
+   d'un visuel). min(88%, 1200px) — mesuré pour permettre au texte de tenir
+   sur UNE ligne aux largeurs desktop confortables, et de se replier sur
+   DEUX lignes bien équilibrées (jamais 3-4 courtes) en dessous. Le
+   max-width générique de .project-showcase__intro a été retiré (voir plus
+   haut) pour ne plus contraindre le titre ni la description à la même
+   valeur : chacun a maintenant sa propre largeur adaptée à son contenu. */
+.project-showcase__intro .universe-project__text {
+  max-width: min(88%, 1200px);
+  margin-top: var(--space-sm);
+}
+
+/* Disciplines toujours centrées désormais qu'elles vivent dans
+   .project-showcase__intro (remplace l'ancienne règle scopée à
+   .project-showcase__footer, supprimé : la description et les disciplines
+   ont rejoint .project-showcase__intro, il ne reste plus qu'un unique
+   span "Découvrir →" après la composition). */
+.project-showcase__intro .project-showcase__tools {
+  justify-content: center;
+}
+
+/* Le <a> (ou le <div>, pour le Projet 02 sans page dédiée) passe en
+   display:contents : .universe-project__discover devient un item direct
+   du flex .universe-project--showcase. Espacement réduit de var(--space-lg)
+   (44px, ancien gap uniforme) à var(--space-sm) (16px) — demande
+   explicite de rapprocher le bouton de la composition, sans toucher à
+   l'espace au-dessus (titre → médias, voir margin-top de
+   .project-showcase__visual ci-dessous, qui conserve l'ancienne valeur de
+   44px). Remplace le margin-top générique de .universe-project__discover
+   (pensé pour un enchaînement vertical classique dans les projets
+   03/04) par cette valeur scopée : une seule source de vérité pour cet
+   espacement précis. */
+.universe-project--showcase > .universe-project__discover {
+  margin-top: var(--space-sm);
+}
+
+/* Espace titre/infos → composition de médias : reprend EXACTEMENT
+   l'ancienne valeur du gap uniforme (var(--space-lg), 44px) qui existait
+   avant sa suppression ci-dessus — disposition des médias et espacement
+   au-dessus d'eux strictement inchangés, seul l'espacement APRÈS eux
+   (vers le bouton, voir règle précédente) a été resserré. */
+.universe-project--showcase .project-showcase__visual {
+  margin-top: var(--space-lg);
+}
+
+/* Conteneur du collage. width: min(92%, 1500px) — la vitrine n'est plus
+   cantonnée à une colonne de grille (~55% de la section) : elle devient la
+   pièce maîtresse de la section, sur le modèle de la référence Audi
+   (plusieurs supports occupant la quasi-totalité de la largeur utile).
+   Toutes les positions/tailles internes de chaque média restent en % (voir
+   plus bas, non modifiées) : élargir ce conteneur agrandit donc TOUT le
+   groupe proportionnellement, sans changer sa disposition. overflow:
+   visible (comme la pile du carrousel d'origine) : les éléments peuvent
+   très légèrement déborder du cadre pour un rendu "composition éditoriale",
+   jamais de façon incontrôlée puisque chaque décalage reste borné à
+   quelques pourcents. aspect-ratio PANORAMIQUE (60/31, ~1.94) inchangé :
+   trois groupes distincts (carousels · flyer · vidéos) alignés de gauche à
+   droite, composition resserrée verticalement pour rester "compacte". */
+.project-showcase__visual {
+  position: relative;
+  width: min(92%, 1500px);
+  aspect-ratio: 60 / 31;
+  overflow: visible;
+}
+
+@media (max-width: 700px) {
+  .project-showcase__visual {
+    width: 100%;
+  }
+}
+
+/* Ombre volontairement DISCRÈTE (contre var(--u-shadow), pensé pour un
+   média unique et beaucoup plus marqué) : avec 5 pièces qui se chevauchent,
+   une ombre large (le halo ~90px de var(--u-shadow)) se superpose d'une
+   pièce à l'autre et finit par dessiner un grand rectangle sombre derrière
+   toute la composition — c'est le "conteneur visible" signalé. Une ombre
+   resserrée garde la profondeur individuelle sans jamais fusionner en un
+   bloc de fond. Aucune rotation nulle part (rotate supprimé partout dans
+   ce bloc) : tous les médias restent parfaitement droits. */
+.project-showcase__item {
+  position: absolute;
+  display: block;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 26px rgba(20, 24, 28, 0.22);
+  transform-origin: center;
+  transition: transform 400ms var(--ease-standard),
+    box-shadow 400ms var(--ease-standard);
+}
+
+/* Hover INDIVIDUEL par média (remplace l'ancien effet de "réveil" global
+   qui faisait légèrement grossir LES CINQ médias dès que la souris entrait
+   n'importe où dans la vitrine — ce comportement contredisait la nouvelle
+   demande explicite : seul le média réellement survolé doit bouger, tous
+   les autres restent exactement dans leur disposition actuelle).
+   - transform: scale() uniquement (jamais width/height/top/left) : aucun
+     recalcul de layout, la position d'ancrage (top/left en %) ne bouge
+     jamais, seul le rendu visuel s'agrandit depuis son propre centre
+     (transform-origin: center, hérité de la règle de base ci-dessus).
+   - z-index poussé à 20 au survol : la spécificité de ".project-showcase__item:hover"
+     (une classe + :hover) est supérieure à celle des z-index de base posés
+     plus bas (une seule classe, ex. ".project-showcase__item--verso"), donc
+     le média survolé passe TOUJOURS au premier plan par rapport aux autres,
+     y compris Zohir/Jean-Marc qui se chevauchent légèrement — sans aucun
+     !important. Le z-index d'origine est repris automatiquement dès la fin
+     du survol puisqu'aucune règle ne le modifie en dehors de :hover.
+   - Ombre légèrement accentuée plutôt que grossie : profondeur éditoriale
+     discrète, pas d'effet "carte e-commerce".
+   - Un seul scale partagé par tous les médias (y compris les vignettes
+     vidéo, dont l'icône Play suit naturellement l'agrandissement puisqu'elle
+     est positionnée en absolu À L'INTÉRIEUR de l'élément transformé) : reste
+     dans la fourchette 1.05–1.10 demandée, sans lancer la vidéo au survol
+     (aucun autoplay ici, comportement inchangé). */
+.project-showcase__item:hover {
+  transform: scale(1.07);
+  z-index: 20;
+  box-shadow: 0 20px 42px rgba(20, 24, 28, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-showcase__item {
+    transition: none;
+  }
+  .project-showcase__item:hover {
+    transform: none;
+  }
+}
+
+/* --- GROUPE 1 : carousels (Jean-Marc + Zohir), en duo, à gauche ---
+   Se chevauchent légèrement pour lire "même série" (au lieu d'être isolés
+   aux deux extrémités de la composition, comme dans la version précédente).
+   Zohir légèrement plus grand et posé au premier plan (z-index supérieur) ;
+   Jean-Marc légèrement plus petit et derrière, mais toujours entièrement
+   identifiable. Aucune rotation — alignement droit, rigoureux. Ratio réel
+   respecté (1082×1582). */
+.project-showcase__item--jm {
+  top: 14.5%;
+  left: 2%;
+  width: 18%;
+  aspect-ratio: 1082 / 1582;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.project-showcase__item--zohir {
+  top: 1.5%;
+  left: 14.5%;
+  width: 23.5%;
+  aspect-ratio: 1082 / 1582;
+  object-fit: cover;
+  z-index: 2;
+}
+
+/* --- GROUPE 2 : print (verso complet du flyer), ancrage central ---
+   Rôle du "grand écran" dans la référence Audi : élément le plus grand,
+   posé entre les deux groupes. Fichier réel ENTIER (aucun recadrage
+   significatif : l'aspect-ratio ci-dessous correspond exactement aux
+   dimensions du fichier, donc object-fit: cover ne rogne rien). Retiré ici :
+   la bordure blanche "photo imprimée" — le média garde désormais le même
+   traitement que les autres (radius + ombre discrète communs), sans effet
+   de cadre ajouté, sans rotation. */
+.project-showcase__item--verso {
+  top: 0;
+  left: 40%;
+  width: 30%;
+  aspect-ratio: 1011 / 1436;
+  object-fit: cover;
+  z-index: 3;
+}
+
+/* --- GROUPE 3 : vidéos (Jean-Marc + Zohir), en duo, à droite ---
+   Reprend EXACTEMENT le même principe de profondeur que le groupe 1
+   (carousels) : une vidéo légèrement plus grande et posée devant, proche du
+   flyer (comme Zohir vis-à-vis de Jean-Marc), l'autre plus petite, décalée
+   vers l'extérieur et légèrement derrière — jamais isolées l'une de
+   l'autre. Tailles relevées pour donner au duo une importance visuelle
+   comparable au duo de carousels (18%/23.5% de large) plutôt que le format
+   nettement plus petit d'avant (14.5%/14.5%) : les vidéos sont plus
+   étroites (ratio 900×1600) qu'un carousel (1082×1582), donc à largeur
+   comparable elles sont même visuellement PLUS hautes/imposantes — la
+   largeur a été calibrée pour un encombrement (hauteur) proche du duo de
+   gauche plutôt qu'une simple égalité de largeur. Pas d'autoplay dans la
+   vitrine (performance) : chaque vidéo est une frame réelle + un symbole de
+   lecture discret. .project-showcase__item est ici posé sur un <span>
+   englobant (plutôt que directement sur l'<img>) afin de superposer le
+   symbole ▶ par-dessus l'image ; overflow: hidden fait le lien entre le
+   border-radius du conteneur et l'image qu'il contient. Aucune rotation. */
+.project-showcase__item--video-jm,
+.project-showcase__item--video-zohir {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 900 / 1600;
+  background: var(--u-surface, #10151B);
+}
+
+.project-showcase__item--video-jm img,
+.project-showcase__item--video-zohir img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Vidéo Zohir : devant, plus grande, proche du flyer (miroir du rôle de
+   Zohir dans le groupe 1). */
+.project-showcase__item--video-zohir {
+  top: 2%;
+  left: 71.5%;
+  width: 19%;
+  z-index: 4;
+}
+
+/* Vidéo Jean-Marc : derrière, plus petite, décalée vers l'extérieur (miroir
+   du rôle de Jean-Marc dans le groupe 1). */
+.project-showcase__item--video-jm {
+  top: 16%;
+  left: 85.5%;
+  width: 15.5%;
+  z-index: 3;
+}
+
+.project-showcase__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(251, 250, 247, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-showcase__play::after {
+  content: "";
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  border-style: solid;
+  border-width: 7px 0 7px 12px;
+  border-color: transparent transparent transparent #14181C;
+}
+
+@media (max-width: 560px) {
+  /* Même ratio panoramique qu'en desktop (les positions/tailles ci-dessus
+     sont calculées pour lui) : on augmente seulement légèrement chaque
+     largeur pour garder les trois groupes lisibles sur une colonne étroite,
+     sans changer la forme d'ensemble du conteneur. */
+  .project-showcase__item--jm            { width: 20%; }
+  .project-showcase__item--zohir         { width: 26%; }
+  .project-showcase__item--verso         { width: 33%; }
+  .project-showcase__item--video-zohir   { width: 21%; }
+  .project-showcase__item--video-jm      { width: 17%; }
+}
+
+/* ------------------------------------------------------------------------ */
+/* Positions GÉNÉRIQUES réutilisables pour les futures vitrines (Projet 02,  */
+/* puis 03/04...) — NOUVELLES classes, strictement additives : les cinq     */
+/* rôles de la composition Audi-esque du Projet 01 (duo gauche en          */
+/* profondeur / pièce centrale / duo droite en profondeur) sont dupliqués   */
+/* ici à l'identique (mêmes top/left/width/aspect-ratio/z-index que         */
+/* --jm/--zohir/--verso/--video-jm/--video-zohir plus haut), mais sous des  */
+/* noms neutres décrivant la POSITION plutôt que le contenu Face à Face.    */
+/* Le Projet 01 continue d'utiliser ses propres classes ci-dessus,          */
+/* inchangées : rien n'est renommé ni partagé, uniquement dupliqué, pour ne */
+/* jamais risquer de casser le Projet 01 en touchant à ces règles.          */
+/* ------------------------------------------------------------------------ */
+.project-showcase__item--left-back {
+  top: 14.5%;
+  left: 2%;
+  width: 18%;
+  aspect-ratio: 1082 / 1582;
+  z-index: 1;
+}
+
+.project-showcase__item--left-front {
+  top: 1.5%;
+  left: 14.5%;
+  width: 23.5%;
+  aspect-ratio: 1082 / 1582;
+  z-index: 2;
+}
+
+.project-showcase__item--center {
+  top: 0;
+  left: 40%;
+  width: 30%;
+  aspect-ratio: 1011 / 1436;
+  z-index: 3;
+}
+
+.project-showcase__item--right-front {
+  top: 2%;
+  left: 71.5%;
+  width: 19%;
+  aspect-ratio: 900 / 1600;
+  z-index: 4;
+}
+
+.project-showcase__item--right-back {
+  top: 16%;
+  left: 85.5%;
+  width: 15.5%;
+  aspect-ratio: 900 / 1600;
+  z-index: 3;
+}
+
+@media (max-width: 560px) {
+  .project-showcase__item--left-back    { width: 20%; }
+  .project-showcase__item--left-front   { width: 26%; }
+  .project-showcase__item--center       { width: 33%; }
+  .project-showcase__item--right-front  { width: 21%; }
+  .project-showcase__item--right-back   { width: 17%; }
+}
+
+/* Traitement visuel des placeholders "En cours" (Projet 02 et futurs
+   projets tant que leurs médias définitifs ne sont pas prêts) : ni fond
+   noir agressif, ni carte générique — une teinte sobre dérivée du fond de
+   la page (--u-bg, bleu glacier) légèrement assombrie via color-mix (déjà
+   utilisé plus haut dans ce fichier pour le voile du Hero), avec une
+   bordure discrète du même ton, un peu plus soutenue. Hérite de
+   .project-showcase__item (position, border-radius, ombre discrète,
+   transition, hover-scale individuel) exactement comme les vrais médias
+   du Projet 01 — mêmes interactions, seul le display change (flex pour
+   centrer le texte au lieu de block pour une image). */
+.project-showcase__item--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--u-bg) 100%, black 10%);
+  border: 1px solid color-mix(in srgb, var(--u-bg) 100%, black 24%);
+  padding: var(--space-2xs);
+  text-align: center;
+}
+
+.project-showcase__placeholder-label {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #495359;
+}
+
+/* CONTRASTE — .universe-project__text et .project-showcase__tools héritent
+   par défaut de --u-ink-muted (#C7C4BC) / --u-ink-subtle (#82868D), deux
+   tons clairs pensés pour du texte sur une surface SOMBRE. Or le fond réel
+   de cette page est --u-bg: #AEC8D8 (bleu glacier CLAIR) — vérifié en tête
+   de fichier. Contraste mesuré : #C7C4BC sur #AEC8D8 ≈ 1.0:1 (quasiment
+   invisible), #82868D ≈ 2.1:1 — tous deux bien sous le seuil AA (4.5:1).
+   Fix : #495359, déjà utilisé ailleurs sur cette même page pour du contenu
+   posé sur ce même fond bleu (voir plus haut body.page-universe .c-icon-btn,
+   .c-menu-toggle et .c-menu-toggle__bar) — 4.52:1, conforme, et cohérent
+   avec la DA existante plutôt qu'une couleur inventée. Scopé à
+   .universe-project--showcase : s'applique donc au Projet 01 ET au
+   Projet 02 (même système de vitrine), pas aux projets 03/04 qui gardent
+   l'ancienne mise en page 2 colonnes (média sombre en fond, contraste
+   déjà correct pour eux). Même correctif étendu ci-dessous à
+   .universe-project__discover : celui-ci reçoit désormais aussi les
+   classes .c-btn .c-btn--secondary (voir universe.html — "Découvrir" est
+   maintenant un vrai bouton, même langage graphique que "Réserver un
+   appel"), dont la règle body.page-universe .c-btn--secondary fixe déjà
+   la même couleur #495359 avec une spécificité supérieure ; cette
+   règle-ci reste un filet de sécurité si ces classes venaient à manquer. */
+.universe-project--showcase .universe-project__text {
+  color: #495359;
+}
+
+.universe-project--showcase .universe-project__discover {
+  color: #495359;
+}
+
+/* État "en attente" du bouton Découvrir (Projet 02, tant qu'aucune page
+   dédiée n'existe) : basé sur l'attribut aria-disabled="true" (posé dans
+   le HTML) plutôt qu'une classe dédiée — même logique que le composant
+   .c-btn[disabled] déjà existant (css/components.css, non modifié),
+   mêmes valeurs d'opacité, pour rester cohérent avec la convention de
+   bouton désactivé déjà utilisée ailleurs sur le site. pointer-events:
+   none supprime aussi tout survol (donc le lift de .c-btn:hover) : un
+   bouton visuellement présent, mais qui ne réagit à rien, plutôt qu'un
+   lien mort. Le Projet 01 n'a pas cet attribut et n'est donc pas concerné. */
+.universe-project__discover[aria-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Disciplines mobilisées — ligne éditoriale discrète (jamais une liste de
+   tags/pastilles) : petits libellés séparés par un point médian. */
+.project-showcase__tools {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #495359;
+}
+
+.project-showcase__tools li:not(:last-child)::after {
+  content: "·";
+  margin: 0 var(--space-2xs);
+  color: var(--u-line-strong);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Séquence de la "scène" projet : numéro → titre → image (voir plus haut, */
+/* délai 160ms) → description → invitation à découvrir. Chaque élément a   */
+/* son propre délai, garanti visible par défaut (sans JS) et neutre sous   */
+/* prefers-reduced-motion (apparition immédiate, sans décalage).           */
+/* ---------------------------------------------------------------------- */
+.universe-project__number,
+.project-showcase__logo,
+.universe-project__category,
+.universe-project__title,
+.universe-project__text,
+.project-showcase__tools,
+.universe-project__discover {
+  opacity: 1;
+  transform: none;
+}
+
+html.js .universe-project__number,
+html.js .project-showcase__logo,
+html.js .universe-project__category,
+html.js .universe-project__title,
+html.js .universe-project__text,
+html.js .project-showcase__tools,
+html.js .universe-project__discover {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms var(--ease-standard), transform 700ms var(--ease-standard);
+}
+
+html.js [data-reveal].universe-project.is-visible .universe-project__number {
+  transition-delay: 0ms;
+}
+html.js [data-reveal].universe-project.is-visible .universe-project__category {
+  transition-delay: 70ms;
+}
+html.js [data-reveal].universe-project.is-visible .universe-project__title {
+  transition-delay: 220ms;
+}
+html.js [data-reveal].universe-project.is-visible .universe-project__text {
+  transition-delay: 420ms;
+}
+html.js [data-reveal].universe-project.is-visible .project-showcase__tools {
+  transition-delay: 480ms;
+}
+html.js [data-reveal].universe-project.is-visible .universe-project__discover {
+  transition-delay: 560ms;
+}
+
+/* Ordre visuel inversé dans .project-showcase__intro (titre avant catégorie,
+   voir universe.html) : ces deux surcharges (plus spécifiques que les
+   règles génériques ci-dessus, donc prioritaires) réordonnent uniquement
+   leurs délais pour suivre l'ordre d'apparition réel à l'écran — sans
+   toucher aux règles génériques utilisées par les projets 02/03/04. */
+html.js [data-reveal].universe-project.is-visible .project-showcase__intro .universe-project__title {
+  transition-delay: 70ms;
+}
+html.js [data-reveal].universe-project.is-visible .project-showcase__intro .universe-project__category {
+  transition-delay: 220ms;
+}
+/* Logo inséré entre le numéro (0ms) et le titre (70ms) dans l'ordre
+   d'apparition réel : ne décale aucun des délais existants ci-dessus. */
+html.js [data-reveal].universe-project.is-visible .project-showcase__intro .project-showcase__logo {
+  transition-delay: 40ms;
+}
+
+html.js [data-reveal].universe-project.is-visible .universe-project__number,
+html.js [data-reveal].universe-project.is-visible .project-showcase__logo,
+html.js [data-reveal].universe-project.is-visible .universe-project__category,
+html.js [data-reveal].universe-project.is-visible .universe-project__title,
+html.js [data-reveal].universe-project.is-visible .universe-project__text,
+html.js [data-reveal].universe-project.is-visible .project-showcase__tools,
+html.js [data-reveal].universe-project.is-visible .universe-project__discover {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .universe-project__number,
+  html.js .project-showcase__logo,
+  html.js .universe-project__category,
+  html.js .universe-project__title,
+  html.js .universe-project__text,
+  html.js .project-showcase__tools,
+  html.js .universe-project__discover {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .universe-project,
+  .universe-project--reverse {
+    grid-template-columns: 1fr;
+    direction: ltr;
+  }
+  /* :not(...) exclut le projet 01 (pile de médias) : il doit garder son
+     ratio 9:16 propre (voir .universe-project__media--stack plus haut),
+     jamais le 16:11 des projets 02/03/04 à ce point de rupture — sans
+     cette exclusion, cette règle l'emporterait par ordre de cascade
+     malgré une spécificité identique, car elle apparaît plus loin dans
+     la feuille de style. */
+  .universe-project__media:not(.universe-project__media--stack) { aspect-ratio: 16 / 11; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* B.1 Témoignages — entre Projet 03 et Contact                             */
+/* ---------------------------------------------------------------------- */
+/* Reprend le PRINCIPE du bandeau d'expertises ci-dessus (voir .expertise-band
+   plus haut, section Hero → Projets) : même technique de boucle infinie
+   (contenu dupliqué une fois, translateX(-50%) via une margin-right portée
+   par chaque set plutôt qu'un gap sur le track — voir le commentaire détaillé
+   sur .expertise-band__set pour le raisonnement complet, non répété ici) et
+   réutilise LITTÉRALEMENT le même @keyframes universe-expertise-marquee
+   défini plus haut (translateX(0) → -50%, générique) plutôt que d'en créer
+   un second identique : seule la durée d'animation change ci-dessous, sur
+   un sélecteur différent. .expertise-band lui-même n'est pas modifié.
+
+   Différences volontaires par rapport au bandeau d'expertises :
+   - section plus haute (demande explicite) : un en-tête (label + titre,
+     statique, DANS .universe-section__inner comme le reste du contenu
+     éditorial) au-dessus d'un track dont les éléments sont de grands blocs
+     portrait+texte plutôt que de simples mots-clés ;
+   - vitesse considérablement plus lente (des phrases entières à lire, pas
+     des mots isolés) ;
+   - pause au survol (souris fine uniquement, voir media query dédiée) pour
+     ne jamais empêcher la lecture d'un témoignage en cours. */
+.testimonial-band {
+  position: relative;
+  padding-block: var(--space-2xl) var(--space-xl);
+  border-top: 1px solid var(--u-line);
+  border-bottom: 1px solid var(--u-line);
+  overflow: hidden;
+}
+
+.testimonial-band__head {
+  margin-bottom: var(--space-xl);
+}
+
+/* Taille volontairement raisonnable (demande explicite : "ne pas alourdir
+   le bandeau") — nettement en dessous d'un titre de section classique comme
+   .universe-contact__title (clamp(2rem, 5.6vw, 4rem)). */
+.testimonial-band__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+  line-height: 1.2;
+  color: var(--u-ink);
+  max-width: 20ch;
+}
+
+.testimonial-band__viewport {
+  overflow: hidden;
+}
+
+.testimonial-band__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: universe-expertise-marquee 100s linear infinite;
+}
+
+/* Pause au survol — souris fine uniquement (@media (hover: hover) and
+   (pointer: fine)) : sur tactile, un simple appui déclenche parfois un
+   ":hover" persistant dans certains navigateurs mobiles, ce qui figerait le
+   défilement sans possibilité de le relancer autrement qu'en touchant
+   ailleurs. Voir js/universe.js pour l'équivalent tactile (pause brève au
+   toucher, minimal, sans nouveau moteur d'animation). */
+@media (hover: hover) and (pointer: fine) {
+  .testimonial-band:hover .testimonial-band__track {
+    animation-play-state: paused;
+  }
+}
+
+/* Équivalent tactile — voir initTestimonialTouchPause() dans js/universe.js :
+   une brève pause au toucher (4s), sans swipe manuel ni second moteur
+   d'animation, juste le temps de lire la phrase en cours. */
+.testimonial-band.is-touch-paused .testimonial-band__track {
+  animation-play-state: paused;
+}
+
+.testimonial-band__set {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  gap: var(--space-2xl);
+  margin-right: var(--space-2xl);
+  padding-inline: clamp(24px, 5vw, 64px);
+}
+
+/* Chaque témoignage : large bloc éditorial (portrait + nom à gauche, avis à
+   droite), jamais une carte — pas de fond, pas de bordure, pas d'ombre.
+   Largeur généreuse et fixe (demande explicite : "éviter les petites cartes
+   serrées") pour laisser l'avis respirer sur plusieurs lignes. */
+.testimonial-band__item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  width: clamp(440px, 42vw, 620px);
+  /* Séparateur discret entre portrait et avis, dans la même teinte chaude
+     que les puces du bandeau d'expertises (var(--u-warm-soft)) : la touche
+     "or, en accent très discret" demandée, jamais une nouvelle couleur. */
+  border-left: 1px solid var(--u-warm-soft);
+  padding-left: var(--space-lg);
+}
+
+.testimonial-band__person {
+  flex-shrink: 0;
+  width: clamp(84px, 8vw, 112px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Placeholder circulaire — même famille visuelle que les placeholders déjà
+   utilisés ailleurs sur cette page pour du contenu "à venir" (voir
+   .project-showcase__item--placeholder : même fond/bordure en color-mix sur
+   --u-bg), simplement rendue ronde ici. Initiales plutôt qu'une icône
+   générique (demande explicite "aucune icône générique trop visible") :
+   un repère lisible, propre à chaque témoignage, facile à distinguer même
+   avant l'ajout d'une vraie photo. Pour remplacer par une photo réelle :
+   ajouter <img class="testimonial-band__avatar-img"> à l'intérieur de ce
+   conteneur (voir commentaire dans universe.html) — width/height/
+   object-fit ci-dessous s'appliquent alors automatiquement au même cadre
+   rond, sans qu'aucune autre règle n'ait besoin d'être touchée. */
+.testimonial-band__avatar {
+  width: clamp(84px, 8vw, 112px);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--u-bg) 100%, black 10%);
+  border: 1px solid color-mix(in srgb, var(--u-bg) 100%, black 24%);
+  overflow: hidden;
+}
+
+.testimonial-band__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.testimonial-band__avatar-initials {
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  letter-spacing: 0.04em;
+  color: var(--u-ink-subtle);
+}
+
+/* Nom : "légèrement plus affirmé que le corps du témoignage" (demande
+   explicite) — même famille que .testimonial-band__quote juste en dessous,
+   mais plus petit qu'un poids/taille de titre, en gris foncé de la charte. */
+.testimonial-band__name {
+  margin-top: var(--space-sm);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+.testimonial-band__quote {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+/* Respect strict de prefers-reduced-motion, exactement la même approche que
+   .expertise-band : animation coupée, copie dupliquée (aria-hidden="true")
+   retirée, le set restant s'enroule statiquement avec le retrait de contenu
+   standard (au lieu du bord à bord réservé au défilement). */
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-band__track {
+    animation: none;
+    transform: none;
+    width: 100%;
+  }
+  .testimonial-band__set {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--space-xl);
+    margin-right: 0;
+  }
+  .testimonial-band__set[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .testimonial-band__item {
+    width: clamp(320px, 78vw, 440px);
+  }
+}
+
+@media (max-width: 640px) {
+  .testimonial-band {
+    padding-block: var(--space-xl) var(--space-lg);
+  }
+  .testimonial-band__track {
+    animation-duration: 64s;
+  }
+  /* Portrait au-dessus de l'avis plutôt que côte à côte : sur un item déjà
+     réduit à ~78vw (voir ci-dessus), une disposition horizontale laisserait
+     trop peu de largeur au texte. Le portrait reste "suffisamment visible"
+     (demande explicite) : sa taille (clamp 84–112px) n'est pas réduite,
+     seule sa position change. */
+  .testimonial-band__item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--u-warm-soft);
+    padding-top: var(--space-lg);
+  }
+  .testimonial-band__person {
+    width: 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* C. Philosophie                                                           */
+/* ---------------------------------------------------------------------- */
+.universe-philosophy__grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(32px, 6vw, 96px);
+  align-items: start;
+}
+
+.universe-philosophy__statement {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 3.6vw, 3.1rem);
+  line-height: 1.22;
+  color: var(--u-ink);
+}
+
+.universe-philosophy__text {
+  margin-top: var(--space-lg);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--u-ink-muted);
+  max-width: 52ch;
+}
+
+@media (max-width: 900px) {
+  .universe-philosophy__grid { grid-template-columns: 1fr; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* D. Contact — conclusion de l'expérience, pas un pied de page générique.  */
+/* ---------------------------------------------------------------------- */
+/* padding-top réduit de var(--space-3xl) hérité (160px) à var(--space-lg)
+   (44px) : voir le commentaire "QUATRIÈME passe" au-dessus de #projets
+   pour le diagnostic complet de la couture Projets → Contact. N'affecte
+   que l'espace AVANT la section (son padding-top propre) — l'espacement
+   interne (eyebrow, titre, e-mail, localisation, réseaux sociaux
+   ci-dessous) reste strictement inchangé. */
+.universe-contact {
+  text-align: center;
+  padding-top: var(--space-lg);
+}
+
+.universe-contact .universe-eyebrow {
+  justify-content: center;
+}
+
+.universe-contact__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 5.6vw, 4rem);
+  line-height: 1.12;
+  color: var(--u-ink);
+  max-width: 18ch;
+  margin-inline: auto;
+}
+
+.universe-contact__email {
+  display: inline-block;
+  margin-top: var(--space-xl);
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--u-ink);
+  border-bottom: 1px solid var(--u-line-strong);
+  padding-bottom: var(--space-3xs);
+  transition: border-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+
+.universe-contact__email:hover,
+.universe-contact__email:focus-visible {
+  color: var(--u-warm);
+  border-color: var(--u-warm-soft);
+}
+
+.universe-contact__meta {
+  margin-top: var(--space-md);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--u-ink-subtle);
+}
+
+.universe-contact__social {
+  margin-top: var(--space-lg);
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.universe-contact__social .c-icon-btn {
+  border-color: var(--u-line-strong);
+  color: var(--u-ink);
+}
+
+.universe-contact__social .c-icon-btn:hover {
+  border-color: var(--u-accent-soft);
+  background: rgba(63, 169, 222, 0.1);
+}
+
+/* ---------------------------------------------------------------------- */
+/* E. Pied de page — conclusion discrète, pas un footer générique.         */
+/* ---------------------------------------------------------------------- */
+.universe-footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--u-line);
+  padding-block: var(--space-2xl) var(--space-lg);
+}
+
+.universe-footer__inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: var(--space-xl);
+}
+
+.universe-footer__brand {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--u-ink);
+}
+
+.universe-footer__role {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--u-ink-subtle);
+  line-height: var(--line-height-body);
+}
+
+.universe-footer__heading {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--u-ink-subtle);
+  margin-bottom: var(--space-sm);
+}
+
+.universe-footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+/* Couleur demandée explicitement (contraste insuffisant, ~1:1) : --u-ink-muted
+   (#C7C4BC) est un ton clair pensé pour un fond sombre, hérité de la palette
+   --u-* de cette page (voir commentaire en tête de fichier) — mais le fond
+   réel ici est --u-bg: #AEC8D8 (bleu glacier CLAIR), d'où la quasi-invisibilité
+   des liens. Remplacé par #495359, le même gris foncé déjà utilisé ailleurs
+   sur cette page pour corriger exactement ce même problème de contraste
+   (catégorie/description des projets, bouton "Découvrir") — ~4.5:1, conforme
+   AA, et cohérent avec le reste du footer. Ne touche que cette liste de liens
+   (.universe-footer__list), aucune autre couleur du footer ou de la page.
+   Aucun changement de typographie, taille, position ou espacement. */
+.universe-footer__list a {
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: #495359;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+/* Le survol utilisait var(--u-warm) (#C7A34E), qui souffre du même problème
+   que ci-dessus sur ce fond clair (~1.4:1, quasi invisible) : ce jeton
+   partagé est utilisé tel quel ailleurs sur la page sur des fonds où il
+   fonctionne, donc non modifié globalement (cela casserait ces autres
+   usages, hors périmètre de cette demande). Un ton doré assombri, propre à
+   CE survol précis, conserve la même famille chromatique "chaude" tout en
+   atteignant un contraste correct (~5.4:1) sur --u-bg. */
+.universe-footer__list a:hover,
+.universe-footer__list a:focus-visible {
+  color: #5C4213;
+}
+
+.universe-footer__social {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-2xs);
+}
+
+.universe-footer__social .c-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-color: var(--u-line-strong);
+  color: var(--u-ink-muted);
+}
+
+.universe-footer__social .c-icon-btn:hover {
+  border-color: var(--u-accent-soft);
+  color: var(--u-ink);
+}
+
+.universe-footer__bottom {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(24px, 5vw, 64px);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--u-line);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  color: var(--u-ink-subtle);
+}
+
+@media (max-width: 860px) {
+  .universe-footer__inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .universe-footer__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  .universe-footer__bottom {
+    flex-direction: column;
+  }
+}
+
+/* ------------------------------------------------------------------------ */
+/* Curseur personnalisé "éclat de glace" (voir js/universe-cursor.js)         */
+/* Page portfolio (universe.html) UNIQUEMENT — nouvelle classe dédiée,       */
+/* aucun lien avec l'ancien système .cursor-dot/.cursor-ring (mort, non      */
+/* utilisé) de css/components.css, qui reste intact et inchangé.            */
+/* Le curseur natif est conservé par défaut ; il n'est masqué que sur le     */
+/* body de cette page, et seulement une fois que has-ice-cursor est posé    */
+/* par le script (donc jamais si prefers-reduced-motion / tactile /         */
+/* absence de JS — le curseur natif reste alors actif).                     */
+/* ------------------------------------------------------------------------ */
+
+html.has-ice-cursor,
+html.has-ice-cursor body.page-universe {
+  cursor: none;
+}
+
+html.has-ice-cursor a,
+html.has-ice-cursor button,
+html.has-ice-cursor [role="button"],
+html.has-ice-cursor input,
+html.has-ice-cursor textarea,
+html.has-ice-cursor select,
+html.has-ice-cursor label {
+  cursor: none;
+}
+
+.universe-ice-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  /* z-index maximal explicite : élimine toute hypothèse d'un élément,
+     présent ou futur, qui passerait devant. */
+  z-index: 2147483000;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+.universe-ice-cursor.is-idle {
+  opacity: 0;
+}
+
+/* Halo glacé permanent (discret au repos, plus lumineux au survol) — un
+   calque flou séparé, sous le fragment, qui donne la "légère luminosité
+   interne" demandée sans jamais dépendre uniquement d'un filter SVG. */
+.universe-ice-cursor__halo {
+  position: absolute;
+  top: -32px;
+  left: -32px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(215, 238, 250, 0.62) 0%, rgba(159, 214, 247, 0.26) 45%, transparent 72%);
+  filter: blur(3px);
+  opacity: 0.6;
+  transition: opacity 260ms ease, transform 260ms ease;
+  will-change: opacity;
+}
+
+.universe-ice-cursor.is-hover .universe-ice-cursor__halo {
+  opacity: 0.95;
+  transform: scale(1.28);
+}
+
+.universe-ice-cursor.is-active .universe-ice-cursor__halo {
+  opacity: 0.45;
+  transform: scale(0.85);
+}
+
+.universe-ice-cursor__shard {
+  position: absolute;
+  top: -23px;
+  left: -23px;
+  width: 46px;
+  height: 46px;
+  display: block;
+  /* Deux ombres superposées : une sombre (grounding), renforcée pour rester
+     lisible sur le bleu clair #AEC8D8 du site, et un halo glacé clair
+     par-dessus pour rester lisible sur les zones sombres. C'est la
+     combinaison des deux qui garde le fragment identifiable partout. */
+  filter: drop-shadow(0 2px 5px rgba(4, 20, 32, 0.65))
+    drop-shadow(0 0 9px rgba(220, 240, 251, 0.7));
+  will-change: transform, filter;
+  transition: filter 260ms ease;
+}
+
+.universe-ice-cursor.is-hover .universe-ice-cursor__shard {
+  filter: drop-shadow(0 2px 5px rgba(4, 20, 32, 0.6))
+    drop-shadow(0 0 20px rgba(184, 226, 250, 0.95))
+    drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
+
+.universe-ice-cursor.is-active .universe-ice-cursor__shard {
+  filter: drop-shadow(0 1px 3px rgba(6, 26, 40, 0.5))
+    drop-shadow(0 0 5px rgba(159, 214, 247, 0.45));
+}
+
+/* Conteneur des petits cristaux projetés au clic (voir plus bas) — reste
+   un pool DOM classique, car ponctuel (un seul déclenchement par clic) et
+   non concerné par la même contrainte de fréquence que la traînée continue. */
+.universe-ice-cursor__vapor {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+}
+
+/* Petits cristaux projetés au clic : pool séparé (4 nœuds), très légers,
+   forme en losange (clip-path) plutôt qu'un disque flou, pour lire comme
+   des éclats solides plutôt que de la vapeur. */
+.universe-ice-cursor__crystal {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(135deg, #ffffff, #bfe3f7);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.universe-ice-cursor__crystal.is-fading {
+  animation-name: universe-ice-crystal-burst;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes universe-ice-crystal-burst {
+  0% {
+    opacity: 0.9;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--vx, 0px), var(--vy, 0px), 0) scale(0.4) rotate(90deg);
+  }
+}
+
+@media (pointer: coarse) {
+  html.has-ice-cursor,
+  html.has-ice-cursor body.page-universe,
+  html.has-ice-cursor a,
+  html.has-ice-cursor button {
+    cursor: auto;
+  }
+  .universe-ice-cursor,
+  .universe-ice-cursor__vapor,
+  .universe-intro__distortion-canvas {
+    display: none;
+  }
+}

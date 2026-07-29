@@ -1,0 +1,50 @@
+/* ==========================================================================
+   VAGABON — UTILITIES.CSS
+   Classes utilitaires courtes, usage ponctuel. À utiliser avec parcimonie :
+   les styles structurants doivent rester dans components.css / layout.css.
+   ========================================================================== */
+
+.u-text-center { text-align: center; }
+.u-text-accent { color: var(--color-accent); }
+.u-text-muted { color: var(--color-text-muted); }
+.u-text-subtle { color: var(--color-text-subtle); }
+
+.u-mt-0 { margin-top: 0; }
+.u-mt-sm { margin-top: var(--space-sm); }
+.u-mt-md { margin-top: var(--space-md); }
+.u-mt-lg { margin-top: var(--space-lg); }
+.u-mt-xl { margin-top: var(--space-xl); }
+.u-mb-sm { margin-bottom: var(--space-sm); }
+.u-mb-md { margin-bottom: var(--space-md); }
+.u-mb-lg { margin-bottom: var(--space-lg); }
+
+.u-flex { display: flex; }
+.u-flex-wrap { flex-wrap: wrap; }
+.u-items-center { align-items: center; }
+.u-justify-between { justify-content: space-between; }
+.u-gap-sm { gap: var(--space-sm); }
+.u-gap-md { gap: var(--space-md); }
+
+.u-hide-mobile { display: initial; }
+.u-hide-desktop { display: none; }
+
+.u-max-w-prose { max-width: 60ch; }
+
+.u-uppercase { text-transform: uppercase; letter-spacing: 0.04em; }
+
+.u-border-top { border-top: 1px solid var(--color-border); }
+.u-border-bottom { border-bottom: 1px solid var(--color-border); }
+
+.u-rounded { border-radius: var(--radius-md); }
+
+.u-sr-only-focusable:not(:focus) {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+}
+
+@media (max-width: 768px) {
+  .u-hide-mobile { display: none; }
+  .u-hide-desktop { display: initial; }
+}

@@ -1,0 +1,37 @@
+/* ==========================================================================
+   VAGABON — RESPONSIVE.CSS
+   Ajustements globaux par point de rupture (grand écran → petit mobile).
+   Les ajustements spécifiques à une page vivent dans css/pages/*.css.
+   Points de rupture testés : 1440 / 1280 / 1024 / 768 / 480 / 375 px.
+   ========================================================================== */
+
+@media (max-width: 1280px) {
+  :root { --container-max: 1140px; }
+}
+
+@media (max-width: 1024px) {
+  :root { --nav-height: 76px; --nav-height-scrolled: 64px; }
+  .l-container { padding-inline: var(--space-md); }
+}
+
+@media (max-width: 768px) {
+  .c-form__row { grid-template-columns: 1fr; }
+  .c-header__actions .c-icon-btn:not(.c-menu-toggle) { display: none; }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --space-2xl: 4rem;
+    --space-3xl: 5.5rem;
+  }
+  .l-container { padding-inline: var(--space-sm); }
+  .c-btn { padding: 0 var(--space-md); }
+}
+
+/* Zones tactiles suffisantes sur tout écran fin (souris absente) */
+@media (hover: none) {
+  .c-btn, .c-icon-btn, .filter-btn, a {
+    min-height: 44px;
+  }
+  .cursor-dot, .cursor-ring { display: none !important; }
+}

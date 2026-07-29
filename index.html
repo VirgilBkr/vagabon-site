@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr" class="is-landing-locked" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" href="assets/fonts/good-times/good-times.woff2" as="font" type="font/woff2" crossorigin>
+  <title>Vagabon — Studio créatif indépendant | Virgil Boukraa, Reims</title>
+  <meta name="description" content="Vagabon est le studio créatif indépendant de Virgil Boukraa : identité visuelle, création graphique, vidéo, UI/UX et stratégie de communication à Reims, Paris, Lille et à distance.">
+  <link rel="canonical" href="https://www.vagabon-exemple.fr/index.html"><!-- Domaine à renseigner avant mise en ligne -->
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Vagabon">
+  <meta property="og:title" content="Vagabon — Studio créatif indépendant">
+  <meta property="og:description" content="Identités, contenus et stratégies conçus pour laisser une empreinte. Studio créatif indépendant fondé par Virgil Boukraa.">
+  <meta property="og:image" content="assets/images/brand/vagabon-social-cover.webp"><!-- Visuel de partage à fournir : 1200x630px -->
+  <meta property="og:url" content="https://www.vagabon-exemple.fr/index.html">
+  <meta property="og:locale" content="fr_FR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vagabon — Studio créatif indépendant">
+  <meta name="twitter:description" content="Identités, contenus et stratégies conçus pour laisser une empreinte.">
+  <meta name="twitter:image" content="assets/images/brand/vagabon-social-cover.webp">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#000000">
+
+  <link rel="stylesheet" href="css/reset.css?v=2">
+  <link rel="stylesheet" href="css/variables.css?v=2">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/layout.css?v=2">
+  <link rel="stylesheet" href="css/components.css?v=2">
+  <link rel="stylesheet" href="css/utilities.css?v=2">
+  <link rel="stylesheet" href="css/animations.css?v=2">
+  <link rel="stylesheet" href="css/responsive.css?v=2">
+  <link rel="stylesheet" href="css/pages/home.css?v=2">
+
+  <!-- Données structurées JSON-LD — Person + ProfessionalService (section 29) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Virgil Boukraa",
+    "url": "https://www.vagabon-exemple.fr/index.html",
+    "jobTitle": "Fondateur — Studio créatif Vagabon",
+    "worksFor": { "@type": "Organization", "name": "Vagabon" },
+    "address": { "@type": "PostalAddress", "addressLocality": "Reims", "addressCountry": "FR" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Vagabon",
+    "founder": "Virgil Boukraa",
+    "areaServed": ["Reims", "Paris", "Lille", "France"],
+    "description": "Studio créatif indépendant : identité visuelle, création graphique, vidéo, UI/UX et stratégie de communication.",
+    "url": "https://www.vagabon-exemple.fr/index.html"
+  }
+  </script>
+</head>
+<body class="page-home">
+  <a class="skip-link" href="#main-content">Aller au contenu</a>
+
+  <!-- Loader — voir js/loader.js. Masqué automatiquement, durée maximale forcée. -->
+  <div class="loader" data-loader aria-hidden="false">
+    <div class="loader__mark" aria-hidden="true">V</div>
+    <p class="loader__wordmark">VAGABON</p>
+    <div class="loader__bar-track"><div class="loader__bar"></div></div>
+  </div>
+
+  <div class="c-progress" data-progress aria-hidden="true"></div>
+
+  <!-- ======================= HEADER (identique sur toutes les pages) ======================= -->
+  <header class="c-header" data-header>
+    <div class="l-container c-header__inner">
+      <!-- Pas de mot-symbole ici (choix déjà en place avant le nettoyage du
+           site : voir css/pages/home.css, body.page-home). -->
+      <div class="c-header__spacer" aria-hidden="true"></div>
+
+      <div class="c-header__actions">
+        <button type="button" class="c-icon-btn u-hide-mobile" data-lang-toggle aria-label="Switch to English">FR</button>
+        <!-- Bouton son masqué sur cette page (l'ancienne vidéo qu'il
+             contrôlait a été remplacée par l'univers Marble, qui n'expose
+             pas de piste audio pilotable) : voir css/pages/home.css,
+             [data-audio-toggle]. Élément conservé dans le DOM (même
+             traitement que sur universe.html) plutôt que supprimé. -->
+        <button type="button" class="c-icon-btn u-hide-mobile" data-audio-toggle aria-label="Activer le son de la vidéo" data-i18n-attr="aria-label:nav.sound_video_label" aria-pressed="false" tabindex="-1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 8a5 5 0 010 8"/></svg>
+        </button>
+        <!-- Reconnecté à la nouvelle page contact.html (apparence, position
+             et comportement du bouton strictement inchangés). -->
+        <a href="contact.html" class="c-btn c-btn--secondary u-hide-mobile" data-i18n="nav.book_call">Réserver un appel</a>
+        <button type="button" class="c-menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="nav-fullscreen" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.menu.open">
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu plein écran -->
+  <nav class="c-nav-fullscreen" id="nav-fullscreen" data-nav-menu data-open="false" aria-hidden="true" aria-label="Navigation principale">
+    <div class="c-nav-fullscreen__grid">
+      <!-- Nettoyage du site (ancien portfolio + univers Marble retirés) :
+           seule "Accueil" correspond encore à une page existante. Les autres
+           entrées seront réintroduites lors de la construction de la
+           nouvelle expérience post-landing. Design du menu inchangé. -->
+      <ul class="c-nav-fullscreen__list">
+        <li><a class="c-nav-fullscreen__link" href="index.html" data-nav-link aria-current="page"><span class="c-nav-fullscreen__link-number">01</span><span data-i18n="nav.home">Accueil</span><span class="c-nav-fullscreen__link-sub" data-i18n="nav.home_sub">Le Prologue</span></a></li>
+      </ul>
+      <div class="c-nav-fullscreen__aside">
+        <div>
+          <p class="c-nav-fullscreen__meta"><span data-i18n="meta.location_line1">Reims · Paris · Lille</span><br><span data-i18n="meta.location_line2">France entière, à distance</span></p>
+          <p class="c-nav-fullscreen__meta u-mt-md"><a href="mailto:virgil.bkr51@outlook.fr" class="c-btn--ghost">virgil.bkr51@outlook.fr</a></p>
+        </div>
+        <div>
+          <a href="contact.html" class="c-btn c-btn--primary c-btn--block" data-menu-close data-i18n="nav.book_call">Réserver un appel</a>
+          <div class="c-nav-fullscreen__social u-mt-md" data-social-links aria-label="Réseaux sociaux"></div>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="c-icon-btn" data-menu-close style="position:absolute; top:24px; right:24px;" aria-label="Fermer le menu" data-i18n-attr="aria-label:nav.menu.close">✕</button>
+  </nav>
+
+  <div class="l-page">
+  <main id="main-content" tabindex="-1">
+
+    <!-- ======================= A. INTRODUCTION IMMERSIVE (HERO) =======================
+         Landing plein écran avec vidéo d'arrière-plan. Seule la LOGIQUE DE
+         COMPOSITION s'inspire d'une introduction cinématographique (cadre,
+         centre fort, générique) : aucun code, asset, texte, police ou
+         univers visuel n'est repris d'un site tiers. L'identité reste
+         entièrement celle de Vagabon (#008AC9, #000000, #FFFFFF).
+         Styles → css/pages/home.css. Bouton de défilement, pause de la
+         vidéo sous prefers-reduced-motion et fondu d'apparition
+         → js/animations.js.
+
+         DÉCISION DOCUMENTÉE (section 13) : ce Hero reste visuellement sombre
+         (texte blanc, overlay sombre) car la vidéo fournie est un plan large
+         et lumineux (ciel/eau) — un overlay clair y réduirait fortement la
+         lisibilité. Cette section garde un habillage fixe via la classe
+         .home-hero--video, indépendamment du reste du site. -->
+    <section class="home-hero home-hero--video" id="home-hero" aria-labelledby="home-hero-title">
+
+      <!-- Univers 3D Marble en arrière-plan plein écran (remplace l'ancienne
+           vidéo). Le fond CSS de .home-hero__media (poster existant) reste
+           affiché sous l'iframe pendant son chargement. aspect-ratio:4/3
+           du snippet Marble d'origine volontairement retiré (voir
+           css/pages/home.css, .home-hero__marble) pour que le monde
+           remplisse exactement le même espace que la vidéo précédente,
+           sans bande visible. splatUrl / mobileUrl / marbleWorldId
+           strictement inchangés par rapport au code fourni par Marble. -->
+      <div class="home-hero__media" aria-hidden="true">
+        <iframe
+          class="home-hero__marble"
+          src="https://marble.worldlabs.ai/viewer.html?splatUrl=https%3A%2F%2Fcdn.marble.worldlabs.ai%2Fd7f2cf0d-1e4a-4d20-a319-fcf8d272aa91%2Ffedefdd3-2bfa-4f93-bdee-9d2b19692473_ceramic.spz&mobileUrl=https%3A%2F%2Fcdn.marble.worldlabs.ai%2Fd7f2cf0d-1e4a-4d20-a319-fcf8d272aa91%2F32957325-cf30-4c69-9486-9a4e90cd6a7f_ceramic_500k.spz&marbleWorldId=d7f2cf0d-1e4a-4d20-a319-fcf8d272aa91"
+          title="Univers 3D Vagabon"
+          loading="eager"
+          allow="xr-spatial-tracking"
+        ></iframe>
+        <div class="home-hero__video-overlay"></div>
+      </div>
+
+      <!-- Cadre graphique décoratif : quatre coins indépendants (jamais un
+           rectangle fermé). Marge responsive pilotée par --hero-frame-offset.
+           Conservé au-dessus de la vidéo : reste lisible et discret. -->
+      <div class="home-hero__frame" data-reveal data-hero-element aria-hidden="true">
+        <span class="home-hero__corner home-hero__corner--top-left"></span>
+        <span class="home-hero__corner home-hero__corner--top-right"></span>
+        <span class="home-hero__corner home-hero__corner--bottom-left"></span>
+        <span class="home-hero__corner home-hero__corner--bottom-right"></span>
+      </div>
+
+      <!-- Zone « contrôles supérieurs » : le header global fixe (menu, son,
+           langue) se superpose déjà au tiers supérieur du Hero.
+           Il n'est pas dupliqué ici afin de ne rien casser sur les autres
+           pages (voir header commun ci-dessus). -->
+
+      <div class="home-hero__content">
+
+        <div class="home-hero__eyebrow" data-reveal style="--reveal-delay:120ms;">
+          <span class="home-hero__eyebrow-line" aria-hidden="true"></span>
+          <p class="home-hero__eyebrow-text" data-i18n="hero.eyebrow">Studio créatif indépendant</p>
+          <span class="home-hero__eyebrow-line" aria-hidden="true"></span>
+        </div>
+
+        <!-- H1 accessible conservé (unique titre de niveau 1 de la page).
+             Le logo typographique n'est volontairement pas affiché en grand
+             ici : il masquerait la vidéo. Il pourra être réintroduit plus
+             tard sous une forme plus discrète (voir assets/images/brand/). -->
+        <h1 id="home-hero-title" class="u-visually-hidden" data-i18n="hero.title_accessible">Vagabon — Studio créatif indépendant de Virgil Boukraa</h1>
+
+        <div class="home-hero__metadata" data-reveal data-hero-metadata style="--reveal-delay:320ms;">
+          <div class="home-hero__metadata-side">
+            <span class="home-hero__metadata-label" data-i18n="hero.metadata.direction_label">Direction</span>
+            <strong class="home-hero__metadata-value" data-i18n="hero.metadata.direction_value">Virgil Boukraa</strong>
+          </div>
+          <div class="home-hero__metadata-side home-hero__metadata-side--right">
+            <span class="home-hero__metadata-label" data-i18n="hero.metadata.location_label">Basé à</span>
+            <strong class="home-hero__metadata-value" data-i18n="hero.metadata.location_value">Reims · France</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phrase principale déplacée ici (au lieu du centre de .home-hero__metadata) :
+           reste sous le monument visible dans la vidéo, juste au-dessus du
+           bouton d'exploration. Déplacement réel dans le DOM (pas seulement
+           visuel via CSS) pour garder un ordre de lecture cohérent au clavier
+           et au lecteur d'écran. -->
+      <div class="home-hero__bottom">
+        <p class="home-hero__statement" data-reveal style="--reveal-delay:560ms;" data-i18n="hero.statement">J'explore les idées pour construire des identités, des contenus et des stratégies qui laissent une empreinte.</p>
+
+        <!-- Mène désormais à universe.html : la nouvelle expérience
+             éditoriale de portfolio (l'ancien univers Marble a été retiré
+             du projet lors du nettoyage du site). Apparence, position et
+             animation du bouton strictement inchangées. -->
+        <a
+          href="universe.html"
+          class="explore-button"
+          data-reveal
+          style="--reveal-delay:760ms;"
+          data-cursor-label="Explorer"
+        >
+          <span class="explore-button__corner explore-button__corner--top-left" aria-hidden="true"></span>
+          <span class="explore-button__corner explore-button__corner--top-right" aria-hidden="true"></span>
+          <span class="explore-button__corner explore-button__corner--bottom-left" aria-hidden="true"></span>
+          <span class="explore-button__corner explore-button__corner--bottom-right" aria-hidden="true"></span>
+          <span class="explore-button__grid" aria-hidden="true"></span>
+          <span class="explore-button__label" data-i18n="hero.button">Entrer dans l'univers</span>
+        </a>
+        <p class="home-hero__sound-message" data-reveal style="--reveal-delay:860ms;" data-i18n="hero.sound_message">Expérience optimale avec le son</p>
+      </div>
+    </section>
+
+  </main>
+  </div>
+
+  <!-- Données (chargées avant les scripts qui en dépendent) -->
+  <script src="data/settings.js"></script>
+  <script src="data/translations.js"></script>
+
+  <!-- Comportements — uniquement ce qui est nécessaire à la landing page.
+       L'ancien portfolio (autres pages, formulaires, filtres, newsletter,
+       calendly, rendu dynamique des cartes, bouton retour en haut) et
+       l'ancien univers Marble ont été retirés du projet (nettoyage du site,
+       fondation prête pour la nouvelle expérience). -->
+  <script src="js/loader.js"></script>
+  <script src="js/accessibility.js" defer></script>
+  <script src="js/language.js" defer></script>
+  <script src="js/navigation.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <script src="js/data-renderer.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
