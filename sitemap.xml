@@ -55,21 +55,11 @@
        publication réussie depuis Sanity. -->
   <!-- RESSOURCES_SITEMAP_START -->
   <url>
-    <loc>https://www.vagabon-exemple.fr/ressources/construire-strategie-communication-coherente/</loc>
+    <loc>https://www.vagabon-exemple.fr/ressources/comment-construire-une-strategie-de-communication-coherente/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  <url>
-    <loc>https://www.vagabon-exemple.fr/ressources/identite-visuelle-plus-qu-un-logo/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.vagabon-exemple.fr/ressources/seo-contenu-visibilite-long-terme/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <!-- RESSOURCES_SITEMAP_END -->
+        <!-- RESSOURCES_SITEMAP_END -->
   <url>
     <loc>https://www.vagabon-exemple.fr/mentions-legales.html</loc>
     <changefreq>yearly</changefreq>
