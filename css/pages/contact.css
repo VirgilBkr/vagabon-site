@@ -21,9 +21,9 @@
    donc été vérifiée par calcul (luminance relative WCAG) : les tons de
    texte sont sombres (gris bleuté/anthracite, cohérents avec la teinte déjà
    utilisée pour le texte du Hero d'universe.html, #495359, 4.52:1) partout
-   où le contenu repose sur le fond clair ; les tons clairs (--vc-menu-*)
-   restent réservés au menu plein écran, seule zone réellement sombre de
-   cette page. */
+   où le contenu repose sur le fond clair. Le menu plein écran n'a plus de
+   palette locale (voir plus bas) : il utilise l'unique composant partagé,
+   indépendant du fond de cette page. */
 
 body.page-contact {
   /* Fond de page + tons de texte SOMBRES (fond clair) — vérifiés ≥ 4.5:1 */
@@ -37,14 +37,6 @@ body.page-contact {
   --vc-warm-text: #5A420F;       /* 5.43:1 — survol de texte (teinte "chaude") */
   --vc-warm-soft: rgba(90, 66, 15, 0.14);
   --vc-error: #8C2A2A;           /* 4.86:1 */
-
-  /* Tons CLAIRS — réservés au menu plein écran (fond sombre, voir plus bas) */
-  --vc-surface: #0E131C;
-  --vc-menu-ink: #F3F1EA;
-  --vc-menu-ink-subtle: #82868D;
-  --vc-menu-line: rgba(243, 241, 234, 0.14);
-  --vc-menu-line-strong: rgba(243, 241, 234, 0.28);
-  --vc-menu-warm: #C7A34E;
 
   background: var(--vc-bg);
   color: var(--vc-ink);
@@ -142,40 +134,19 @@ body.page-contact .c-btn--secondary:hover {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Menu plein écran — fond sombre fixe (même choix que universe.html,      */
-/* cohérent avec une page dont l'identité reste glaciale quel que soit le  */
-/* thème clair/sombre sélectionné). Seule zone de cette page où les tons   */
-/* CLAIRS (--vc-menu-*) sont utilisés, puisque le fond y est sombre.       */
+/* Menu plein écran — audit cohérence globale : le fond sombre fixe qui     */
+/* était défini ici a été supprimé. Ce composant est un overlay plein      */
+/* écran opaque qui recouvre entièrement la page : il n'a donc aucune      */
+/* raison de s'adapter au fond glacial de CETTE page en particulier. Le    */
+/* menu suit désormais partout l'unique composant partagé                  */
+/* (.c-nav-fullscreen dans components.css), pour une identité strictement  */
+/* identique quelle que soit la page depuis laquelle il est ouvert.        */
 /* ---------------------------------------------------------------------- */
-body.page-contact .c-nav-fullscreen {
-  background: var(--vc-surface);
-  color: var(--vc-menu-ink);
-}
-
-body.page-contact .c-nav-fullscreen__link {
-  color: var(--vc-menu-ink);
-  border-color: var(--vc-menu-line);
-}
-
-body.page-contact .c-nav-fullscreen__link:hover,
-body.page-contact .c-nav-fullscreen__link:focus-visible {
-  color: var(--vc-menu-warm);
-}
-
-body.page-contact .c-nav-fullscreen__meta {
-  color: var(--vc-menu-ink-subtle);
-}
-
-body.page-contact .c-nav-fullscreen [data-menu-close],
-body.page-contact .c-nav-fullscreen .c-icon-btn {
-  border-color: var(--vc-menu-line-strong);
-  color: var(--vc-menu-ink);
-}
 
 /* ---------------------------------------------------------------------- */
 /* Retour discret vers l'accueil/l'univers — repère éditorial en haut du    */
 /* contenu, sous le header fixe. Fond CLAIR ici (contenu principal) :       */
-/* tons sombres --vc-ink-muted, pas --vc-menu-*.                            */
+/* tons sombres --vc-ink-muted.                                             */
 /* ---------------------------------------------------------------------- */
 .contact-back {
   position: relative;

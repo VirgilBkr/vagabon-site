@@ -23,14 +23,14 @@
   <meta name="theme-color" content="#05070B">
 
   <link rel="stylesheet" href="css/reset.css?v=2">
-  <link rel="stylesheet" href="css/variables.css?v=2">
+  <link rel="stylesheet" href="css/variables.css?v=4">
   <link rel="stylesheet" href="css/base.css?v=2">
   <link rel="stylesheet" href="css/layout.css?v=2">
-  <link rel="stylesheet" href="css/components.css?v=2">
+  <link rel="stylesheet" href="css/components.css?v=4">
   <link rel="stylesheet" href="css/utilities.css?v=2">
-  <link rel="stylesheet" href="css/animations.css?v=2">
+  <link rel="stylesheet" href="css/animations.css?v=3">
   <link rel="stylesheet" href="css/responsive.css?v=2">
-  <link rel="stylesheet" href="css/pages/universe.css?v=39">
+  <link rel="stylesheet" href="css/pages/universe.css?v=46">
 </head>
 <body class="page-universe">
   <a class="skip-link" href="#main-content">Aller au contenu</a>
@@ -69,6 +69,16 @@
              Contact interne de cette page, pas vers le bouton de prise de
              contact). -->
         <a href="contact.html" class="c-btn c-btn--secondary u-hide-mobile" data-i18n="nav.book_call">Réserver un appel</a>
+        <!-- Icônes réseaux sociaux déplacées ici depuis la section Contact
+             (voir plus bas, #contact) : même conteneur [data-social-links]
+             que le footer et le menu plein écran, rempli automatiquement par
+             js/data-renderer.js avec les liens de data/settings.js (icônes
+             .c-icon-btn, style/hover/tailles identiques au reste du header).
+             Masquées ≤768px par la règle globale existante
+             .c-header__actions .c-icon-btn:not(.c-menu-toggle) (voir
+             css/responsive.css) : sur mobile, elles restent accessibles via
+             le menu plein écran. -->
+        <div class="c-header__social" data-social-links aria-label="Réseaux sociaux"></div>
         <button type="button" class="c-menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="nav-fullscreen" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.menu.open">
           <span class="c-menu-toggle__bar" aria-hidden="true"></span>
           <span class="c-menu-toggle__bar" aria-hidden="true"></span>
@@ -82,31 +92,10 @@
   <nav class="c-nav-fullscreen" id="nav-fullscreen" data-nav-menu data-open="false" aria-hidden="true" aria-label="Navigation de l'univers">
     <div class="c-nav-fullscreen__grid">
       <ul class="c-nav-fullscreen__list">
-        <li><a class="c-nav-fullscreen__link" href="#universe-intro"><span class="c-nav-fullscreen__link-number">01</span><span data-i18n="nav.menu.index">Index</span></a></li>
-        <li><a class="c-nav-fullscreen__link" href="#projets"><span class="c-nav-fullscreen__link-number">02</span><span data-i18n="nav.projects">Projets</span></a></li>
-        <!-- Ancienne destination "#philosophie" (section interne, déjà
-             désactivée/commentée plus bas sur cette page — voir section C)
-             remplacée par une page dédiée à part entière, à l'identique du
-             fonctionnement déjà en place pour "04 Contact" vs contact.html :
-             le style, la position dans la liste et le comportement du lien
-             (hover, focus, ouverture/fermeture du menu) restent strictement
-             ceux du composant partagé .c-nav-fullscreen__link, inchangé.
-             data-nav-link ajouté pour bénéficier du même marquage
-             aria-current automatique (js/navigation.js) que les autres liens
-             de ce menu qui pointent vers une page réelle plutôt qu'une
-             simple ancre interne. -->
-        <li><a class="c-nav-fullscreen__link" href="qui-suis-je.html" data-nav-link><span class="c-nav-fullscreen__link-number">03</span><span data-i18n="nav.menu.who">Qui suis-je</span></a></li>
-        <!-- Nouvelle entrée "Ressources" (demande explicite) — même
-             traitement visuel/comportemental que les autres liens vers une
-             page dédiée (qui-suis-je.html juste au-dessus) : style, hover,
-             focus et marquage aria-current automatique via data-nav-link
-             (js/navigation.js), rien de nouveau créé pour ce lien. Ajoutée
-             ici plutôt qu'en tête de liste pour respecter l'ordre demandé
-             (Projets / Qui suis-je / Ressources / Contact) tout en
-             conservant "01 Index" en première position, comme le reste du
-             menu n'a jamais été retiré ni réordonné ailleurs. -->
-        <li><a class="c-nav-fullscreen__link" href="ressources.html" data-nav-link><span class="c-nav-fullscreen__link-number">04</span><span data-i18n="nav.ressources">Ressources</span></a></li>
-        <li><a class="c-nav-fullscreen__link" href="#contact"><span class="c-nav-fullscreen__link-number">05</span><span data-i18n="nav.contact">Contact</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="universe.html" data-nav-link aria-current="page"><span class="c-nav-fullscreen__link-number">01</span><span data-i18n="nav.menu.universe">Univers</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="qui-suis-je.html" data-nav-link><span class="c-nav-fullscreen__link-number">02</span><span data-i18n="nav.menu.who">Qui suis-je</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="ressources.html" data-nav-link><span class="c-nav-fullscreen__link-number">03</span><span data-i18n="nav.ressources">Ressources</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="contact.html" data-nav-link><span class="c-nav-fullscreen__link-number">04</span><span data-i18n="nav.contact">Contact</span></a></li>
       </ul>
       <div class="c-nav-fullscreen__aside">
         <div>
@@ -263,7 +252,41 @@
           <h2 id="projets-title" class="universe-intro__title" style="font-size:clamp(1.8rem, 4vw, 3.2rem);" data-reveal data-reveal-delay="1" data-i18n="universe.projects_heading">Mes projets.</h2>
         </div>
 
-        <div class="universe-projects__list">
+        <!-- Bloc horizontal des 3 projets — refonte "scroll horizontal
+             épinglé" (demande explicite) : les 3 <article> ci-dessous sont
+             STRICTEMENT INCHANGÉS (numéro, titre, catégorie, description,
+             disciplines, composition de médias, bouton Découvrir, lien vers
+             la page dédiée) — seul un nouveau conteneur (.universe-projects__pin
+             > .universe-projects__sticky > .universe-projects__list) les
+             enveloppe désormais, pour permettre 3 présentations différentes
+             pilotées uniquement par CSS/JS, sans aucune duplication du DOM :
+             1) REPLI PAR DÉFAUT (aucune classe JS ajoutée — pas de JS,
+                prefers-reduced-motion, ou échec d'initialisation) : la liste
+                reste empilée verticalement, exactement comme avant cette
+                refonte (voir la règle de base .universe-projects__list plus
+                bas dans universe.css) — mouvement le plus simple possible,
+                conforme à la demande "réduire l'animation" en reduced-motion.
+             2) DESKTOP/POINTEUR FIN (classe .is-projects-pinned, ajoutée par
+                js/universe.js → initProjectsHorizontalScroll()) : la section
+                devient épinglée (position: sticky) le temps de parcourir les
+                3 projets horizontalement, entièrement piloté par la lecture
+                passive du scroll vertical natif de la page (aucune
+                interception de wheel/preventDefault — la leçon du DIAGNOSTIC
+                COMPARATIF en tête de js/universe.js est respectée). Un
+                repère discret (compteur "01 / 03" + ligne de progression +
+                flèche) vit dans .universe-projects__indicator.
+             3) TACTILE/MOBILE (classe .is-projects-swipe, même fonction JS) :
+                pas d'épinglage ni de scroll vertical détourné — la liste
+                devient un carrousel horizontal au défilement tactile natif
+                (overflow-x + scroll-snap), totalement indépendant du scroll
+                vertical de la page (deux axes distincts, donc aucun conflit
+                possible), avec le même repère de progression mis à jour par
+                l'événement scroll natif du conteneur.
+             Chaque projet garde sa propre URL/page dédiée (Projet 01 →
+             face-a-face.html) ; rien n'est fusionné ni dupliqué. -->
+        <div class="universe-projects__pin" data-projects-pin>
+          <div class="universe-projects__sticky" data-projects-sticky>
+            <div class="universe-projects__list" data-projects-track>
 
           <!-- Projet 01 — VITRINE SYNTHÉTIQUE (le carrousel interactif qui
                vivait ici a été DÉPLACÉ tel quel, sans reconstruction, vers
@@ -290,9 +313,15 @@
                l'ORDRE/la MISE EN PAGE a changé. Médias, classes et logique
                de regroupement (carousels / flyer / vidéos) strictement
                inchangés : voir css/pages/universe.css pour le détail de
-               chaque média, non retouché dans ce tour. -->
+               chaque média, non retouché dans ce tour.
+               tabindex="0" ajouté (accessibilité clavier, demande explicite
+               de la refonte scroll horizontal) : bug de rendu connu, un
+               <a> passé en display:contents (voir .project-showcase__link
+               ci-dessous) perd son focus clavier natif dans certains
+               moteurs — attribut purement comportemental, aucun changement
+               visuel, aucun changement de mise en page. -->
           <article class="universe-project universe-project--showcase" data-reveal>
-            <a class="project-showcase__link" href="face-a-face.html" aria-label="Découvrir le projet Face à Face — Club de Muay Thaï" data-i18n-attr="aria-label:project.faf.aria_discover">
+            <a class="project-showcase__link" href="face-a-face.html" tabindex="0" aria-label="Découvrir le projet Face à Face — Club de Muay Thaï" data-i18n-attr="aria-label:project.faf.aria_discover">
               <div class="project-showcase__intro">
                 <span class="universe-project__number">01</span>
                 <!-- Logo Face à Face — signature de marque, juste au-dessus
@@ -469,6 +498,22 @@
             </div>
           </article>
 
+            </div>
+            <!-- Repère discret de progression — purement décoratif
+                 (aria-hidden : le contenu réel de chaque projet reste
+                 accessible normalement dans le DOM, ce repère ne fait que
+                 visualiser une position déjà déductible du contexte). Mis à
+                 jour par js/universe.js (initProjectsHorizontalScroll()) :
+                 compteur "01 / 03", ligne de progression, flèche. Invisible
+                 en repli statique (voir règle CSS dédiée) et en mode
+                 tactile positionné en bas du carrousel plutôt qu'en
+                 surimpression. -->
+            <div class="universe-projects__indicator" data-projects-indicator aria-hidden="true">
+              <span class="universe-projects__indicator-count"><span data-projects-current>01</span> / <span data-projects-total>03</span></span>
+              <span class="universe-projects__indicator-track"><span class="universe-projects__indicator-fill" data-projects-fill></span></span>
+              <span class="universe-projects__indicator-arrow" aria-hidden="true">→</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -508,32 +553,56 @@
          dans le CSS pour la marche à suivre). -->
     <section class="testimonial-band" aria-labelledby="testimonials-title">
       <div class="testimonial-band__head universe-section__inner">
-        <div class="universe-eyebrow" data-reveal data-i18n="testimonials.section_label">Témoignages</div>
-        <h2 id="testimonials-title" class="testimonial-band__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="testimonials.title">Ce sont eux qui en parlent le mieux.</h2>
+        <div class="testimonial-band__head-copy">
+          <div class="universe-eyebrow" data-reveal data-i18n="testimonials.section_label">Témoignages</div>
+          <h2 id="testimonials-title" class="testimonial-band__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="testimonials.title">Ce sont eux qui en parlent le mieux.</h2>
+        </div>
+        <!-- Navigation manuelle discrète (précédent/suivant) : réutilise
+             .c-icon-btn (même composant rond que les boutons du header sur
+             cette page — mêmes couleurs, bordure, taille 40px, hover et
+             focus), sans nouveau style. Logique de défilement/pause/boucle
+             dans js/universe.js, voir initTestimonialCarousel(). Masqués en
+             prefers-reduced-motion (voir css/pages/universe.css) : le
+             bandeau devient alors une grille statique, sans rien à faire
+             défiler. -->
+        <div class="testimonial-band__nav">
+          <button type="button" class="c-icon-btn testimonial-band__nav-btn" data-testimonial-prev aria-label="Témoignage précédent" data-i18n-attr="aria-label:testimonials.nav.prev">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <button type="button" class="c-icon-btn testimonial-band__nav-btn" data-testimonial-next aria-label="Témoignage suivant" data-i18n-attr="aria-label:testimonials.nav.next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
       </div>
       <div class="testimonial-band__viewport">
         <div class="testimonial-band__track">
           <div class="testimonial-band__set">
             <div class="testimonial-band__item">
               <div class="testimonial-band__person">
-                <!-- PLACEHOLDER PORTRAIT : remplacer par
-                     <img class="testimonial-band__avatar-img" src="…" alt="" width="112" height="112">
-                     à l'intérieur de .testimonial-band__avatar dès qu'une
-                     photo dédiée à ce témoignage sera disponible. -->
-                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">ZR</span></div>
+                <!-- Photo réelle : crop carré recadré sur le visage à partir
+                     de la photo fournie (salle de boxe thaï), converti en
+                     noir et blanc pour rester cohérent avec la charte froide
+                     du site (voir assets/images/testimonials/README.md). -->
+                <div class="testimonial-band__avatar" aria-hidden="true"><img class="testimonial-band__avatar-img" src="assets/images/testimonials/zohir-remidi.webp" alt="" width="112" height="112" loading="lazy"></div>
                 <p class="testimonial-band__name" data-i18n="testimonials.01.name">Zohir Remidi</p>
               </div>
               <p class="testimonial-band__quote" data-i18n="testimonials.01.quote">« Virgil a su transformer nos besoins en une communication claire, cohérente et réellement adaptée à l'identité de Face à Face. Au-delà de la création visuelle, il a pris le temps de comprendre notre fonctionnement et nos contraintes afin de proposer des supports aussi efficaces qu'esthétiques. »</p>
             </div>
             <div class="testimonial-band__item">
               <div class="testimonial-band__person">
-                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">JG</span></div>
+                <div class="testimonial-band__avatar" aria-hidden="true"><img class="testimonial-band__avatar-img" src="assets/images/testimonials/jean-marc-guillot.webp" alt="" width="112" height="112" loading="lazy"></div>
                 <p class="testimonial-band__name" data-i18n="testimonials.02.name">Jean-Marc Guillot</p>
               </div>
               <p class="testimonial-band__quote" data-i18n="testimonials.02.quote">[Témoignage à venir — avis de Jean-Marc Guillot à intégrer ultérieurement.]</p>
             </div>
             <div class="testimonial-band__item">
               <div class="testimonial-band__person">
+                <!-- PLACEHOLDER PORTRAIT (toujours en attente) : remplacer
+                     par <img class="testimonial-band__avatar-img" src="…"
+                     alt="" width="112" height="112" loading="lazy"> à
+                     l'intérieur de .testimonial-band__avatar dès qu'une
+                     photo dédiée à ce témoignage sera disponible — même
+                     traitement que Zohir/Jean-Marc ci-dessus. -->
                 <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">—</span></div>
                 <p class="testimonial-band__name" data-i18n="testimonials.03.name">Client — À venir</p>
               </div>
@@ -543,14 +612,14 @@
           <div class="testimonial-band__set" aria-hidden="true">
             <div class="testimonial-band__item">
               <div class="testimonial-band__person">
-                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">ZR</span></div>
+                <div class="testimonial-band__avatar" aria-hidden="true"><img class="testimonial-band__avatar-img" src="assets/images/testimonials/zohir-remidi.webp" alt="" width="112" height="112" loading="lazy"></div>
                 <p class="testimonial-band__name" data-i18n="testimonials.01.name">Zohir Remidi</p>
               </div>
               <p class="testimonial-band__quote" data-i18n="testimonials.01.quote">« Virgil a su transformer nos besoins en une communication claire, cohérente et réellement adaptée à l'identité de Face à Face. Au-delà de la création visuelle, il a pris le temps de comprendre notre fonctionnement et nos contraintes afin de proposer des supports aussi efficaces qu'esthétiques. »</p>
             </div>
             <div class="testimonial-band__item">
               <div class="testimonial-band__person">
-                <div class="testimonial-band__avatar" aria-hidden="true"><span class="testimonial-band__avatar-initials">JG</span></div>
+                <div class="testimonial-band__avatar" aria-hidden="true"><img class="testimonial-band__avatar-img" src="assets/images/testimonials/jean-marc-guillot.webp" alt="" width="112" height="112" loading="lazy"></div>
                 <p class="testimonial-band__name" data-i18n="testimonials.02.name">Jean-Marc Guillot</p>
               </div>
               <p class="testimonial-band__quote" data-i18n="testimonials.02.quote">[Témoignage à venir — avis de Jean-Marc Guillot à intégrer ultérieurement.]</p>
@@ -594,9 +663,34 @@
       <div class="universe-section__inner" data-scene>
         <div class="universe-eyebrow" data-reveal data-i18n="nav.contact">Contact</div>
         <h2 id="contact-title" class="universe-contact__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="contact_section.title">Parlons de votre prochain projet.</h2>
-        <a href="mailto:virgil.bkr51@outlook.fr" class="universe-contact__email" data-reveal data-reveal-delay="2">virgil.bkr51@outlook.fr</a>
-        <p class="universe-contact__meta" data-reveal data-reveal-delay="3" data-i18n="contact_section.meta">Reims · Paris · Lille · France entière, à distance</p>
-        <div class="universe-contact__social" data-social-links aria-label="Réseaux sociaux" data-reveal data-reveal-delay="3"></div>
+        <!-- Accroche de conclusion (demande explicite) : deux niveaux de
+             discours, hiérarchisés par taille/poids/couleur uniquement
+             (aucune nouvelle police) — .hook-lead reprend le ton pleine
+             encre (var(--u-ink)) du titre et de l'e-mail juste en dessous ;
+             .hook-sub reprend le ton discret déjà utilisé par
+             .universe-contact__meta (var(--u-ink-subtle)). Découpée en deux
+             <span data-i18n> séparés par un <br> pour la deuxième phrase :
+             même convention que .c-nav-fullscreen__meta un peu plus haut
+             dans ce fichier (data-i18n ne peut pas porter de balise HTML
+             interne, seulement du texte). -->
+        <p class="universe-contact__hook-lead" data-reveal data-reveal-delay="2" data-i18n="contact_section.hook_lead">Et si on brisait la glace&nbsp;?</p>
+        <p class="universe-contact__hook-sub" data-reveal data-reveal-delay="3"><span data-i18n="contact_section.hook_sub_line1">Chaque projet commence par une conversation.</span><br><span data-i18n="contact_section.hook_sub_line2">Le vôtre pourrait être le prochain à prendre vie.</span></p>
+        <!-- CTA premium : classes .c-btn .c-btn--primary partagées avec le
+             reste du site (voir "Réserver un appel" dans le menu plein
+             écran) — aucun nouveau style de bouton créé. Sur cette page,
+             body.page-universe .c-btn--primary (voir plus haut dans ce
+             fichier) fixe déjà le rendu clair/anthracite cohérent avec la
+             charte "glace" ; .universe-contact hérite de text-align:center,
+             donc ce bouton inline-flex se centre naturellement sous le
+             texte, sans règle de centrage propre à ajouter. -->
+        <a href="contact.html" class="c-btn c-btn--primary universe-contact__cta" data-reveal data-reveal-delay="4" data-i18n="contact_section.cta">Parlons de votre projet</a>
+        <a href="mailto:virgil.bkr51@outlook.fr" class="universe-contact__email" data-reveal data-reveal-delay="5">virgil.bkr51@outlook.fr</a>
+        <p class="universe-contact__meta" data-reveal data-reveal-delay="6" data-i18n="contact_section.meta">Reims · Paris · Lille · France entière, à distance</p>
+        <!-- Icônes réseaux sociaux déplacées dans le header (voir plus haut) :
+             ce conteneur est volontairement retiré ici. Titre, e-mail, texte
+             de localisation et bouton de prise de contact (mailto) de cette
+             section restent inchangés — seul le CTA "Parlons de votre
+             projet" ci-dessus est nouveau. -->
       </div>
     </section>
 

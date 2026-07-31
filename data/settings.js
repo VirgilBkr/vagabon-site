@@ -28,8 +28,8 @@ const VAGABON_SETTINGS = {
    * tout réseau vide plutôt que de générer un lien cassé.
    */
   socialLinks: {
-    linkedin: "",
-    instagram: "",
+    linkedin: "https://www.linkedin.com/in/virgil-boukraa-a9ab55239/",
+    instagram: "https://www.instagram.com/vagabonstudio?igsh=cGhnNzc3Zm9haWJ2",
     behance: "",
   },
 

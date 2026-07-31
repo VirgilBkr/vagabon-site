@@ -73,6 +73,27 @@
   color: var(--u-ink);
 }
 
+/* Texte d'introduction personnel — même famille typographique que
+   who-hero__role juste en dessous (corps de texte standard, pas la
+   version "lg"), pour bien distinguer visuellement les deux niveaux tout
+   en restant dans le même vocabulaire de styles déjà utilisé sur cette
+   page (voir who-section__body). */
+.who-hero__intro {
+  margin-top: var(--space-lg);
+  max-width: 46ch;
+}
+
+.who-hero__intro p {
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+.who-hero__intro p + p {
+  margin-top: var(--space-sm);
+}
+
 .who-hero__role {
   margin-top: var(--space-lg);
   max-width: 42ch;
@@ -82,14 +103,14 @@
   color: #495359;
 }
 
-/* Portrait — emplacement réservé. Ratio 3:4 aligné sur le fichier attendu
-   par assets/images/profile/README.md (1200×1600px). Même traitement
-   visuel que les placeholders déjà utilisés pour les projets à venir (voir
-   .project-showcase__item--placeholder dans universe.css) : un rectangle
-   discret, jamais une carte ou un cadre avec ombre. */
+/* Portrait — cadre calé sur le ratio RÉEL de la photo actuelle
+   (virgil-portrait-poolside.webp, 1100×1955px, ≈ 9:16) plutôt que sur un
+   3:4 fixe, pour afficher la composition complète de la photo sans jamais
+   la recadrer (demande explicite). Même traitement visuel qu'avant :
+   rectangle discret, jamais une carte ou un cadre avec ombre. */
 .who-hero__portrait-frame {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1100 / 1955;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,15 +127,15 @@
   color: #495359;
 }
 
-/* Une fois assets/images/profile/virgil-portrait-01.webp disponible et
-   l'élément <img class="who-hero__portrait-img"> substitué au placeholder
-   (voir commentaire dans qui-suis-je.html) : remplit le même cadre 3:4,
-   recadré proprement, sans jamais déformer le portrait. */
+/* object-fit:contain (plutôt que cover) garantit qu'aucun bord de la photo
+   n'est jamais rogné, y compris en cas d'écart d'arrondi entre le ratio du
+   cadre et celui du fichier réel — priorité donnée à la composition
+   complète sur le remplissage exact du cadre. */
 .who-hero__portrait-img {
   width: 100%;
   height: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
+  aspect-ratio: 1100 / 1955;
+  object-fit: contain;
 }
 
 @media (max-width: 900px) {
@@ -170,6 +191,18 @@
   color: #495359;
 }
 
+/* Citation de la section "Mon profil" (01) : la règle globale de base.css
+   (em { color: var(--color-accent); font-style: normal; }) affiche par
+   défaut les <em> en couleur d'accent et SANS italique — l'inverse de ce
+   qui est demandé ici ("italique uniquement, sans autre effet"). Override
+   scopé à cette seule classe, même approche que legal.css/contact.css/
+   face-a-face.css ailleurs sur le site : couleur identique au texte
+   environnant, italique réactivée, aucun autre effet ajouté. */
+.who-section__body em {
+  color: inherit;
+  font-style: italic;
+}
+
 /* --------------------------- Alternance gauche/droite ------------------- */
 .who-section__inner--split {
   display: grid;
@@ -192,9 +225,107 @@
   border: 1px solid color-mix(in srgb, var(--u-bg) 100%, black 24%);
 }
 
+/* Une fois une image réelle placée à l'intérieur d'un who-section__visual
+   (voir section "Mes valeurs") : remplit le même cadre (largeur, ratio 4:5,
+   bordure — tout hérité du conteneur ci-dessus, rien ne change), recadrée
+   proprement en object-fit:cover, jamais déformée. Règle générique
+   (réutilisable telle quelle si section 02 ou 04 reçoivent un jour une
+   image de la même façon), pas de recadrage manuel (object-position) : le
+   sujet est déjà bien centré sur la photo source, le centre par défaut du
+   cadre suffit. */
+.who-section__visual > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Section 01 "Mon profil" — diaporama automatique (LiteYear / URCA) à la
+   place du rectangle vide : .who-section__slideshow réutilise
+   .who-section__visual (même largeur 100%, même ratio 4:5, même bordure
+   fine — cf. .who-hero__portrait-frame plus haut dans ce fichier — aucun
+   nouveau style de cadre inventé), et n'ajoute que ce qui est strictement
+   nécessaire au fondu enchaîné : position relative + overflow:hidden pour
+   contenir le zoom des deux <img> superposées en absolute. La logique
+   d'alternance (classe "is-active") est gérée par
+   js/qui-suis-je-slideshow.js — ce fichier ne contient que le rendu
+   visuel, jamais la temporisation. */
+.who-section__slideshow {
+  position: relative;
+  overflow: hidden;
+}
+
+.who-section__slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* object-fit:cover : les deux photos (LiteYear en 1:1, URCA en ~16:10)
+     partagent exactement le même cadre 4:5 sans jamais être déformées —
+     seul le recadrage diffère, jamais l'échelle horizontale/verticale. */
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 1200ms ease-in-out;
+}
+
+.who-section__slide.is-active {
+  opacity: 1;
+  z-index: 1;
+  /* Zoom très léger et lent (Ken Burns discret) pendant tout le temps où
+     l'image reste affichée (3000ms d'affichage + 1200ms de fondu = 4200ms,
+     voir js/qui-suis-je-slideshow.js) — jamais de à-coup, l'animation
+     redémarre proprement à chaque fois que la classe est réappliquée. */
+  animation: who-slide-zoom 4200ms ease-out forwards;
+}
+
+@keyframes who-slide-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .who-section__slide {
+    /* Fondu conservé (nettement adouci) mais zoom entièrement désactivé,
+       comme demandé explicitement pour prefers-reduced-motion. */
+    transition: opacity 600ms ease-in-out;
+  }
+  .who-section__slide.is-active {
+    animation: none;
+    transform: scale(1);
+  }
+}
+
+/* Desktop uniquement : le bloc image doit être "visuellement plus présent"
+   (texte de gauche désormais long) — override scopé à #profil uniquement :
+   la section 02 "Mon approche" juste en dessous garde son 1fr/1fr d'origine,
+   inchangé.
+   Alignement vertical : align-items:center (plutôt que "start", essayé
+   précédemment puis jugé trop haut par rapport au texte) — solution native
+   de la grille déjà utilisée par .who-section__inner--split pour la
+   section 02, sans valeur "magique" et donc robuste à tous les
+   breakpoints : le bloc image se cale sur le centre vertical réel de la
+   colonne de texte, quelle que soit sa hauteur (qui varie déjà pas mal
+   d'un breakpoint à l'autre vu la longueur du texte). */
+@media (min-width: 901px) {
+  #profil .who-section__inner--split {
+    grid-template-columns: 1fr 1.15fr;
+    align-items: center;
+  }
+}
+
 @media (max-width: 900px) {
   .who-section__inner--split {
     grid-template-columns: 1fr;
+  }
+  /* Demande explicite pour cette section (contrairement à "Mon approche") :
+     le diaporama passe AU-DESSUS du texte sur mobile. order:-1 ne change
+     que l'ordre visuel dans la grille à une seule colonne — le texte reste
+     bien le premier élément du DOM (lu en premier par un lecteur d'écran
+     ou en l'absence de CSS), même principe déjà utilisé par
+     .who-section--visual-left ci-dessous pour l'inverse. */
+  #profil .who-section__slideshow {
+    order: -1;
   }
   .who-section--visual-left .who-section__visual {
     order: 0;
@@ -229,30 +360,177 @@
   text-align: center;
 }
 
-/* --------------------------- Étapes discrètes (04) ------------------------ */
-/* Simple liste numérotée en ligne — jamais des cards : pas de fond, pas de
-   bordure, pas d'icône. Juste un repère chiffré, comme les numéros de
-   section eux-mêmes. */
-.who-section__steps {
+/* --------------------------- Manifeste "Ma vision" ------------------------ */
+/* Même gabarit que la rupture éditoriale (03) juste au-dessus
+   (who-section--statement, who-section__body--centered) — seules deux
+   valeurs sont ajustées ici, scopées à #vision uniquement, sans toucher aux
+   règles génériques ni à la section 03 :
+   - who-section__statement : titre plus long que le statement de la
+     section 03 ("Ma manière d'aborder la communication et la création"
+     contre un court intitulé de rupture) → max-width relevé à 34ch pour un
+     retour à la ligne équilibré (2 lignes) plutôt que fragmenté. Taille de
+     police/graisse/interligne repris À L'IDENTIQUE de l'ancienne citation
+     de conclusion de "Mes valeurs" (who-values__quote, supprimée — voir
+     plus bas) suite à sa suppression : demande explicite de réutiliser
+     exactement cette hiérarchie visuelle pour ce titre plutôt que de
+     garder la taille par défaut de who-section__statement (utilisée par la
+     section 03). font-family/font-weight/color restent hérités de
+     who-section__statement (déjà identiques à l'ancienne citation, aucun
+     changement nécessaire).
+   - who-section__body : colonne de texte volontairement plus large que
+     l'habituel 52ch (demande explicite : "environ 700 à 850px"), avec un
+     corps de texte légèrement agrandi (--font-size-body-lg, déjà utilisé
+     ailleurs sur cette page pour who-hero__role) pour rester confortable à
+     lire sur une colonne aussi large, et un espacement entre paragraphes
+     nettement augmenté (--space-lg au lieu de --space-md) pour la
+     respiration "manifeste" demandée. */
+#vision .who-section__statement {
+  max-width: 34ch;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.28;
+}
+
+#vision .who-section__body {
+  max-width: clamp(700px, 60vw, 850px);
+  margin-top: var(--space-lg);
+  font-size: var(--font-size-body-lg);
+}
+
+/* Remonte légèrement la section (espace au-dessus uniquement) suite à la
+   suppression de la citation de conclusion de "Mes valeurs" juste au-dessus
+   — sans cette citation, l'espacement partagé habituel (universe-section :
+   padding-block: var(--space-3xl) en haut ET en bas de chaque section)
+   laissait un vide trop grand entre les deux sections. Seul padding-top est
+   réduit (var(--space-2xl) au lieu de var(--space-3xl) hérité) : l'espace
+   sous la section (vers "Mon approche" juste après) reste inchangé, comme
+   demandé ("ne modifie rien d'autre"). */
+#vision {
+  padding-top: var(--space-2xl);
+}
+
+/* --------------------------- Étapes détaillées (04) ------------------------ */
+/* Grille 2x2 (4 étapes réparties sur la largeur de la colonne de texte),
+   toujours sans carte ni bordure ni icône : seul un numéro discret (même
+   traitement que who-section__number) introduit chaque étape, dans le même
+   esprit minimaliste que le reste de la page. */
+.who-methode-steps {
   margin-top: var(--space-xl);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-lg) var(--space-xl);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl) var(--space-lg);
   list-style: none;
 }
 
-.who-section__step {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2xs);
-  font-family: var(--font-body);
-  font-size: var(--font-size-small);
-  color: #495359;
-}
-
-.who-section__step-number {
+.who-methode-step__number {
+  display: block;
+  margin-bottom: var(--space-2xs);
   font-family: var(--font-body);
   font-size: var(--font-size-xs);
   letter-spacing: 0.08em;
   color: var(--u-ink-subtle);
 }
+
+.who-methode-step__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+  color: var(--u-ink);
+}
+
+.who-methode-step__body {
+  margin-top: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+
+/* Sur une seule colonne (mobile/tablette, cf. who-section__inner--split
+   ci-dessus), la grille 2x2 repasse en liste verticale simple pour garder
+   des lignes de texte confortables. */
+@media (max-width: 900px) {
+  .who-methode-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------- Section "Mes valeurs" ------------------------ */
+/* Alternance inversée (image à gauche) : who-section--visual-left et
+   who-section__visual sont réutilisées telles quelles (déjà déclarées plus
+   haut pour la section 04) — aucune règle ci-dessous ne redéfinit la
+   structure en 2 colonnes elle-même ni le comportement mobile de
+   who-section--visual-left, déjà correct par défaut (image en premier dans
+   le DOM = image au-dessus du texte en une colonne, cf. règle
+   ".who-section--visual-left .who-section__visual { order:0; }" plus haut
+   dans ce fichier). */
+
+/* Largeur des colonnes alignée sur celle de la section 01 "Mon profil" :
+   même ratio (1fr / 1.15fr), la colonne visuelle recevant toujours la plus
+   grande part — ici la colonne visuelle est la première de la grille
+   (image à gauche), d'où l'ordre inverse des valeurs par rapport à
+   l'override #profil. Scopé à #valeurs uniquement : la section 04 plus bas,
+   qui utilise la même classe who-section--visual-left, garde son 1fr/1fr
+   d'origine, inchangé. */
+@media (min-width: 901px) {
+  #valeurs .who-section__inner--split {
+    grid-template-columns: 1.15fr 1fr;
+  }
+}
+
+/* Liste des 4 valeurs — lecture éditoriale (icône + titre marqué + courte
+   accroche en italique + texte), séparateurs fins entre chaque valeur
+   (var(--u-line), même token que les séparateurs déjà utilisés ailleurs sur
+   le site) plutôt que des cards ou des blocs avec fond. */
+.who-values {
+  margin-top: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.who-value {
+  display: flex;
+  gap: var(--space-md);
+  padding-block: var(--space-lg);
+}
+
+.who-value:first-child {
+  padding-top: 0;
+}
+
+.who-value + .who-value {
+  border-top: 1px solid var(--u-line);
+}
+
+.who-value__icon {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin-top: 3px;
+  color: var(--u-ink-subtle);
+}
+
+.who-value__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  color: var(--u-ink);
+}
+
+.who-value__tagline {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: var(--u-ink-subtle);
+}
+
+.who-value__text {
+  margin-top: var(--space-sm);
+  max-width: 48ch;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: #495359;
+}
+

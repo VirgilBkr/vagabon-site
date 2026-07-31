@@ -28,18 +28,18 @@
   <meta name="theme-color" content="#AEC8D8">
 
   <link rel="stylesheet" href="css/reset.css?v=2">
-  <link rel="stylesheet" href="css/variables.css?v=2">
+  <link rel="stylesheet" href="css/variables.css?v=4">
   <link rel="stylesheet" href="css/base.css?v=2">
   <link rel="stylesheet" href="css/layout.css?v=2">
-  <link rel="stylesheet" href="css/components.css?v=2">
+  <link rel="stylesheet" href="css/components.css?v=4">
   <link rel="stylesheet" href="css/utilities.css?v=2">
-  <link rel="stylesheet" href="css/animations.css?v=2">
+  <link rel="stylesheet" href="css/animations.css?v=3">
   <link rel="stylesheet" href="css/responsive.css?v=2">
   <!-- Réutilise universe.css TEL QUEL (identique à face-a-face.html) :
        palette --u-*, header/menu plein écran, curseur glace, moteur de
        révélation .universe-section / .universe-eyebrow / [data-word-reveal]
        / [data-scene]. Rien n'est dupliqué depuis ce fichier partagé. -->
-  <link rel="stylesheet" href="css/pages/universe.css?v=39">
+  <link rel="stylesheet" href="css/pages/universe.css?v=46">
   <!-- Styles propres à cette page (Hero + 4 sections de présentation). -->
   <link rel="stylesheet" href="css/pages/qui-suis-je.css?v=1">
 </head>
@@ -84,8 +84,8 @@
   <nav class="c-nav-fullscreen" id="nav-fullscreen" data-nav-menu data-open="false" aria-hidden="true" aria-label="Navigation principale">
     <div class="c-nav-fullscreen__grid">
       <ul class="c-nav-fullscreen__list">
-        <li><a class="c-nav-fullscreen__link" href="index.html" data-nav-link><span class="c-nav-fullscreen__link-number">01</span><span data-i18n="nav.home">Accueil</span></a></li>
-        <li><a class="c-nav-fullscreen__link" href="universe.html#projets" data-nav-link><span class="c-nav-fullscreen__link-number">02</span><span data-i18n="nav.projects">Projets</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="universe.html" data-nav-link><span class="c-nav-fullscreen__link-number">01</span><span data-i18n="nav.menu.universe">Univers</span></a></li>
+        <li><a class="c-nav-fullscreen__link" href="qui-suis-je.html" data-nav-link aria-current="page"><span class="c-nav-fullscreen__link-number">02</span><span data-i18n="nav.menu.who">Qui suis-je</span></a></li>
         <li><a class="c-nav-fullscreen__link" href="ressources.html" data-nav-link><span class="c-nav-fullscreen__link-number">03</span><span data-i18n="nav.ressources">Ressources</span></a></li>
         <li><a class="c-nav-fullscreen__link" href="contact.html" data-nav-link><span class="c-nav-fullscreen__link-number">04</span><span data-i18n="nav.contact">Contact</span></a></li>
       </ul>
@@ -114,106 +114,236 @@
       <div class="who-hero__inner">
         <div class="who-hero__text">
           <div class="universe-eyebrow" data-reveal data-i18n="who.hero_eyebrow">Qui suis-je</div>
-          <!-- Nom et fonction : mêmes clés que la signature du Hero de
-               universe.html (universe.signature_name / universe.signature_role)
-               plutôt qu'un doublon — cohérence garantie même si l'une des
-               deux devait être reformulée plus tard (demande explicite,
-               voir section 7 du brief). -->
+          <!-- Nom : même clé que la signature du Hero de universe.html
+               (universe.signature_name) plutôt qu'un doublon — cohérence
+               garantie même si le nom devait être reformulé plus tard
+               (demande explicite, voir section 7 du brief).
+               Fonction : who.hero_role, clé PROPRE à cette page (et non
+               plus universe.signature_role) depuis l'ajout du texte
+               d'introduction ci-dessous — la formulation de cette ligne a
+               été modifiée uniquement ici ("création de contenus" ajouté),
+               sans toucher au Hero de universe.html qui conserve son
+               texte original via universe.signature_role, inchangé. -->
           <h1 id="who-hero-title" class="who-hero__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="universe.signature_name">Virgil Boukraa</h1>
-          <p class="who-hero__role" data-reveal data-reveal-delay="2" data-i18n="universe.signature_role">Freelance en stratégie de communication &amp; direction artistique</p>
+
+          <!-- Ordre demandé : nom -> sous-titre (fonction) -> texte
+               d'introduction. who-hero__role est donc remonté juste sous le
+               h1 (delay=2), who-hero__intro passe après (delay=3) — seule
+               la position dans le DOM et les data-reveal-delay changent,
+               aucune classe ni aucun contenu n'est modifié. -->
+          <p class="who-hero__role" data-reveal data-reveal-delay="2" data-i18n="who.hero_role">Freelance en stratégie de communication, création de contenus &amp; direction artistique</p>
+
+          <div class="who-hero__intro" data-reveal data-reveal-delay="3">
+            <p data-i18n="who.hero_intro1">Je ne cherche pas à être le plus talentueux.</p>
+            <p data-i18n="who.hero_intro2">J'essaie simplement d'être celui qui continue lorsque les autres s'arrêtent.</p>
+            <p data-i18n="who.hero_intro3">La boxe m'a appris qu'un combat se prépare bien avant de monter sur le ring. Observer, comprendre, rester discipliné et savoir frapper au bon moment.</p>
+            <p data-i18n="who.hero_intro4">Aujourd'hui, j'aborde chaque projet avec ce même état d'esprit.</p>
+          </div>
         </div>
 
-        <!-- Portrait — EMPLACEMENT RÉSERVÉ, aucun fichier réel disponible
-             pour l'instant. Vérification effectuée avant d'écrire ce
-             balisage : assets/images/hero/vagabon-hero-portrait*.webp
-             existent bien sur le disque mais ne sont RÉFÉRENCÉS PAR AUCUNE
-             page (le Hero de universe.html utilise désormais un visuel
-             unique et différent, vagabon-hero-background.webp — voir le
-             commentaire à ce sujet dans universe.html) : les réutiliser ici
-             aurait affiché un portrait daté/hors-contexte, contrairement à
-             la demande explicite de vérifier les assets avant réemploi. Un
-             dossier dédié existe déjà pour CETTE page précise :
-             assets/images/profile/ (voir son README.md), qui attend un
-             fichier "virgil-portrait-01.webp" (1200×1600px, ratio 3:4).
-             Dès que ce fichier sera fourni, remplacer le <div> ci-dessous
-             par :
-             <img class="who-hero__portrait-img" src="assets/images/profile/virgil-portrait-01.webp" alt="Portrait de Virgil Boukraa" width="1200" height="1600">
-             (conserver who-hero__portrait comme conteneur parent). -->
+        <!-- Portrait — photo extérieure au bord d'une piscine
+             (assets/images/profile/virgil-portrait-poolside.webp,
+             1100×1955px, ratio réel de la photo source conservé À
+             L'IDENTIQUE — aucun recadrage, la composition complète reste
+             visible : piscine, chaise, environnement). who-hero__portrait-
+             frame utilise désormais ce même ratio (aspect-ratio mis à jour
+             dans qui-suis-je.css, au lieu du 3:4 précédent) et
+             .who-hero__portrait-img passe en object-fit:contain pour
+             garantir qu'aucun bord de l'image ne soit jamais rogné, même en
+             cas d'écart d'arrondi entre le ratio du cadre et celui du
+             fichier. -->
         <div class="who-hero__portrait" data-reveal data-reveal-delay="3">
           <div class="who-hero__portrait-frame">
-            <span class="who-hero__portrait-label" data-i18n="who.portrait_placeholder">Portrait à venir</span>
+            <img class="who-hero__portrait-img" src="assets/images/profile/virgil-portrait-poolside.webp" alt="Virgil Boukraa au bord d'une piscine" width="1100" height="1955">
           </div>
         </div>
       </div>
     </section>
 
     <!-- ======================= B. 01 — MON PROFIL =======================
-         Contenu structurel uniquement : aucun parcours, diplôme, client ou
-         compétence n'a été inventé (demande explicite). Les textes entre
-         crochets sont des repères clairement identifiables, à remplacer par
-         les contenus définitifs transmis progressivement. -->
-    <section class="who-section universe-section" id="profil" aria-labelledby="profil-title">
-      <div class="who-section__inner universe-section__inner" data-scene>
-        <span class="who-section__number" aria-hidden="true" data-i18n="who.section01.number">01</span>
-        <div class="universe-eyebrow" data-reveal data-i18n="who.section01.eyebrow">Mon profil</div>
-        <h2 id="profil-title" class="who-section__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section01.title">[Titre à venir]</h2>
-        <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body">[Texte à venir — présentez ici votre parcours, ce qui vous a mené à Vagabon, et la personne derrière le studio.]</p>
-      </div>
-    </section>
-
-    <!-- ======================= C. 02 — MON APPROCHE =======================
-         Alternance gauche/droite : texte à gauche, emplacement visuel à
-         droite (image grand format à intégrer plus tard — voir
-         who-section__visual dans qui-suis-je.css). Composition en écho à
-         celle des pages projet (face-a-face.html), sans dupliquer leurs
-         classes (page indépendante). -->
-    <section class="who-section who-section--split universe-section" id="approche" aria-labelledby="approche-title">
+         Passée en mise en page --split (même schéma que la section 02
+         "Mon approche" juste en dessous : .who-section__text à gauche,
+         .who-section__visual à droite, grid align-items:center déjà
+         existante dans qui-suis-je.css) pour accueillir les deux photos
+         LiteYear.webp / URCA.webp. La colonne de texte (.who-section__text)
+         reprend EXACTEMENT le même contenu, les mêmes classes et les mêmes
+         attributs data-reveal qu'avant ce changement — seul un wrapper de
+         mise en page a été ajouté autour, rien n'a été retiré ni modifié
+         dans le texte lui-même. -->
+    <section class="who-section who-section--split universe-section" id="profil" aria-labelledby="profil-title">
       <div class="who-section__inner who-section__inner--split universe-section__inner" data-scene>
         <div class="who-section__text">
-          <span class="who-section__number" aria-hidden="true" data-i18n="who.section02.number">02</span>
-          <div class="universe-eyebrow" data-reveal data-i18n="who.section02.eyebrow">Mon approche</div>
-          <h2 id="approche-title" class="who-section__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section02.title">[Titre à venir]</h2>
-          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section02.body">[Texte à venir — expliquez ici votre manière d'aborder la communication et la création.]</p>
+          <span class="who-section__number" aria-hidden="true" data-i18n="who.section01.number">01</span>
+          <div class="universe-eyebrow" data-reveal data-i18n="who.section01.eyebrow">Mon profil</div>
+          <h2 id="profil-title" class="who-section__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section01.title">Qui suis-je ?</h2>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body1">Depuis mon plus jeune âge, l'entrepreneuriat est un objectif qui brûle en moi.</p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body2">Pourquoi vouloir entreprendre ? Parce que l'idée de concevoir quelque chose à partir de mes propres idées, de mes pensées et de ma vision a toujours eu du sens pour moi. Je ne voulais pas simplement travailler pour les idées d'un autre, mais apprendre à construire les miennes.</p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body3">Mais avant de vouloir, il faut faire.</p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body4">C'est dans cette logique que j'ai commencé mes études en économie et gestion. À mes débuts, je ne savais pas encore réellement dans quel domaine me spécialiser. J'ai donc choisi une formation généraliste, avec l'idée d'acquérir des connaissances suffisamment larges pour comprendre les différentes dimensions nécessaires à la création et au développement d'une entreprise.</p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body5">En parallèle de mes études, j'ai travaillé comme commercial au sein d'une agence. Ma mission consistait notamment à démarcher des personnes en porte-à-porte pour leur présenter et leur vendre un produit qu'elles n'avaient, à l'origine, pas prévu d'acheter. Une expérience exigeante qui m'a forgé et m'a permis de développer de véritables compétences commerciales.</p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2"><span data-i18n="who.section01.quote_lead">Comme j'aime le dire : </span><em data-i18n="who.section01.quote_text">« Pour entreprendre, il faut savoir vendre son bien ou son service. »</em></p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body6">J'ai ensuite décidé de me spécialiser dans la communication digitale, toujours avec cette même idée en tête : comprendre comment vendre un produit, un service ou une idée, mais cette fois-ci à travers le digital. C'est ainsi que je me suis retrouvé à étudier pendant trois ans la communication et le marketing digital, jusqu'à l'obtention de mon Mastère en Stratégie Marketing et Communication Digitale.</p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body7">Après toutes ces années à apprendre, expérimenter et construire progressivement ma vision, il était temps pour moi de faire mes premiers pas dans l'entrepreneuriat.</p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body8">C'est comme cela qu'est né Vagabon.</p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body9">Un projet né des pensées et de la volonté d'un jeune garçon qui voulait créer quelque chose à son image, apporter sa pierre à l'édifice et, aujourd'hui, mettre son expertise, sa créativité et sa vision au service de ses futurs clients.</p>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section01.body10">Vagabon représente finalement la continuité de ce parcours : transformer des idées en projets concrets et aider d'autres personnes à donner vie aux leurs.</p>
         </div>
-        <!-- Emplacement visuel réservé (image grand format à venir) — vide
-             pour l'instant, aucun visuel disponible : voir
-             who-section__visual dans qui-suis-je.css pour le traitement une
-             fois un fichier fourni. -->
-        <div class="who-section__visual" data-reveal data-reveal-delay="3" aria-hidden="true"></div>
+        <!-- Colonne droite : diaporama automatique (2 photos en fondu
+             enchaîné + léger zoom, voir .who-section__slideshow dans
+             qui-suis-je.css et js/qui-suis-je-slideshow.js pour la logique).
+             aria-hidden : les deux expériences (LiteYear, URCA) sont déjà
+             nommées explicitement dans le texte de gauche, ce visuel est
+             redondant/décoratif pour les technologies d'assistance — même
+             convention que l'ancien placeholder vide de cette section
+             (aria-hidden="true"). -->
+        <div class="who-section__visual who-section__slideshow" data-reveal data-reveal-delay="3" data-auto-slideshow aria-hidden="true">
+          <img class="who-section__slide is-active" src="assets/images/profile/liteyear.webp" width="1024" height="1024" alt="Virgil Boukraa lors de son expérience commerciale en porte-à-porte chez LiteYear" loading="lazy" decoding="async">
+          <img class="who-section__slide" src="assets/images/profile/urca.webp" width="1312" height="813" alt="Virgil Boukraa devant l'université de Reims Champagne-Ardenne (URCA), durant ses études en communication et marketing digital" loading="lazy" decoding="async">
+        </div>
       </div>
     </section>
 
-    <!-- ======================= D. 03 — STRATÉGIE & CRÉATION =======================
-         Rupture de composition volontaire (demande explicite d'alterner les
-         mises en page) : retour à un bloc centré, pleine largeur, dans
-         l'esprit de la section Philosophie de universe.html — un temps fort
-         éditorial plutôt qu'une troisième alternance gauche/droite. -->
-    <section class="who-section who-section--statement universe-section" id="strategie-creation" aria-labelledby="strategie-creation-title">
+    <!-- ======================= C-bis. MES VALEURS =======================
+         Nouvelle section insérée entre "Mon profil" (01) et "Mon approche"
+         (02). Alternance inversée par rapport à la section 01 : image à
+         gauche (emplacement réservé, fichier fourni plus tard), contenu à
+         droite. Réutilise telle quelle who-section--visual-left (déjà
+         utilisée par la section 04 "Ma façon de travailler" plus bas) et
+         who-section__visual — aucune nouvelle classe de mise en page n'a
+         été créée pour la structure en 2 colonnes elle-même, ni pour le
+         comportement mobile (image au-dessus du texte : déjà le
+         comportement par défaut de who-section--visual-left, voir
+         qui-suis-je.css). Largeur des colonnes alignée sur celle de la
+         section 01 (override scopé #valeurs dans qui-suis-je.css).
+         Pas de numéro affiché : aucun numéro n'a été demandé pour cette
+         section, et les sections existantes 02/03/04 ne sont pas
+         renumérotées (aucune autre section n'est modifiée). -->
+    <section class="who-section who-section--split who-section--visual-left universe-section" id="valeurs" aria-labelledby="valeurs-title">
+      <div class="who-section__inner who-section__inner--split universe-section__inner" data-scene>
+        <!-- Photo réelle (séance de Muay Thaï avec le coach) — remplace
+             l'emplacement réservé. who-section__visual reste le même
+             conteneur (largeur, ratio 4:5, bordure) déjà utilisé ailleurs
+             sur la page ; seule une règle générique "img à l'intérieur de
+             who-section__visual" a été ajoutée dans qui-suis-je.css
+             (object-fit:cover), réutilisable telle quelle si section 02 ou
+             04 reçoivent un jour une image de la même façon. -->
+        <div class="who-section__visual" data-reveal data-reveal-delay="3" aria-hidden="true">
+          <img src="assets/images/profile/boxe-thai.webp" alt="Virgil Boukraa à l'entraînement de Muay Thaï avec son coach" width="1400" height="1867" loading="lazy" decoding="async">
+        </div>
+        <div class="who-section__text">
+          <h2 id="valeurs-title" class="who-section__title" data-reveal data-word-reveal data-i18n="who.valeurs.title">Mes valeurs</h2>
+
+          <div class="who-values">
+            <div class="who-value" data-reveal data-reveal-delay="1">
+              <svg class="who-value__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M14.3 9.7 12.7 12.7 9.7 14.3 11.3 11.3z"></path>
+              </svg>
+              <div class="who-value__content">
+                <h3 class="who-value__title" data-i18n="who.valeurs.value1.title">Autonomie</h3>
+                <p class="who-value__tagline" data-i18n="who.valeurs.value1.tagline">Chercher, comprendre, créer.</p>
+                <p class="who-value__text" data-i18n="who.valeurs.value1.text">J'ai toujours aimé apprendre par moi-même. Chercher une solution, expérimenter, recommencer jusqu'à comprendre fait partie de ma manière de fonctionner. Cette autonomie nourrit aujourd'hui ma créativité et me pousse continuellement à développer de nouvelles compétences. Je préfère ne pas attendre de savoir faire : j'apprends à faire.</p>
+              </div>
+            </div>
+            <div class="who-value" data-reveal data-reveal-delay="2">
+              <svg class="who-value__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M3 18 8 11l3.5 4L16 9l5 9"></path>
+              </svg>
+              <div class="who-value__content">
+                <h3 class="who-value__title" data-i18n="who.valeurs.value2.title">Persévérance</h3>
+                <p class="who-value__tagline" data-i18n="who.valeurs.value2.tagline">Continuer, même lorsque le résultat n'est pas immédiat.</p>
+                <p class="who-value__text" data-i18n="who.valeurs.value2.text">Mes études, le sport et mes expériences professionnelles m'ont appris une chose essentielle : la progression vient rarement sans difficulté. J'ai connu l'échec, le doute et le refus, mais j'ai surtout appris à continuer. Pour moi, la difficulté n'est pas une finalité : c'est souvent là que commence la progression.</p>
+              </div>
+            </div>
+            <div class="who-value" data-reveal data-reveal-delay="3">
+              <svg class="who-value__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="10.5" cy="10.5" r="6.5"></circle>
+                <path d="m15.3 15.3 5 5"></path>
+              </svg>
+              <div class="who-value__content">
+                <h3 class="who-value__title" data-i18n="who.valeurs.value3.title">Curiosité</h3>
+                <p class="who-value__tagline" data-i18n="who.valeurs.value3.tagline">Ne jamais arrêter d'apprendre.</p>
+                <p class="who-value__text" data-i18n="who.valeurs.value3.text">J'aime comprendre comment les choses fonctionnent, découvrir de nouveaux outils, de nouvelles cultures et de nouvelles manières de créer. Cette curiosité dépasse largement mon métier. Elle influence ma façon d'observer le monde et, forcément, ma manière de communiquer et de concevoir mes projets. Chaque nouvelle compétence devient une possibilité supplémentaire de créer autrement.</p>
+              </div>
+            </div>
+            <div class="who-value" data-reveal data-reveal-delay="3">
+              <svg class="who-value__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M12 19V5"></path>
+                <path d="m6 11 6-6 6 6"></path>
+              </svg>
+              <div class="who-value__content">
+                <h3 class="who-value__title" data-i18n="who.valeurs.value4.title">Ambition</h3>
+                <p class="who-value__tagline" data-i18n="who.valeurs.value4.tagline">Construire plutôt que simplement suivre.</p>
+                <p class="who-value__text" data-i18n="who.valeurs.value4.text">Depuis longtemps, j'ai cette envie d'entreprendre et de construire quelque chose à partir de mes propres idées. Mon ambition ne se résume pas à la réussite professionnelle : elle est profondément liée à la liberté de créer, de choisir mes projets, d'évoluer et de construire une vie qui me ressemble. Vagabon est aujourd'hui une première concrétisation de cette volonté.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= C-ter. MA VISION =======================
+         Nouvelle section insérée entre "Mes valeurs" et "Mon approche" (02).
+         Reprend tel quel le gabarit "rupture éditoriale" déjà utilisé par
+         la section 03 "Stratégie & création" (who-section--statement :
+         bloc centré pleine largeur, aucune colonne visuelle) — aucune
+         nouvelle classe de mise en page. Volontairement sans image (demande
+         explicite). Pas de numéro affiché, même choix que pour "Mes
+         valeurs" juste au-dessus : aucun numéro n'a été demandé, les
+         sections existantes ne sont pas renumérotées. Largeur de colonne de
+         texte et espacement entre paragraphes propres à cette section (voir
+         override #vision dans qui-suis-je.css), sans toucher à
+         who-section__body utilisé ailleurs (section 01, section 03). -->
+    <section class="who-section who-section--statement universe-section" id="vision" aria-labelledby="vision-title">
       <div class="who-section__inner universe-section__inner" data-scene>
-        <span class="who-section__number" aria-hidden="true" data-i18n="who.section03.number">03</span>
-        <div class="universe-eyebrow" data-reveal data-i18n="who.section03.eyebrow">Stratégie &amp; création</div>
-        <h2 id="strategie-creation-title" class="who-section__statement" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section03.title">[Titre à venir]</h2>
-        <p class="who-section__body who-section__body--centered" data-reveal data-reveal-delay="2" data-i18n="who.section03.body">[Texte à venir — expliquez ici pourquoi vous associez réflexion stratégique, communication, identité visuelle et direction artistique plutôt que de traiter ces disciplines séparément.]</p>
+        <div class="universe-eyebrow" data-reveal data-i18n="who.vision.eyebrow">Ma vision</div>
+        <h2 id="vision-title" class="who-section__statement" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.vision.title">Ma manière d'aborder la communication et la création</h2>
+        <p class="who-section__body who-section__body--centered" data-reveal data-reveal-delay="2" data-i18n="who.vision.body1">Ce que j'aime avant tout dans la communication, c'est la difficulté, aujourd'hui, de réussir à créer un contenu réellement différenciant. Nous sommes confrontés à longueur de journée à des publicités, des publications, des vidéos et toutes sortes de contenus. Et, la plupart du temps, ça nous saoule — moi le premier d'ailleurs.</p>
+        <p class="who-section__body who-section__body--centered" data-reveal data-reveal-delay="2" data-i18n="who.vision.body2">Et c'est justement là que, selon moi, la communication devient un art : réussir à toucher son public cible avec un contenu qui se différencie de la masse, qui attire l'attention et qui donne une raison de s'y intéresser.</p>
+        <p class="who-section__body who-section__body--centered" data-reveal data-reveal-delay="2" data-i18n="who.vision.body3">La création est probablement l'une des choses les plus difficiles à juger, puisque chacun possède sa propre perception de ce qui est beau, intéressant ou impactant. C'est un peu comme l'art : face à un même tableau, deux personnes peuvent ressentir des choses complètement différentes. Et c'est précisément cette difficulté qui m'intéresse.</p>
+        <p class="who-section__body who-section__body--centered" data-reveal data-reveal-delay="2" data-i18n="who.vision.body4">J'aime chercher à comprendre ce qui peut toucher un public, l'intéresser ou le sensibiliser à un sujet. Pour moi, créer ne consiste donc pas simplement à produire quelque chose de beau. C'est aussi chercher à comprendre psychologiquement sa cible afin d'imaginer un contenu, un visuel ou une vidéo capable de lui parler et de provoquer une réaction.</p>
+        <p class="who-section__body who-section__body--centered" data-reveal data-reveal-delay="2" data-i18n="who.vision.body5">Mais ce qui m'intéresse encore davantage, c'est la stratégie. Parce qu'une bonne création sans véritable réflexion derrière elle peut rapidement perdre de son impact. La stratégie, c'est ce qui permet de donner une direction aux idées et, surtout, de comprendre comment se différencier des autres.</p>
       </div>
     </section>
 
     <!-- ======================= E. 04 — MA FAÇON DE TRAVAILLER =======================
-         Alternance inversée (visuel à gauche, texte à droite) + une liste
-         d'étapes discrète (pas des cards : simple numérotation textuelle en
-         ligne), pour esquisser un déroulé de méthode sans détailler un
-         processus qui n'a pas encore été rédigé. -->
+         Alternance inversée (visuel à gauche, texte à droite), inchangée.
+         La liste d'étapes est passée d'une simple énumération en ligne (3
+         intitulés courts, contenu pas encore rédigé) à une grille 2x2 de 4
+         étapes détaillées (numéro + titre + texte), pour présenter une
+         véritable méthode de travail. Nouvelles classes who-methode-steps /
+         who-methode-step* dédiées à cette page (l'ancienne who-section__steps
+         ne convenait plus au contenu, beaucoup plus riche désormais — voir
+         qui-suis-je.css). -->
     <section class="who-section who-section--split who-section--visual-left universe-section" id="methode" aria-labelledby="methode-title">
       <div class="who-section__inner who-section__inner--split universe-section__inner" data-scene>
         <div class="who-section__visual" data-reveal data-reveal-delay="3" aria-hidden="true"></div>
         <div class="who-section__text">
           <span class="who-section__number" aria-hidden="true" data-i18n="who.section04.number">04</span>
           <div class="universe-eyebrow" data-reveal data-i18n="who.section04.eyebrow">Ma façon de travailler</div>
-          <h2 id="methode-title" class="who-section__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section04.title">[Titre à venir]</h2>
-          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section04.body">[Texte à venir — présentez ici votre manière d'accompagner un projet, depuis sa compréhension jusqu'à sa traduction visuelle et sa mise en œuvre.]</p>
-          <ol class="who-section__steps" data-reveal data-reveal-delay="3">
-            <li class="who-section__step"><span class="who-section__step-number">01</span><span data-i18n="who.section04.step1">[Étape à venir]</span></li>
-            <li class="who-section__step"><span class="who-section__step-number">02</span><span data-i18n="who.section04.step2">[Étape à venir]</span></li>
-            <li class="who-section__step"><span class="who-section__step-number">03</span><span data-i18n="who.section04.step3">[Étape à venir]</span></li>
+          <h2 id="methode-title" class="who-section__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.section04.title">Chaque projet se construit en 4 rounds</h2>
+          <p class="who-section__body" data-reveal data-reveal-delay="2" data-i18n="who.section04.body">Chaque projet commence bien avant la création d'un visuel ou d'une vidéo. Mon objectif est d'abord de comprendre votre activité, vos enjeux et les personnes que vous souhaitez toucher. Cette phase de réflexion permet de construire une stratégie solide avant de passer à la création.</p>
+          <ol class="who-methode-steps" data-reveal data-reveal-delay="3">
+            <li class="who-methode-step">
+              <span class="who-methode-step__number" aria-hidden="true">01</span>
+              <h3 class="who-methode-step__title" data-i18n="who.section04.step1.title">Comprendre</h3>
+              <p class="who-methode-step__body" data-i18n="who.section04.step1.body">Chaque collaboration débute par un échange. J'apprends à connaître votre activité, vos objectifs, votre positionnement ainsi que les problématiques auxquelles vous êtes confronté. Cette première étape est essentielle, car une bonne communication commence toujours par une bonne compréhension.</p>
+            </li>
+            <li class="who-methode-step">
+              <span class="who-methode-step__number" aria-hidden="true">02</span>
+              <h3 class="who-methode-step__title" data-i18n="who.section04.step2.title">Construire la stratégie</h3>
+              <p class="who-methode-step__body" data-i18n="who.section04.step2.body">À partir de nos échanges, j'élabore une stratégie de communication adaptée à vos besoins. Je construis un plan clair qui définit les objectifs, les messages, les supports à produire ainsi que la direction créative à suivre avant de commencer toute réalisation.</p>
+            </li>
+            <li class="who-methode-step">
+              <span class="who-methode-step__number" aria-hidden="true">03</span>
+              <h3 class="who-methode-step__title" data-i18n="who.section04.step3.title">Créer et ajuster</h3>
+              <p class="who-methode-step__body" data-i18n="who.section04.step3.body">Je réalise une première proposition. Selon le projet, je présente plusieurs pistes créatives ou plusieurs variantes afin d'obtenir votre retour. Cette étape d'échange permet d'affiner progressivement la création jusqu'à trouver la solution qui correspond réellement à vos attentes.</p>
+            </li>
+            <li class="who-methode-step">
+              <span class="who-methode-step__number" aria-hidden="true">04</span>
+              <h3 class="who-methode-step__title" data-i18n="who.section04.step4.title">Livrer et accompagner</h3>
+              <p class="who-methode-step__body" data-i18n="who.section04.step4.body">Une fois les derniers ajustements effectués, je livre les fichiers finaux dans les formats adaptés. Si le projet le nécessite, je reste disponible pour accompagner sa mise en ligne, son déploiement ou ses futures évolutions.</p>
+            </li>
           </ol>
         </div>
       </div>
@@ -265,6 +395,7 @@
   <script src="js/data-renderer.js" defer></script>
   <script src="js/universe.js" defer></script>
   <script src="js/universe-cursor.js?v=9" defer></script>
+  <script src="js/qui-suis-je-slideshow.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>

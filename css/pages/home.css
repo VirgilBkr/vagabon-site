@@ -141,27 +141,14 @@ body.page-home [data-audio-toggle] {
   display: none !important;
 }
 
-/* Le loader (js/loader.js) précède l'apparition du Hero : il fait partie
-   de "l'arrivée immersive, sombre, cinématographique" décrite comme
-   objectif du site (voir le brief) et doit donc rester sombre lui aussi
-   sur cette page, sans dépendre du nouveau thème clair par défaut du
-   reste du site. Mêmes valeurs qu'auparavant, codées en dur ici pour la
-   même raison que pour le header ci-dessus. */
-body.page-home .loader {
-  background: #000000;
-}
-body.page-home .loader__mark {
-  border-color: #008AC9;
-}
-body.page-home .loader__wordmark {
-  color: #B5B5B5;
-}
-body.page-home .loader__bar-track {
-  background: rgba(255, 255, 255, 0.16);
-}
-body.page-home .loader__bar {
-  background: #008AC9;
-}
+/* Audit cohérence globale (identité visuelle unique du loader/menu, tous
+   écrans de transition confondus) : l'override sombre codé en dur
+   ci-dessus (fond noir, gris #B5B5B5) a été supprimé. Il datait d'une
+   ancienne direction artistique "sombre" de la page d'accueil et créait un
+   flash de couleur incohérent avec le loader clair (--color-background)
+   utilisé sur TOUTES les autres pages du site. Le loader suit désormais
+   partout la même unique source de vérité (.loader dans components.css,
+   variables --color-*), sans exception par page. */
 
 .page-home .c-header__spacer {
   flex: 1 1 auto;

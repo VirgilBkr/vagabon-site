@@ -44,6 +44,9 @@ html.js [data-reveal].is-visible {
 html.js [data-reveal][data-reveal-delay="1"] { transition-delay: 80ms; }
 html.js [data-reveal][data-reveal-delay="2"] { transition-delay: 160ms; }
 html.js [data-reveal][data-reveal-delay="3"] { transition-delay: 240ms; }
+html.js [data-reveal][data-reveal-delay="4"] { transition-delay: 320ms; }
+html.js [data-reveal][data-reveal-delay="5"] { transition-delay: 400ms; }
+html.js [data-reveal][data-reveal-delay="6"] { transition-delay: 480ms; }
 
 @media (prefers-reduced-motion: reduce) {
   html.js [data-reveal] {

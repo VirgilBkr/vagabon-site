@@ -126,7 +126,16 @@
     var bar = document.querySelector("[data-progress-live]");
     var parallaxEnabled = !prefersReducedMotion() && isFinePointerDesktop();
     var items = parallaxEnabled
-      ? Array.prototype.slice.call(document.querySelectorAll("[data-universe-parallax]"))
+      ? Array.prototype.slice.call(document.querySelectorAll("[data-universe-parallax]")).filter(function (el) {
+          // Exclut les visuels de la section Projets : ils vivent désormais
+          // dans un conteneur potentiellement épinglé (position: sticky,
+          // voir initProjectsHorizontalScroll() plus bas). Un décalage
+          // vertical supplémentaire y entrerait en conflit avec le nouveau
+          // mécanisme de progression horizontale, pour un gain visuel
+          // négligeable (amplitude déjà subtile, ±18px). Aucune autre
+          // section du site n'est concernée par ce filtre.
+          return !el.closest("[data-projects-pin]");
+        })
       : [];
 
     if (!bar && items.length === 0) return;
@@ -275,39 +284,388 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* Bandeau témoignages — pause tactile ([data-marquee-touch-pause])     */
+  /* Bandeau témoignages — carousel manuel (précédent/suivant/drag)       */
   /* ------------------------------------------------------------------ */
   /**
-   * Le survol souris met déjà en pause .testimonial-band__track en CSS pur
-   * (voir @media (hover: hover) and (pointer: fine) dans
-   * css/pages/universe.css) — inutile en JS. Sur tactile, il n'existe pas
-   * d'équivalent fiable au survol (voir le commentaire CSS à ce sujet) :
-   * cette fonction ajoute donc une pause COURTE et explicite au toucher,
-   * juste assez longue pour lire la phrase en cours, sans bloquer
-   * indéfiniment le défilement ni ajouter de logique de swipe/scroll manuel
-   * (demande explicite : rester simple). N'introduit aucun nouveau moteur
-   * d'animation : bascule uniquement une classe CSS, l'animation elle-même
-   * reste celle définie par .testimonial-band__track.
+   * Remplace l'ancien défilement 100 % CSS (@keyframes universe-expertise-
+   * marquee, voir css/pages/universe.css) par un pilotage JS du même
+   * transform: translateX(...) sur .testimonial-band__track. Nécessaire
+   * pour répondre à la demande explicite : boutons précédent/suivant qui
+   * sautent IMMÉDIATEMENT au témoignage voisin, y compris pendant le
+   * défilement automatique — une animation CSS pure ne permet pas de lire
+   * ni de modifier sa position courante à la volée.
+   *
+   * Principe conservé à l'identique de l'ancien marquee : .testimonial-
+   * band__track contient deux .testimonial-band__set identiques côte à
+   * côte (le second aria-hidden="true") ; translater d'un plein "set" de
+   * largeur (cycleWidth) ramène visuellement à la position de départ. Le
+   * modulo ci-dessous (wrap()) exploite exactement cette duplication déjà
+   * présente dans le HTML, sans y toucher.
+   *
+   * États de pause, cumulables :
+   *  - survol souris (pointeur fin uniquement, comme l'ancien :hover CSS) ;
+   *  - glissement tactile en cours ;
+   *  - MANUAL_PAUSE_MS après une action manuelle (bouton ou fin de glisser),
+   *    le temps de lire le témoignage affiché.
+   * prefers-reduced-motion : aucun transform n'est appliqué et la fonction
+   * s'arrête après avoir seulement câblé les boutons sur un pas fixe (pas
+   * d'auto-scroll à mettre en pause) — cohérent avec le repli CSS statique
+   * déjà en place pour cette préférence.
    */
-  function initTestimonialTouchPause() {
+  function initTestimonialCarousel() {
     var bands = document.querySelectorAll(".testimonial-band");
-    if (bands.length === 0 || !("ontouchstart" in window)) return;
+    if (bands.length === 0) return;
 
-    var RESUME_DELAY_MS = 4000;
+    var MANUAL_PAUSE_MS = 5000;
+    var MOBILE_BREAKPOINT = "(max-width: 640px)";
+    var FINE_HOVER = "(hover: hover) and (pointer: fine)";
+    var reduceMotionMql = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     bands.forEach(function (band) {
-      var resumeTimer = null;
-      band.addEventListener(
+      var track = band.querySelector(".testimonial-band__track");
+      var viewport = band.querySelector(".testimonial-band__viewport");
+      var prevBtn = band.querySelector("[data-testimonial-prev]");
+      var nextBtn = band.querySelector("[data-testimonial-next]");
+      if (!track || !viewport) return;
+
+      var cycleWidth = 0;
+      function measure() {
+        // Les deux .testimonial-band__set étant identiques, la moitié de
+        // la largeur totale du track équivaut exactement à la distance
+        // d'un cycle complet (même valeur que le translateX(-50%) de
+        // l'ancienne animation CSS).
+        cycleWidth = track.scrollWidth / 2;
+      }
+      measure();
+      if (typeof ResizeObserver === "function") {
+        new ResizeObserver(measure).observe(track);
+      } else {
+        window.addEventListener("resize", measure);
+      }
+
+      function getStep() {
+        var items = track.querySelectorAll(".testimonial-band__item");
+        if (items.length < 2) return cycleWidth || 1;
+        var a = items[0].getBoundingClientRect().left;
+        var b = items[1].getBoundingClientRect().left;
+        return Math.abs(b - a) || cycleWidth || 1;
+      }
+
+      if (reduceMotionMql.matches) {
+        // Rien à faire défiler dans le repli statique : .testimonial-band__nav
+        // est de toute façon masqué en CSS pour cette préférence.
+        return;
+      }
+
+      var offset = 0;
+      var isHoverPaused = false;
+      var isDragging = false;
+      var manualPauseUntil = 0;
+      var dragStartX = 0;
+      var dragStartY = 0;
+      var dragStartOffset = 0;
+      var dragIsHorizontal = null;
+
+      function render() {
+        track.style.transform = "translateX(" + -offset + "px)";
+      }
+
+      function wrap() {
+        if (!cycleWidth) return;
+        offset = ((offset % cycleWidth) + cycleWidth) % cycleWidth;
+      }
+
+      function pauseForInteraction() {
+        manualPauseUntil = performance.now() + MANUAL_PAUSE_MS;
+      }
+
+      function goPrev() {
+        offset -= getStep();
+        wrap();
+        render();
+        pauseForInteraction();
+      }
+
+      function goNext() {
+        offset += getStep();
+        wrap();
+        render();
+        pauseForInteraction();
+      }
+
+      if (prevBtn) prevBtn.addEventListener("click", goPrev);
+      if (nextBtn) nextBtn.addEventListener("click", goNext);
+
+      // Pause au survol — souris fine uniquement (même garde-fou que
+      // l'ancienne règle CSS @media (hover: hover) and (pointer: fine) :
+      // sur tactile, un simple appui peut déclencher un ":hover" persistant
+      // dans certains navigateurs, ce qui figerait le défilement).
+      if (window.matchMedia(FINE_HOVER).matches) {
+        band.addEventListener("mouseenter", function () {
+          isHoverPaused = true;
+        });
+        band.addEventListener("mouseleave", function () {
+          isHoverPaused = false;
+        });
+      }
+
+      // Glissement tactile horizontal : ne capture le geste (et ne bloque
+      // le scroll vertical de la page) qu'une fois le mouvement identifié
+      // comme horizontal, pour ne jamais gêner la lecture de la page sur
+      // mobile.
+      viewport.addEventListener(
         "touchstart",
-        function () {
-          band.classList.add("is-touch-paused");
-          window.clearTimeout(resumeTimer);
-          resumeTimer = window.setTimeout(function () {
-            band.classList.remove("is-touch-paused");
-          }, RESUME_DELAY_MS);
+        function (e) {
+          if (e.touches.length !== 1) return;
+          isDragging = true;
+          dragIsHorizontal = null;
+          dragStartX = e.touches[0].clientX;
+          dragStartY = e.touches[0].clientY;
+          dragStartOffset = offset;
         },
         { passive: true }
       );
+
+      viewport.addEventListener(
+        "touchmove",
+        function (e) {
+          if (!isDragging || e.touches.length !== 1) return;
+          var dx = e.touches[0].clientX - dragStartX;
+          if (dragIsHorizontal === null) {
+            var dy = e.touches[0].clientY - dragStartY;
+            if (Math.abs(dx) < 4 && Math.abs(dy) < 4) return; // pas assez de mouvement pour trancher
+            dragIsHorizontal = Math.abs(dx) > Math.abs(dy);
+          }
+          if (!dragIsHorizontal) return;
+          e.preventDefault();
+          offset = dragStartOffset - dx;
+          wrap();
+          render();
+        },
+        { passive: false }
+      );
+
+      function endDrag() {
+        if (!isDragging) return;
+        isDragging = false;
+        if (dragIsHorizontal) pauseForInteraction();
+        dragIsHorizontal = null;
+      }
+      viewport.addEventListener("touchend", endDrag, { passive: true });
+      viewport.addEventListener("touchcancel", endDrag, { passive: true });
+
+      var lastTs = null;
+      function frame(ts) {
+        if (lastTs === null) lastTs = ts;
+        var dt = ts - lastTs;
+        lastTs = ts;
+        if (!isDragging && !isHoverPaused && ts > manualPauseUntil && cycleWidth) {
+          var cycleDurationMs = window.matchMedia(MOBILE_BREAKPOINT).matches ? 64000 : 100000;
+          offset += (cycleWidth / cycleDurationMs) * dt;
+          wrap();
+          render();
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Projets — scroll horizontal épinglé (desktop) / swipe natif (mobile) */
+  /* ------------------------------------------------------------------ */
+  /**
+   * Voir le grand commentaire HTML au-dessus de .universe-projects__pin
+   * dans universe.html, et le bloc CSS correspondant (juste avant
+   * .universe-project) dans css/pages/universe.css, pour le détail des 3
+   * présentations possibles. Cette fonction ne fait qu'ajouter/retirer les
+   * classes .is-projects-pinned / .is-projects-swipe sur [data-projects-pin]
+   * et piloter la progression (0..panelCount-1) :
+   *  - desktop (pointeur fin, ≥901px) : progression dérivée de
+   *    window.scrollY — scroll natif, jamais intercepté (aucun
+   *    preventDefault sur wheel), conformément au DIAGNOSTIC COMPARATIF en
+   *    tête de ce fichier ;
+   *  - tactile/mobile/tablette : progression dérivée de track.scrollLeft —
+   *    scroll natif du conteneur lui-même (overflow-x + scroll-snap CSS,
+   *    voir universe.css), totalement indépendant du scroll de la page.
+   * Sous prefers-reduced-motion, ou si la structure attendue (pin/sticky/
+   * track + au moins 2 panneaux) est absente, la fonction s'arrête sans
+   * ajouter aucune classe : le repli CSS (empilement vertical d'origine)
+   * reste actif tel quel, mouvement le plus simple possible.
+   */
+  function initProjectsHorizontalScroll() {
+    var pin = document.querySelector("[data-projects-pin]");
+    var sticky = document.querySelector("[data-projects-sticky]");
+    var track = document.querySelector("[data-projects-track]");
+    if (!pin || !sticky || !track) return;
+
+    var panels = Array.prototype.slice.call(track.children).filter(function (el) {
+      return el.classList.contains("universe-project");
+    });
+    var panelCount = panels.length;
+    if (panelCount < 2 || prefersReducedMotion()) return;
+
+    var currentEl = document.querySelector("[data-projects-current]");
+    var fillEl = document.querySelector("[data-projects-fill]");
+
+    var desktopMql = window.matchMedia("(min-width: 901px)");
+    var finePointerMql = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    function isDesktop() {
+      return desktopMql.matches && finePointerMql.matches;
+    }
+
+    function pad2(n) {
+      return n < 10 ? "0" + n : String(n);
+    }
+
+    function updateIndicator(progress) {
+      var index = Math.min(panelCount - 1, Math.max(0, Math.round(progress)));
+      if (currentEl) currentEl.textContent = pad2(index + 1);
+      if (fillEl) fillEl.style.transform = "translateX(" + index * 100 + "%)";
+    }
+
+    var mode = null; // "pinned" | "swipe"
+    var pinTop = 0;
+    var pinnedHeight = 0;
+    var scrollRange = 1;
+
+    /* ---- Mode desktop : épinglage + translation horizontale ---------- */
+
+    function measurePinned() {
+      // La fenêtre épinglée fait exactement la hauteur du viewport, jamais
+      // plus : un position: sticky ne peut de toute façon jamais afficher
+      // plus que window.innerHeight à l'écran pendant qu'il est épinglé
+      // (son sommet reste fixé à top: 0 tout du long) — lui donner une
+      // hauteur supérieure au viewport (ce qui a été essayé, en prenant le
+      // plus grand des 3 panneaux) ne rend PAS le surplus visible pour
+      // autant : ce surplus reste en permanence sous le pli, invisible et
+      // inatteignable puisque l'élément ne bouge plus tant qu'il est
+      // épinglé. .universe-projects__sticky centre déjà son contenu
+      // verticalement (align-items: center) : si un panneau est plus haut
+      // que le viewport (cas rare, uniquement le Projet 01 sur de très
+      // petites hauteurs d'écran), le dépassement est ainsi réparti
+      // symétriquement en haut ET en bas plutôt que perdu uniquement en bas.
+      pinnedHeight = window.innerHeight;
+      sticky.style.height = pinnedHeight + "px";
+      pin.style.height = pinnedHeight * panelCount + "px";
+
+      var rect = pin.getBoundingClientRect();
+      pinTop = rect.top + window.scrollY;
+      scrollRange = Math.max(1, pinnedHeight * (panelCount - 1));
+    }
+
+    function applyPinnedProgress() {
+      var raw = (window.scrollY - pinTop) / scrollRange;
+      raw = Math.min(Math.max(raw, 0), 1);
+      var progress = raw * (panelCount - 1);
+      var stepPct = 100 / panelCount;
+      track.style.transform = "translateX(" + -progress * stepPct + "%)";
+      panels.forEach(function (panel, i) {
+        var dist = Math.min(1, Math.abs(progress - i));
+        panel.style.opacity = String(1 - dist * 0.6);
+      });
+      updateIndicator(progress);
+    }
+
+    var pinnedTicking = false;
+    function onPinnedScroll() {
+      if (pinnedTicking) return;
+      pinnedTicking = true;
+      window.requestAnimationFrame(function () {
+        pinnedTicking = false;
+        applyPinnedProgress();
+      });
+    }
+
+    function setupPinned() {
+      pin.classList.add("is-projects-pinned");
+      measurePinned();
+      applyPinnedProgress();
+      window.addEventListener("scroll", onPinnedScroll, { passive: true });
+    }
+
+    function teardownPinned() {
+      pin.classList.remove("is-projects-pinned");
+      pin.style.height = "";
+      sticky.style.height = "";
+      track.style.transform = "";
+      panels.forEach(function (panel) { panel.style.opacity = ""; });
+      window.removeEventListener("scroll", onPinnedScroll);
+    }
+
+    /* ---- Mode tactile/mobile : swipe natif, indicateur seul ----------- */
+
+    function applySwipeProgress() {
+      var max = track.scrollWidth - track.clientWidth;
+      var progress = max > 0 ? (track.scrollLeft / max) * (panelCount - 1) : 0;
+      updateIndicator(progress);
+    }
+
+    var swipeTicking = false;
+    function onSwipeScroll() {
+      if (swipeTicking) return;
+      swipeTicking = true;
+      window.requestAnimationFrame(function () {
+        swipeTicking = false;
+        applySwipeProgress();
+      });
+    }
+
+    function setupSwipe() {
+      pin.classList.add("is-projects-swipe");
+      applySwipeProgress();
+      track.addEventListener("scroll", onSwipeScroll, { passive: true });
+    }
+
+    function teardownSwipe() {
+      pin.classList.remove("is-projects-swipe");
+      track.removeEventListener("scroll", onSwipeScroll);
+    }
+
+    /* ---- Bascule entre modes, y compris au redimensionnement ---------- */
+
+    function refreshMode() {
+      var desired = isDesktop() ? "pinned" : "swipe";
+      if (desired === mode) {
+        // Toujours re-mesurer : la hauteur naturelle des panneaux ou la
+        // largeur du viewport a pu changer (redimensionnement, rotation).
+        if (mode === "pinned") { measurePinned(); applyPinnedProgress(); }
+        else { applySwipeProgress(); }
+        return;
+      }
+      if (mode === "pinned") teardownPinned();
+      if (mode === "swipe") teardownSwipe();
+      mode = desired;
+      if (mode === "pinned") setupPinned();
+      else setupSwipe();
+    }
+
+    refreshMode();
+    window.addEventListener("resize", refreshMode);
+    // Une police ou une image encore en cours de chargement au premier
+    // calcul peut légèrement modifier la hauteur naturelle des panneaux
+    // (mêmes précautions que measure() dans initScrollEffects ci-dessus) :
+    // une re-mesure ponctuelle à "load" suffit, jamais répétée ensuite.
+    window.addEventListener("load", refreshMode);
+
+    // Accessibilité clavier : si un élément focusable à l'intérieur d'un
+    // panneau reçoit le focus (Tab) alors qu'il n'est pas le panneau
+    // actuellement visible, on l'amène en vue — utile dès qu'un futur
+    // Projet 02/03 recevra une vraie page dédiée (donc un lien focusable).
+    // Le Projet 01 (seul lien réel actuellement) est toujours le premier
+    // panneau : ce cas ne se présente pas encore en pratique, mais le
+    // mécanisme est déjà en place pour rester accessible par construction.
+    track.addEventListener("focusin", function (e) {
+      var panel = e.target.closest ? e.target.closest(".universe-project") : null;
+      if (!panel) return;
+      var index = panels.indexOf(panel);
+      if (index < 0) return;
+      if (mode === "pinned") {
+        window.scrollTo({ top: pinTop + index * pinnedHeight, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+      } else if (mode === "swipe") {
+        panel.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", inline: "start", block: "nearest" });
+      }
     });
   }
 
@@ -317,7 +675,8 @@
     initScrollEffects();
     initWordReveal();
     initSceneReveal();
-    initTestimonialTouchPause();
+    initTestimonialCarousel();
+    initProjectsHorizontalScroll();
   }
 
   if (document.readyState === "loading") {

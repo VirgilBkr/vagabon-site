@@ -140,6 +140,33 @@
   --z-menu: 800;
   --z-loader: 1000;
   --z-toast: 950;
+
+  /* ---- Identité "chrome" globale : loader + menu plein écran + transitions
+     entre pages (section 6bis, audit cohérence loader/menu, 2026).
+     Source de vérité UNIQUE pour ces composants transverses uniquement —
+     ne remplace PAS --color-background/--color-text/--color-accent
+     ci-dessus, qui restent le système de couleurs du contenu des pages
+     (non concerné par cette correction). Valeurs reprises À L'IDENTIQUE de
+     la charte récente déjà en place et vérifiée par calcul de contraste
+     WCAG sur les pages représentatives du site (universe.html,
+     qui-suis-je.html via body.page-universe, contact.html et les pages
+     légales via leurs jetons --vc-* et --lg-* désormais alignés ci-dessous) :
+     aucune couleur inventée. --color-transition-bg est le fond glacier
+     #AEC8D8 utilisé comme fond de page sur la majorité du site aujourd'hui ;
+     --color-transition-text/--text-muted sont les tons anthracite
+     vérifiés ≥ 4.5:1 sur ce fond (7.48:1 et 4.52:1) ; --color-transition-
+     accent est le doré sombre "survol chaud" vérifié 5.43:1 (le doré vif
+     --u-warm #C7A34E, réservé aux fonds sombres des cartes/Hero, échoue à
+     1.37:1 sur ce fond clair et n'est donc pas repris ici). */
+  --color-transition-bg: #AEC8D8;
+  --color-transition-surface: #AEC8D8; /* pas de sous-surface distincte identifiée dans la charte actuelle */
+  --color-transition-text: #2B3236;
+  --color-transition-text-muted: #495359;
+  --color-transition-accent: #5A420F;
+  --color-transition-border: rgba(43, 50, 54, 0.18);
+  --color-transition-border-strong: rgba(43, 50, 54, 0.32);
+  --color-transition-overlay: rgba(174, 200, 216, 0.94);
+  --color-loader-progress: #5A420F;
 }
 
 /* ---- Thème sombre (compatibilité) -------------------------------------------

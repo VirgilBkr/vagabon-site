@@ -121,6 +121,21 @@
   gap: var(--space-sm);
 }
 
+/* Icônes réseaux sociaux dans le header (déplacées depuis la section
+   Contact de universe.html) : simple conteneur flex au même espacement que
+   .c-header__actions, rempli par js/data-renderer.js avec des .c-icon-btn
+   — aucun style propre, elles héritent donc exactement des couleurs, tailles
+   et hover déjà définis pour .c-icon-btn ci-dessous (et de tout override
+   propre à une page, ex. body.page-universe .c-icon-btn). Masqué ≤768px par
+   la règle globale existante .c-header__actions .c-icon-btn:not(.c-menu-toggle)
+   (voir css/responsive.css), comme les autres actions du header : les icônes
+   restent accessibles sur mobile via le menu plein écran. */
+.c-header__social {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
 .c-icon-btn {
   display: inline-flex;
   align-items: center;
@@ -179,11 +194,17 @@
 }
 
 /* Menu plein écran */
+/* Palette : jetons --color-transition-* (variables.css), même source de
+   vérité que .loader ci-dessus — identité "chrome" récente du site (fond
+   glacier + anthracite + doré sombre), strictement identique quelle que
+   soit la page depuis laquelle le menu est ouvert. La hiérarchie visuelle
+   entre liens principaux / numéros / sous-labels est portée par l'opacité
+   (une seule couleur de base), pas par des tons supplémentaires. */
 .c-nav-fullscreen {
   position: fixed;
   inset: 0;
   z-index: var(--z-menu);
-  background: var(--color-background);
+  background: var(--color-transition-bg);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -227,30 +248,32 @@
   gap: var(--space-sm);
   font-family: var(--font-display);
   font-size: clamp(2rem, 5.5vw, 4rem);
-  color: var(--color-text-muted);
+  color: var(--color-transition-text-muted);
   padding-block: var(--space-2xs);
   border-bottom: 1px solid transparent;
 }
 
 .c-nav-fullscreen__link:hover,
 .c-nav-fullscreen__link:focus-visible {
-  color: var(--color-text);
+  color: var(--color-transition-accent);
 }
 
 .c-nav-fullscreen__link[aria-current="page"] {
-  color: var(--color-accent);
+  color: var(--color-transition-accent);
 }
 
 .c-nav-fullscreen__link-number {
   font-size: var(--font-size-small);
-  color: var(--color-text-subtle);
+  color: var(--color-transition-text-muted);
+  opacity: 0.65;
   font-family: var(--font-body);
 }
 
 .c-nav-fullscreen__link-sub {
   font-family: var(--font-body);
   font-size: var(--font-size-small);
-  color: var(--color-text-subtle);
+  color: var(--color-transition-text-muted);
+  opacity: 0.65;
   margin-left: auto;
   display: none;
 }
@@ -264,13 +287,58 @@
 }
 
 .c-nav-fullscreen__meta {
-  color: var(--color-text-muted);
+  color: var(--color-transition-text-muted);
+  opacity: 0.65;
   font-size: var(--font-size-small);
 }
 
 .c-nav-fullscreen__social {
   display: flex;
   gap: var(--space-sm);
+}
+
+/* Boutons/icônes intégrés au menu (bouton "Réserver un appel", lien
+   e-mail, bouton fermer, icônes sociales) : les classes .c-btn--primary/
+   --ghost et .c-icon-btn sont partagées avec le reste du site (header,
+   contenu des pages), donc non modifiées elles-mêmes. Ces overrides sont
+   scopés au conteneur .c-nav-fullscreen — pas à une page — pour ne changer
+   que leur rendu À L'INTÉRIEUR du menu, sur toutes les pages identiquement. */
+.c-nav-fullscreen .c-btn--primary {
+  background: var(--color-transition-bg);
+  border-color: var(--color-transition-text-muted);
+  color: var(--color-transition-text-muted);
+}
+
+.c-nav-fullscreen .c-btn--primary:hover,
+.c-nav-fullscreen .c-btn--primary:focus-visible {
+  background: var(--color-transition-text-muted);
+  border-color: var(--color-transition-text-muted);
+  color: var(--color-transition-bg);
+}
+
+.c-nav-fullscreen .c-btn--ghost {
+  color: var(--color-transition-accent);
+}
+
+.c-nav-fullscreen .c-btn--ghost:hover,
+.c-nav-fullscreen .c-btn--ghost:focus-visible {
+  color: var(--color-transition-text);
+}
+
+.c-nav-fullscreen [data-menu-close],
+.c-nav-fullscreen .c-icon-btn {
+  border-color: var(--color-transition-border-strong);
+  color: var(--color-transition-text-muted);
+  background: transparent;
+}
+
+.c-nav-fullscreen [data-menu-close]:hover,
+.c-nav-fullscreen [data-menu-close]:focus-visible,
+.c-nav-fullscreen .c-icon-btn:hover,
+.c-nav-fullscreen .c-icon-btn:focus-visible {
+  border-color: var(--color-transition-accent);
+  color: var(--color-transition-accent);
+  background: transparent;
 }
 
 @media (max-width: 860px) {
@@ -799,11 +867,16 @@
 /* Loader                                                                    */
 /* ---------------------------------------------------------------------- */
 
+/* Palette : jetons --color-transition-* (variables.css), identité "chrome"
+   récente du site (fond glacier + anthracite + doré sombre), distincte des
+   jetons --color-background/--color-accent utilisés par le contenu des
+   pages. Visible dès la première frame : ces variables sont définies dans
+   :root, sans dépendance à un attribut posé par JavaScript. */
 .loader {
   position: fixed;
   inset: 0;
   z-index: var(--z-loader);
-  background: var(--color-background);
+  background: var(--color-transition-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -821,12 +894,12 @@
   width: 56px;
   height: 56px;
   border-radius: var(--radius-md);
-  border: 2px solid var(--color-accent);
+  border: 2px solid var(--color-transition-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-display);
-  color: var(--color-accent);
+  color: var(--color-transition-accent);
   transform: rotate(-6deg);
 }
 
@@ -834,13 +907,13 @@
   font-family: var(--font-display);
   font-size: 1.1rem;
   letter-spacing: 0.08em;
-  color: var(--color-text-muted);
+  color: var(--color-transition-text-muted);
 }
 
 .loader__bar-track {
   width: 160px;
   height: 2px;
-  background: var(--color-border);
+  background: var(--color-transition-border);
   overflow: hidden;
   border-radius: var(--radius-full);
 }
@@ -848,7 +921,7 @@
 .loader__bar {
   height: 100%;
   width: 0%;
-  background: var(--color-accent);
+  background: var(--color-loader-progress);
   animation: vg-loader-bar 1.1s var(--ease-standard) forwards;
 }
 

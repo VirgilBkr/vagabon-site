@@ -29,8 +29,8 @@
    que celles déjà validées dans contact.css pour un texte sombre sur ce
    même fond clair (#AEC8D8) : #2B3236 ≈ 7.48:1 (titres), #495359 ≈ 4.52:1
    (texte courant, labels, liens), #5A420F ≈ 5.43:1 (survol "chaud"). Les
-   tons clairs (--lg-menu-*) restent réservés au menu plein écran, seule
-   zone sombre de ces pages.
+   Le menu plein écran n'a plus de palette locale (voir plus bas) : il
+   utilise l'unique composant partagé, indépendant du fond de ces pages.
    ========================================================================== */
 
 body.page-legal {
@@ -43,14 +43,6 @@ body.page-legal {
   --lg-accent-soft: rgba(11, 93, 130, 0.1);
   --lg-warm-text: #5A420F;       /* 5.43:1 — survol de texte (teinte "chaude") */
   --lg-warm-soft: rgba(90, 66, 15, 0.14);
-
-  /* Tons CLAIRS — réservés au menu plein écran (fond sombre) */
-  --lg-surface: #0E131C;
-  --lg-menu-ink: #F3F1EA;
-  --lg-menu-ink-subtle: #82868D;
-  --lg-menu-line: rgba(243, 241, 234, 0.14);
-  --lg-menu-line-strong: rgba(243, 241, 234, 0.28);
-  --lg-menu-warm: #C7A34E;
 
   background: var(--lg-bg);
   color: var(--lg-ink);
@@ -153,42 +145,18 @@ body.page-legal .c-btn--secondary:hover {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Menu plein écran — fond sombre fixe, même choix que universe.html/      */
-/* contact.html : seule zone de ces pages où les tons CLAIRS sont utilisés. */
-/* Contenu et items du menu inchangés (Accueil / Univers) : uniquement les */
-/* couleurs sont harmonisées ici.                                          */
-/* ---------------------------------------------------------------------- */
-body.page-legal .c-nav-fullscreen {
-  background: var(--lg-surface);
-  color: var(--lg-menu-ink);
-}
-
-body.page-legal .c-nav-fullscreen__link {
-  color: var(--lg-menu-ink);
-  border-color: var(--lg-menu-line);
-}
-
-body.page-legal .c-nav-fullscreen__link:hover,
-body.page-legal .c-nav-fullscreen__link:focus-visible {
-  color: var(--lg-menu-warm);
-}
-
-body.page-legal .c-nav-fullscreen__meta {
-  color: var(--lg-menu-ink-subtle);
-}
-
-body.page-legal .c-nav-fullscreen [data-menu-close],
-body.page-legal .c-nav-fullscreen .c-icon-btn {
-  border-color: var(--lg-menu-line-strong);
-  color: var(--lg-menu-ink);
-}
-
-/* Le lien e-mail dans le menu (.c-btn--ghost) reste sur le style bleu
-   accent global (var(--color-accent), components.css) : il repose sur le
-   fond SOMBRE du menu plein écran, où ce bleu fonctionne bien et n'a
-   jamais été signalé comme un problème — seul le "bleu vif sur fond
-   clair" (le lien "Retour à l'univers" ci-dessous) est concerné par cette
-   demande. Aucune règle nécessaire ici : comportement déjà correct. */
+/* Menu plein écran — audit cohérence globale : le fond sombre fixe qui     */
+/* était défini ici (et dupliqué à l'identique dans contact.css et          */
+/* universe.css, chacun avec ses propres variables --lg-*/--vc-*/--u-*)     */
+/* a été supprimé. Ce composant est un overlay plein écran opaque qui       */
+/* recouvre entièrement la page : il n'a donc aucune raison de s'adapter    */
+/* au fond glacial de ces pages en particulier. Le menu suit désormais      */
+/* partout l'unique composant partagé (.c-nav-fullscreen dans               */
+/* components.css), identité strictement identique quelle que soit la      */
+/* page depuis laquelle il est ouvert. Le lien e-mail (.c-btn--ghost)       */
+/* garde son style bleu accent global par défaut — déjà celui utilisé sans  */
+/* problème sur toutes les pages qui n'avaient pas cet override (accueil,   */
+/* qui-suis-je, ressources, face-à-face). */
 
 /* ---------------------------------------------------------------------- */
 /* Lien "← Retour à l'univers" — l'ancien bleu vif venait du composant     */

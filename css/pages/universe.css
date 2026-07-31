@@ -267,70 +267,19 @@ body.page-universe .c-btn--ghost:hover {
   opacity: 1;
 }
 
-/* Menu plein écran — harmonisation avec la nouvelle identité visuelle.
-   Palette imposée (valeurs HEX littérales, demandées explicitement plutôt
-   que des variables) : fond #AEC7D8, textes/contours/icônes #647279.
-   La hiérarchie visuelle qui existait déjà (liens principaux vs
-   numéros/meta/sous-labels plus discrets) n'était pas portée par de
-   l'opacité mais par des tokens de couleur distincts (--color-text-muted
-   vs --color-text-subtle) : elle est donc recréée ici avec la MÊME
-   couleur de base #647279 pour tout, et de l'opacité pour les niveaux
-   secondaires/tertiaires — exactement le mécanisme suggéré par la
-   consigne ("utilise #647279 comme couleur de base et conserve
-   éventuellement les niveaux d'opacité nécessaires"). Aucune autre
-   couleur (blanc, noir, bleu accent, ancien #495359) ne subsiste. */
-body.page-universe .c-nav-fullscreen {
-  background: #AEC7D8;
-}
-
-body.page-universe .c-nav-fullscreen__link {
-  color: #647279;
-  opacity: 0.72;
-}
-
-body.page-universe .c-nav-fullscreen__link:hover,
-body.page-universe .c-nav-fullscreen__link:focus-visible {
-  opacity: 1;
-}
-
-/* Lien de la page courante : plus aucun accent bleu (hors palette).
-   Distinction conservée via opacité pleine + le poids de police déjà
-   défini par ailleurs pour [aria-current], sans ajouter de couleur. */
-body.page-universe .c-nav-fullscreen__link[aria-current="page"] {
-  color: #647279;
-  opacity: 1;
-}
-
-body.page-universe .c-nav-fullscreen__link-number,
-body.page-universe .c-nav-fullscreen__link-sub,
-body.page-universe .c-nav-fullscreen__meta {
-  color: #647279;
-  opacity: 0.6;
-}
-
-/* Bouton fermer (X) et boutons sociaux : scindés du reste des
-   .c-icon-btn de la page (header : FR, luminosité, menu-toggle, qui
-   restent en #495359 comme fixé précédemment) via le sélecteur
-   .c-nav-fullscreen, pour ne modifier QUE l'intérieur du menu. */
-body.page-universe .c-nav-fullscreen [data-menu-close] {
-  border-color: #647279;
-  color: #647279;
-}
-
-body.page-universe .c-nav-fullscreen .c-icon-btn {
-  border-color: #647279;
-  color: #647279;
-  background: transparent;
-}
-
-body.page-universe .c-nav-fullscreen [data-menu-close]:hover,
-body.page-universe .c-nav-fullscreen [data-menu-close]:focus-visible,
-body.page-universe .c-nav-fullscreen .c-icon-btn:hover,
-body.page-universe .c-nav-fullscreen .c-icon-btn:focus-visible {
-  background: #647279;
-  color: #AEC7D8;
-  border-color: #647279;
-}
+/* Menu plein écran — audit cohérence globale (voir aussi contact.css et
+   legal.css) : la palette locale imposée ici (fond #AEC7D8, textes
+   #647279) a été supprimée. Ce composant est un overlay plein écran,
+   opaque, qui recouvre entièrement la page en dessous — il n'a donc,
+   contrairement au header, AUCUNE raison fonctionnelle de s'adapter au
+   fond de la page depuis laquelle il est ouvert. Trois variantes
+   différentes coexistaient sur le site (celle-ci, une variante sombre sur
+   contact.html/les pages légales, et le composant partagé clair par
+   défaut ailleurs) : le menu suit désormais partout l'unique composant
+   partagé (.c-nav-fullscreen dans components.css, variables --color-*),
+   pour une identité strictement identique quelle que soit la page
+   d'ouverture. .universe-nav__back ci-dessous n'est PAS concerné (lien
+   affiché dans le contenu de page, pas dans le menu) et reste inchangé. */
 
 .universe-nav__back {
   display: inline-flex;
@@ -357,31 +306,14 @@ body.page-universe .c-progress {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Loader — variante sombre, pour une entrée dans l'univers sans flash      */
-/* clair (le composant partagé utilise var(--color-background), clair par  */
-/* défaut ailleurs sur le site : sans cette règle, un flash clair d'environ */
-/* une seconde apparaîtrait avant le contenu sombre de cette page).         */
+/* Loader — audit cohérence globale : l'ancienne variante sombre codée ici */
+/* (fond --u-bg, accents --u-warm/--u-ink) a été supprimée. Elle créait,   */
+/* selon la page visitée, une TROISIÈME palette de loader différente de    */
+/* celle du reste du site — exactement le défaut de cohérence à corriger.  */
+/* Le loader suit désormais partout l'unique composant partagé            */
+/* (.loader dans components.css, variables --color-*), sans variante par   */
+/* page : plus aucun flash de couleur incohérente entre deux navigations.  */
 /* ---------------------------------------------------------------------- */
-body.page-universe .loader {
-  background: var(--u-bg);
-}
-
-body.page-universe .loader__mark {
-  border-color: var(--u-warm);
-  color: var(--u-ink);
-}
-
-body.page-universe .loader__wordmark {
-  color: var(--u-ink-muted);
-}
-
-body.page-universe .loader__bar-track {
-  background: var(--u-line);
-}
-
-body.page-universe .loader__bar {
-  background: var(--u-warm);
-}
 
 /* ---------------------------------------------------------------------- */
 /* Rythme général des sections                                             */
@@ -1258,6 +1190,205 @@ html.js .universe-intro__cue-line::after {
   }
 }
 
+/* ========================================================================
+   REFONTE — SCROLL HORIZONTAL ÉPINGLÉ DES 3 PROJETS (demande explicite)
+   ========================================================================
+   .universe-projects__pin > .universe-projects__sticky > .universe-
+   projects__list enveloppent désormais les 3 <article
+   class="universe-project universe-project--showcase"> (inchangés — voir
+   universe.html). Trois présentations, toutes pilotées par des classes
+   ajoutées/retirées par JS (js/universe.js → initProjectsHorizontalScroll()),
+   jamais par une media query CSS seule (la détection tactile/pointeur fin
+   ne peut être fiable qu'en JS) :
+
+   1) BASE / REPLI (aucune classe) — pas de JS, échec d'initialisation, ou
+      prefers-reduced-motion : .universe-projects__pin/__sticky ne sont que
+      de simples boîtes position:relative sans effet ; .universe-projects__list
+      garde EXACTEMENT sa règle historique ci-dessus (empilement vertical,
+      gap, margin-top) — c'est le mouvement le plus simple possible, donc
+      déjà conforme à la demande de réduction d'animation.
+
+   2) .is-projects-pinned (desktop / pointeur fin) — épinglage réel
+      (position: sticky) le temps de parcourir les 3 projets, piloté par la
+      lecture PASSIVE du scroll vertical natif (aucun preventDefault sur
+      wheel — voir le DIAGNOSTIC COMPARATIF en tête de js/universe.js, dont
+      la leçon est délibérément respectée ici : ne jamais remplacer le
+      scroll natif). Hauteurs de .pin/.sticky fixées en JS (dépendent du
+      contenu réel de chaque projet, jamais codées en dur ici).
+
+   3) .is-projects-swipe (tactile / mobile / tablette) — pas d'épinglage :
+      .universe-projects__list devient elle-même le conteneur défilant
+      (overflow-x + scroll-snap natifs), totalement indépendant du scroll
+      vertical de la page — deux axes distincts, aucun conflit possible.
+      Aucun carrousel interne n'existe dans ces vignettes (elles sont
+      cliquables mais statiques, voir .project-showcase__item plus bas) :
+      aucune zone de geste concurrente à isoler.
+   ======================================================================== */
+
+.universe-projects__pin {
+  position: relative;
+}
+
+.universe-projects__sticky {
+  position: relative;
+}
+
+/* Repère de progression : invisible en repli statique (les 3 projets se
+   lisent déjà dans l'ordre vertical, rien à indiquer). */
+.universe-projects__indicator {
+  display: none;
+}
+
+/* ---- 2) Desktop / pointeur fin -------------------------------------- */
+
+.is-projects-pinned .universe-projects__sticky {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.is-projects-pinned .universe-projects__list {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 0;
+  margin-top: 0;
+  /* flex: 0 0 300% (pas seulement width: 300%) : la piste est elle-même un
+     item flex de .universe-projects__sticky (display:flex). Sans
+     flex-shrink: 0 explicite, le flex-shrink par défaut (1) réduisait la
+     piste sous sa largeur voulue dès que la somme des min-content de ses
+     3 panneaux ne suffisait pas à la "défendre" — constaté : piste ramenée
+     à ~205 % au lieu de 300 %, donc panneaux plus étroits que la fenêtre
+     épinglée et bord du panneau suivant visible en permanence. flex-basis:
+     300% remplace width: 300% (comportement identique pour un item flex en
+     ligne, mais c'est flex-basis qui est réellement consulté par
+     l'algorithme de flex). */
+  flex: 0 0 300%;
+  width: 300%;
+  overflow-x: visible;
+  will-change: transform;
+}
+
+.is-projects-pinned .universe-projects__list > .universe-project {
+  /* Aucun padding-inline propre ici : chaque panneau occupe exactement
+     100%/3 de la piste, elle-même à 300% de .universe-projects__sticky —
+     donc chaque panneau mesure exactement la même largeur (celle de
+     .universe-section__inner, déjà paddée) qu'avant cette refonte, sans
+     rien resserrer.
+     min-width: 0 est INDISPENSABLE : par défaut, un enfant flex a
+     min-width: auto, ce qui empêche le navigateur de le réduire sous la
+     largeur minimale de son propre contenu (min-content) — même avec un
+     flex-basis explicite. Le Projet 01 (contenu réel, large composition
+     de médias) a un min-content bien supérieur à 100 %/3 de la piste : sans
+     cette règle, son panneau s'élargissait de force au détriment des
+     Projets 02/03 (constaté : 1063px / 729px / 729px au lieu de trois tiers
+     égaux), ce qui décalait tout le calcul de progression horizontale. */
+  flex: 0 0 calc(100% / 3);
+  width: calc(100% / 3);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.is-projects-pinned .universe-projects__indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  position: absolute;
+  top: var(--space-md);
+  right: clamp(24px, 5vw, 64px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ---- 3) Tactile / mobile / tablette ----------------------------------- */
+
+.is-projects-swipe .universe-projects__list {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0;
+  margin-top: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.is-projects-swipe .universe-projects__list::-webkit-scrollbar {
+  display: none;
+}
+
+.is-projects-swipe .universe-projects__list > .universe-project {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  box-sizing: border-box;
+}
+
+.is-projects-swipe .universe-projects__indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  position: relative;
+  margin-top: var(--space-md);
+}
+
+/* ---- Style commun du repère (compteur / ligne / flèche) --------------- */
+
+.universe-projects__indicator {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-eyebrow);
+  color: var(--u-ink-subtle);
+}
+
+.universe-projects__indicator-count {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.universe-projects__indicator-track {
+  display: inline-block;
+  width: 48px;
+  height: 1px;
+  background: var(--u-line);
+  position: relative;
+  overflow: hidden;
+}
+
+.universe-projects__indicator-fill {
+  position: absolute;
+  inset: 0;
+  width: calc(100% / 3);
+  background: var(--u-ink-subtle);
+}
+
+.universe-projects__indicator-arrow {
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .universe-projects__pin,
+  .universe-projects__sticky {
+    position: static !important;
+    height: auto !important;
+  }
+  .universe-projects__list {
+    transform: none !important;
+  }
+  .universe-projects__list > .universe-project {
+    opacity: 1 !important;
+  }
+  .universe-projects__indicator {
+    display: none !important;
+  }
+}
+
 .universe-project {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -1658,15 +1789,32 @@ html.js [data-reveal].universe-project.is-visible .universe-project__media::afte
   align-items: center;
 }
 
-/* display: contents : le <a> disparaît de l'arbre de boîtes (aucune boîte
-   propre, aucun impact visuel) mais laisse ses enfants (.project-showcase__intro,
-   .project-showcase__visual, .universe-project__discover) devenir directement
-   les items du conteneur flex .universe-project--showcase, exactement comme
-   avant l'ajout de ce lien. Le clic reste géré au niveau DOM (une seule
-   cible couvrant tout le contenu), donc toute la vignette — titre, visuels,
-   texte, zones vides — ouvre bien face-a-face.html, sans JavaScript dédié. */
+/* CORRECTIF ACCESSIBILITÉ (refonte scroll horizontal) : display: contents
+   a été retiré ici. Un <a>/<div> en display: contents ne génère aucune
+   boîte propre — dans plusieurs moteurs de rendu, un élément interactif
+   ainsi affiché devient purement et simplement infocalisable au clavier
+   (Tab le saute entièrement, même avec tabindex explicite), ce qui rendait
+   le Projet 01 injoignable au clavier. Remplacé par un vrai conteneur flex
+   qui reproduit EXACTEMENT la même disposition que l'ancien display:
+   contents produisait : même direction (column), même centrage
+   (align-items: center) que .universe-project--showcase, et surtout une
+   largeur EXPLICITE de 100 % — indispensable, car sans elle ce nouveau
+   conteneur (align-items: center, donc sans étirement automatique)
+   adopterait une largeur "au contenu", ce qui casserait le calcul en
+   pourcentage de .project-showcase__visual (width: min(92%, 1500px))
+   juste en dessous : avec width: 100% ici, ce calcul retombe exactement
+   sur les mêmes pixels qu'avant, aucune proportion ne change. Seule
+   conséquence en cascade : le sélecteur d'enfant direct
+   ".universe-project--showcase > .universe-project__discover" ci-dessous
+   a dû passer en sélecteur descendant (.universe-project__discover n'est
+   plus un enfant direct de .universe-project--showcase, mais de ce nouveau
+   conteneur) — aucun autre sélecteur du fichier ne dépendait d'une
+   relation d'enfant direct à travers .project-showcase__link (vérifié). */
 .project-showcase__link {
-  display: contents;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 /* --- Bloc titre + description, au-dessus de la composition --- */
@@ -1784,7 +1932,7 @@ html.js [data-reveal].universe-project.is-visible .universe-project__media::afte
    (pensé pour un enchaînement vertical classique dans les projets
    03/04) par cette valeur scopée : une seule source de vérité pour cet
    espacement précis. */
-.universe-project--showcase > .universe-project__discover {
+.universe-project--showcase .universe-project__discover {
   margin-top: var(--space-sm);
 }
 
@@ -2296,6 +2444,38 @@ html.js [data-reveal].universe-project.is-visible .universe-project__discover {
 
 .testimonial-band__head {
   margin-bottom: var(--space-xl);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.testimonial-band__head-copy {
+  min-width: 0;
+}
+
+/* Navigation manuelle précédent/suivant (voir universe.html et
+   initTestimonialCarousel() dans js/universe.js). Alignée à droite du
+   titre grâce à .testimonial-band__head en flex ci-dessus ; passe sous la
+   copie si l'espace manque (flex-wrap), jamais superposée au texte. Les
+   boutons eux-mêmes n'ont aucun style propre : .c-icon-btn (partagé avec
+   le header de cette page) fournit déjà forme ronde, bordure fine, hover
+   et focus cohérents avec le reste du site. */
+.testimonial-band__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  flex-shrink: 0;
+  /* Garde l'alignement à droite même si la ligne passe sous le titre
+     (flex-wrap sur .testimonial-band__head, écrans étroits) : sans cela,
+     un seul élément sur sa propre ligne flex se retrouverait à gauche. */
+  margin-left: auto;
+}
+
+.testimonial-band__nav-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* Taille volontairement raisonnable (demande explicite : "ne pas alourdir
@@ -2314,30 +2494,22 @@ html.js [data-reveal].universe-project.is-visible .universe-project__discover {
   overflow: hidden;
 }
 
+/* Le défilement automatique n'est plus une @keyframes CSS : la navigation
+   manuelle demandée (sauter immédiatement au témoignage précédent/suivant,
+   y compris pendant le défilement) exige de connaître et de piloter la
+   position exacte du bandeau à tout instant, ce qu'une animation CSS pure
+   ne permet pas. Le déplacement, la pause au survol/au toucher/après une
+   action manuelle et le respect de prefers-reduced-motion sont donc gérés
+   par initTestimonialCarousel() dans js/universe.js, qui applique un simple
+   transform: translateX(...) sur cet élément à chaque frame — même
+   principe visuel qu'avant (boucle infinie via les deux .testimonial-band__set
+   dupliqués ci-dessous, vitesse identique : 100s/64s pour parcourir un set),
+   juste un moteur différent. will-change: transform conservé pour les mêmes
+   raisons de performance qu'avant. */
 .testimonial-band__track {
   display: flex;
   width: max-content;
   will-change: transform;
-  animation: universe-expertise-marquee 100s linear infinite;
-}
-
-/* Pause au survol — souris fine uniquement (@media (hover: hover) and
-   (pointer: fine)) : sur tactile, un simple appui déclenche parfois un
-   ":hover" persistant dans certains navigateurs mobiles, ce qui figerait le
-   défilement sans possibilité de le relancer autrement qu'en touchant
-   ailleurs. Voir js/universe.js pour l'équivalent tactile (pause brève au
-   toucher, minimal, sans nouveau moteur d'animation). */
-@media (hover: hover) and (pointer: fine) {
-  .testimonial-band:hover .testimonial-band__track {
-    animation-play-state: paused;
-  }
-}
-
-/* Équivalent tactile — voir initTestimonialTouchPause() dans js/universe.js :
-   une brève pause au toucher (4s), sans swipe manuel ni second moteur
-   d'animation, juste le temps de lire la phrase en cours. */
-.testimonial-band.is-touch-paused .testimonial-band__track {
-  animation-play-state: paused;
 }
 
 .testimonial-band__set {
@@ -2432,12 +2604,14 @@ html.js [data-reveal].universe-project.is-visible .universe-project__discover {
 }
 
 /* Respect strict de prefers-reduced-motion, exactement la même approche que
-   .expertise-band : animation coupée, copie dupliquée (aria-hidden="true")
-   retirée, le set restant s'enroule statiquement avec le retrait de contenu
-   standard (au lieu du bord à bord réservé au défilement). */
+   .expertise-band : défilement coupé (initTestimonialCarousel() détecte la
+   préférence et n'applique alors aucun transform, voir js/universe.js),
+   copie dupliquée (aria-hidden="true") retirée, le set restant s'enroule
+   statiquement avec le retrait de contenu standard (au lieu du bord à bord
+   réservé au défilement). La navigation précédent/suivant est masquée : il
+   n'y a plus rien à faire défiler dans cette disposition statique. */
 @media (prefers-reduced-motion: reduce) {
   .testimonial-band__track {
-    animation: none;
     transform: none;
     width: 100%;
   }
@@ -2448,6 +2622,9 @@ html.js [data-reveal].universe-project.is-visible .universe-project__discover {
     margin-right: 0;
   }
   .testimonial-band__set[aria-hidden="true"] {
+    display: none;
+  }
+  .testimonial-band__nav {
     display: none;
   }
 }
@@ -2462,9 +2639,10 @@ html.js [data-reveal].universe-project.is-visible .universe-project__discover {
   .testimonial-band {
     padding-block: var(--space-xl) var(--space-lg);
   }
-  .testimonial-band__track {
-    animation-duration: 64s;
-  }
+  /* Vitesse de défilement mobile (traverser un set en 64s au lieu de 100s) :
+     gérée par initTestimonialCarousel() dans js/universe.js, qui lit ce
+     même point de rupture (max-width: 640px) via matchMedia plutôt qu'une
+     règle CSS animation-duration désormais inutile ici. */
   /* Portrait au-dessus de l'avis plutôt que côte à côte : sur un item déjà
      réduit à ~78vw (voir ci-dessus), une disposition horizontale laisserait
      trop peu de largeur au texte. Le portrait reste "suffisamment visible"
@@ -2540,6 +2718,57 @@ html.js [data-reveal].universe-project.is-visible .universe-project__discover {
   line-height: 1.12;
   color: var(--u-ink);
   max-width: 18ch;
+  margin-inline: auto;
+}
+
+/* Accroche de conclusion, deux niveaux (demande explicite : le premier
+   "légèrement mis en avant", le second "plus discret") — hiérarchie posée
+   uniquement par taille/poids/couleur, aucune police nouvelle. .hook-lead
+   reprend le ton pleine encre (var(--u-ink)) déjà utilisé par le titre et
+   l'e-mail juste en dessous ; .hook-sub reprend le ton discret déjà utilisé
+   par .universe-contact__meta plus bas (même var(--u-ink-subtle)). */
+.universe-contact__hook-lead {
+  margin-top: var(--space-lg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  line-height: var(--line-height-body);
+  color: var(--u-ink);
+  max-width: 32ch;
+  margin-inline: auto;
+}
+
+.universe-contact__hook-sub {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--u-ink-subtle);
+  max-width: 34ch;
+  margin-inline: auto;
+}
+
+/* CTA premium : .c-btn .c-btn--primary sont partagées avec le reste du
+   site (voir "Réserver un appel" dans le menu plein écran de cette même
+   page) — aucun nouveau style de bouton (couleurs, bordure, hauteur,
+   typographie) n'est ajouté ici, uniquement la position. .c-btn est
+   display:inline-flex (components.css, partagé, non modifié) : laissé tel
+   quel, ce bouton se serait retrouvé sur la même ligne que le lien e-mail
+   juste en dessous (deux éléments inline-level côte à côte) au lieu d'être
+   centré seul au-dessus. display:flex + width:fit-content + margin-inline:
+   auto le transforme en bloc centré sur sa propre ligne, sans toucher au
+   composant .c-btn partagé ni à son padding/sa hauteur/sa forme. */
+/* Sélecteur "body.page-universe .universe-contact__cta" (et non
+   ".universe-contact__cta" seul) : nécessaire pour égaler la spécificité
+   de "body.page-universe .c-btn" tout en haut de ce fichier (centrage du
+   texte du bouton), qui imposait sinon display:inline-flex malgré la
+   règle ci-dessous — cette dernière déclarée plus loin dans le fichier
+   l'emporte alors à spécificité égale, sans qu'aucune des deux règles
+   n'ait eu besoin d'être modifiée. */
+body.page-universe .universe-contact__cta {
+  display: flex;
+  width: fit-content;
+  margin-top: var(--space-xl);
   margin-inline: auto;
 }
 
