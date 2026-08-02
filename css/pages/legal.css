@@ -98,10 +98,10 @@ body.page-legal .c-icon-btn:active,
 body.page-legal .c-menu-toggle:hover,
 body.page-legal .c-menu-toggle:focus-visible,
 body.page-legal .c-menu-toggle:active {
-  border-color: var(--lg-warm-soft);
-  background: rgba(90, 66, 15, 0.1);
-  color: var(--lg-warm-text);
-  outline-color: var(--lg-warm-text);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 body.page-legal [data-lang-toggle] {
@@ -139,10 +139,10 @@ body.page-legal .c-btn--secondary {
 body.page-legal .c-btn--secondary:hover,
 body.page-legal .c-btn--secondary:focus-visible,
 body.page-legal .c-btn--secondary:active {
-  border-color: var(--lg-warm-soft);
-  background: rgba(90, 66, 15, 0.08);
-  color: var(--lg-warm-text);
-  outline-color: var(--lg-warm-text);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 /* Logo — classe locale dédiée (même recette que .universe-brand /
@@ -161,7 +161,7 @@ body.page-legal .c-btn--secondary:active {
 .legal-brand:hover,
 .legal-brand:focus-visible {
   opacity: 1;
-  color: var(--lg-warm-text);
+  color: var(--color-warm);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -194,8 +194,8 @@ body.page-legal .c-btn--secondary:active {
 .c-btn--ghost.legal-back:hover,
 .c-btn--ghost.legal-back:focus-visible,
 .c-btn--ghost.legal-back:active {
-  color: var(--lg-warm-text);
-  outline-color: var(--lg-warm-text);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -333,9 +333,10 @@ body.page-legal main a:not(.c-btn--ghost):focus-visible {
 .universe-footer__social .c-icon-btn:hover,
 .universe-footer__social .c-icon-btn:focus-visible,
 .universe-footer__social .c-icon-btn:active {
-  border-color: var(--lg-warm-soft);
-  color: var(--lg-warm-text);
-  outline-color: var(--lg-warm-text);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 .universe-footer__bottom {

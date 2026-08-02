@@ -35,16 +35,16 @@
   transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
 }
 
-/* Doré sitewide (audit uniformisation boutons/CTA) : --u-warm (vif) posé en
-   texte directement sur --u-bg (fond clair de cette page) mesure ~1,37:1 —
-   sous le seuil WCAG. Remplacé par --u-warm-on-light (5,43:1), le palier
-   déjà utilisé par les autres boutons de fond clair du site. */
+/* Doré sitewide (audit uniformisation boutons/CTA, passe 3) : demande
+   explicite du client — copie exacte des valeurs du bouton de référence
+   .universe-cta (css/pages/universe.css), sans palier de contraste
+   alternatif. --u-warm (vif, #C7A34E) remplace --u-warm-on-light ici. */
 .ressources-back:hover,
 .ressources-back:focus-visible,
 .ressources-back:active {
-  color: var(--u-warm-on-light);
-  border-color: var(--u-warm-on-light-soft);
-  outline-color: var(--u-warm-on-light);
+  color: var(--color-warm);
+  border-color: var(--color-warm-soft);
+  outline-color: var(--color-warm);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -127,9 +127,9 @@
 .ressources-filters__pill:hover,
 .ressources-filters__pill:focus-visible,
 .ressources-filters__pill:active {
-  color: var(--u-ink);
-  border-color: var(--u-warm-on-light-soft);
-  outline-color: var(--u-warm-on-light);
+  color: var(--color-warm);
+  border-color: var(--color-warm-soft);
+  outline-color: var(--color-warm);
 }
 
 /* Catégorie active — trait plein doré, pas de fond plein (reste sobre).

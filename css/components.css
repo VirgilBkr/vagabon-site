@@ -161,13 +161,20 @@
    surchargée jusqu'ici), au-dessus même des couleurs déjà corrigées. Ajout
    sans risque dans ce bloc groupé : l'outline ne s'affiche de toute façon
    que lorsque :focus-visible s'applique réellement. */
+/* Doré sitewide (audit uniformisation boutons/CTA, passe 3) : demande
+   explicite du client — plus de palier "fond clair" (--color-warm-on-light,
+   #5A420F, perçu comme grisâtre/terne). Toutes les règles d'interaction
+   (:hover/:focus-visible/:active) ci-dessous copient désormais EXACTEMENT
+   les valeurs du bouton de référence .universe-cta (css/pages/universe.css) :
+   border-color: var(--color-warm-soft), background: rgba(199, 163, 78,
+   0.08), color: var(--color-warm), outline-color: var(--color-warm). */
 .c-icon-btn:hover,
 .c-icon-btn:focus-visible,
 .c-icon-btn:active {
-  border-color: var(--color-warm-on-light-soft);
-  background: color-mix(in srgb, var(--color-warm-on-light) 12%, transparent);
-  color: var(--color-warm-on-light);
-  outline-color: var(--color-warm-on-light);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 /* Doré sitewide (audit uniformisation boutons/CTA, passe 2) : .c-menu-toggle
@@ -182,14 +189,15 @@
 .c-menu-toggle:hover,
 .c-menu-toggle:focus-visible,
 .c-menu-toggle:active {
-  border-color: var(--color-warm-on-light-soft);
-  outline-color: var(--color-warm-on-light);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  outline-color: var(--color-warm);
 }
 
 .c-menu-toggle:hover .c-menu-toggle__bar,
 .c-menu-toggle:focus-visible .c-menu-toggle__bar,
 .c-menu-toggle:active .c-menu-toggle__bar {
-  background: var(--color-warm-on-light);
+  background: var(--color-warm);
 }
 
 .c-icon-btn[disabled] {
@@ -294,7 +302,7 @@
 .c-nav-fullscreen__link:hover,
 .c-nav-fullscreen__link:focus-visible,
 .c-nav-fullscreen__link:active {
-  color: var(--color-transition-accent);
+  color: var(--color-warm);
 }
 
 .c-nav-fullscreen__link[aria-current="page"] {
@@ -356,10 +364,10 @@
 .c-nav-fullscreen .c-btn--primary:hover,
 .c-nav-fullscreen .c-btn--primary:focus-visible,
 .c-nav-fullscreen .c-btn--primary:active {
-  background: var(--color-transition-accent);
-  border-color: var(--color-transition-accent);
+  background: var(--color-warm);
+  border-color: var(--color-warm);
   color: var(--color-transition-bg);
-  outline-color: var(--color-transition-accent);
+  outline-color: var(--color-warm);
 }
 
 .c-nav-fullscreen .c-btn--ghost {
@@ -374,8 +382,8 @@
 .c-nav-fullscreen .c-btn--ghost:hover,
 .c-nav-fullscreen .c-btn--ghost:focus-visible,
 .c-nav-fullscreen .c-btn--ghost:active {
-  color: var(--color-transition-accent);
-  outline-color: var(--color-transition-accent);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 .c-nav-fullscreen [data-menu-close],
@@ -391,10 +399,10 @@
 .c-nav-fullscreen .c-icon-btn:hover,
 .c-nav-fullscreen .c-icon-btn:focus-visible,
 .c-nav-fullscreen .c-icon-btn:active {
-  border-color: var(--color-transition-accent);
-  color: var(--color-transition-accent);
+  border-color: var(--color-warm);
+  color: var(--color-warm);
   background: transparent;
-  outline-color: var(--color-transition-accent);
+  outline-color: var(--color-warm);
 }
 
 @media (max-width: 860px) {
@@ -461,8 +469,8 @@
 .c-btn--primary:hover,
 .c-btn--primary:focus-visible,
 .c-btn--primary:active {
-  background: var(--color-warm-on-light);
-  outline-color: var(--color-warm-on-light);
+  background: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 .c-btn--secondary {
@@ -473,8 +481,10 @@
 .c-btn--secondary:hover,
 .c-btn--secondary:focus-visible,
 .c-btn--secondary:active {
-  border-color: var(--color-warm-on-light-soft);
-  outline-color: var(--color-warm-on-light);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 .c-btn--ghost {
@@ -488,7 +498,7 @@
 }
 .c-btn--ghost:hover,
 .c-btn--ghost:focus-visible,
-.c-btn--ghost:active { color: var(--color-warm-on-light); outline-color: var(--color-warm-on-light); }
+.c-btn--ghost:active { color: var(--color-warm); outline-color: var(--color-warm); }
 
 .c-btn--block { width: 100%; }
 .c-btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
@@ -629,9 +639,10 @@
 .filter-btn:hover,
 .filter-btn:focus-visible,
 .filter-btn:active {
-  border-color: var(--color-warm-on-light-soft);
-  color: var(--color-text);
-  outline-color: var(--color-warm-on-light);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 .filter-btn[aria-pressed="true"] {

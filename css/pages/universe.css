@@ -162,10 +162,10 @@ body.page-universe .c-icon-btn:active,
 body.page-universe .c-menu-toggle:hover,
 body.page-universe .c-menu-toggle:focus-visible,
 body.page-universe .c-menu-toggle:active {
-  border-color: var(--u-warm-on-light-soft);
-  background: color-mix(in srgb, var(--u-warm-on-light) 12%, transparent);
-  color: var(--u-warm-on-light);
-  outline-color: var(--u-warm-on-light);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 /* Centrage de "FR" dans le bouton rond de langue. .c-icon-btn a déjà
@@ -242,10 +242,10 @@ body.page-universe .c-btn--secondary {
 body.page-universe .c-btn--secondary:hover,
 body.page-universe .c-btn--secondary:focus-visible,
 body.page-universe .c-btn--secondary:active {
-  border-color: var(--u-warm-on-light-soft);
-  background: color-mix(in srgb, var(--u-warm-on-light) 10%, transparent);
-  color: var(--u-warm-on-light);
-  outline-color: var(--u-warm-on-light);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 /* Bouton primaire (menu plein écran, "Réserver un appel") : abandon du
@@ -272,10 +272,10 @@ body.page-universe .c-btn--primary {
 body.page-universe .c-btn--primary:hover,
 body.page-universe .c-btn--primary:focus-visible,
 body.page-universe .c-btn--primary:active {
-  background-color: var(--u-warm-on-light);
-  border-color: var(--u-warm-on-light);
-  color: var(--u-ink);
-  outline-color: var(--u-warm-on-light);
+  background-color: var(--color-warm);
+  border-color: var(--color-warm);
+  color: var(--u-surface);
+  outline-color: var(--color-warm);
 }
 
 body.page-universe .c-btn--ghost {
@@ -2860,9 +2860,10 @@ body.page-universe .universe-contact__cta {
 .universe-contact__social .c-icon-btn:hover,
 .universe-contact__social .c-icon-btn:focus-visible,
 .universe-contact__social .c-icon-btn:active {
-  border-color: var(--u-warm-on-light-soft);
-  background: color-mix(in srgb, var(--u-warm-on-light) 10%, transparent);
-  outline-color: var(--u-warm-on-light);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -2962,9 +2963,10 @@ body.page-universe .universe-contact__cta {
 .universe-footer__social .c-icon-btn:hover,
 .universe-footer__social .c-icon-btn:focus-visible,
 .universe-footer__social .c-icon-btn:active {
-  border-color: var(--u-warm-on-light-soft);
-  color: var(--u-warm-on-light);
-  outline-color: var(--u-warm-on-light);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 .universe-footer__bottom {
@@ -3303,7 +3305,7 @@ html.has-ice-cursor label {
    service cliquable) restait bleu au focus clavier — passe au même doré
    "fond clair" que les autres contrôles de cette page. */
 .universe-services__panel-header:focus-visible {
-  outline: 2px solid var(--u-warm-on-light);
+  outline: 2px solid var(--color-warm);
   outline-offset: 6px;
   border-radius: var(--radius-sm);
 }

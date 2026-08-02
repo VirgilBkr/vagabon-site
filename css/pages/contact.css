@@ -93,10 +93,10 @@ body.page-contact .c-icon-btn:active,
 body.page-contact .c-menu-toggle:hover,
 body.page-contact .c-menu-toggle:focus-visible,
 body.page-contact .c-menu-toggle:active {
-  border-color: var(--vc-warm-soft);
-  background: rgba(90, 66, 15, 0.1);
-  color: var(--vc-warm-text);
-  outline-color: var(--vc-warm-text);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 /* Centrage du texte du bouton "Réserver un appel" — même diagnostic et
@@ -127,10 +127,10 @@ body.page-contact .c-btn--secondary {
 body.page-contact .c-btn--secondary:hover,
 body.page-contact .c-btn--secondary:focus-visible,
 body.page-contact .c-btn--secondary:active {
-  border-color: var(--vc-warm-soft);
-  background: rgba(90, 66, 15, 0.08);
-  color: var(--vc-warm-text);
-  outline-color: var(--vc-warm-text);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 /* Logo — classe locale dédiée (même recette que .universe-brand dans
@@ -149,7 +149,7 @@ body.page-contact .c-btn--secondary:active {
 .contact-brand:hover,
 .contact-brand:focus-visible {
   opacity: 1;
-  color: var(--vc-warm-text);
+  color: var(--color-warm);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -189,8 +189,8 @@ body.page-contact .c-btn--secondary:active {
 
 .contact-back:hover,
 .contact-back:focus-visible {
-  color: var(--vc-warm-text);
-  border-color: var(--vc-warm-soft);
+  color: var(--color-warm);
+  border-color: var(--color-warm-soft);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -391,8 +391,8 @@ body.page-contact .c-btn--secondary:active {
 
 a.contact-coords__value:hover,
 a.contact-coords__value:focus-visible {
-  color: var(--vc-warm-text);
-  border-color: var(--vc-warm-soft);
+  color: var(--color-warm);
+  border-color: var(--color-warm-soft);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -552,11 +552,11 @@ select.contact-field__control option {
 .contact-form__submit:hover,
 .contact-form__submit:focus-visible,
 .contact-form__submit:active {
-  border-color: var(--vc-warm-soft);
-  background: rgba(90, 66, 15, 0.1);
-  color: var(--vc-warm-text);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
   transform: translateY(-2px);
-  outline-color: var(--vc-warm-text);
+  outline-color: var(--color-warm);
 }
 
 .contact-form__submit-arrow {
@@ -610,7 +610,7 @@ select.contact-field__control option {
 }
 
 .contact-form__privacy-note a:hover,
-.contact-form__privacy-note a:focus-visible { color: var(--vc-warm-text); }
+.contact-form__privacy-note a:focus-visible { color: var(--color-warm); }
 
 .contact-form__global-error {
   display: none;
@@ -745,11 +745,11 @@ select.contact-field__control option {
 .contact-calendly__button:hover,
 .contact-calendly__button:focus-visible,
 .contact-calendly__button:active {
-  border-color: var(--vc-warm-soft);
-  background: rgba(90, 66, 15, 0.1);
-  color: var(--vc-warm-text);
+  border-color: var(--color-warm-soft);
+  background: rgba(199, 163, 78, 0.08);
+  color: var(--color-warm);
   transform: translateY(-2px);
-  outline-color: var(--vc-warm-text);
+  outline-color: var(--color-warm);
 }
 
 .contact-calendly__button[aria-disabled="true"] {
