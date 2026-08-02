@@ -41,7 +41,10 @@ body.page-legal {
   --lg-line: rgba(43, 50, 54, 0.18);
   --lg-line-strong: rgba(43, 50, 54, 0.32);
   --lg-accent-soft: rgba(11, 93, 130, 0.1);
-  --lg-warm-text: #5A420F;       /* 5.43:1 — survol de texte (teinte "chaude") */
+  /* Doré sitewide (audit uniformisation boutons/CTA, voir variables.css) :
+     repointé sur la source unique --color-warm-on-light — aucun changement
+     de rendu (même #5A420F, 5,43:1). */
+  --lg-warm-text: var(--color-warm-on-light);
   --lg-warm-soft: rgba(90, 66, 15, 0.14);
 
   background: var(--lg-bg);
@@ -82,9 +85,15 @@ body.page-legal .c-menu-toggle {
   color: #495359;
 }
 
-body.page-legal .c-icon-btn:hover {
-  border-color: var(--lg-accent-soft);
-  background: rgba(11, 93, 130, 0.1);
+/* Doré sitewide (audit uniformisation boutons/CTA) : ces boutons ronds du
+   header restaient bleus (--lg-accent-soft) alors que .c-btn--secondary
+   juste en dessous dans ce même fichier utilise déjà correctement le doré
+   --lg-warm-soft/--lg-warm-text — alignement. */
+body.page-legal .c-icon-btn:hover,
+body.page-legal .c-icon-btn:focus-visible,
+body.page-legal .c-icon-btn:active {
+  border-color: var(--lg-warm-soft);
+  background: rgba(90, 66, 15, 0.1);
 }
 
 body.page-legal [data-lang-toggle] {
@@ -119,7 +128,9 @@ body.page-legal .c-btn--secondary {
   color: #495359;
 }
 
-body.page-legal .c-btn--secondary:hover {
+body.page-legal .c-btn--secondary:hover,
+body.page-legal .c-btn--secondary:focus-visible,
+body.page-legal .c-btn--secondary:active {
   border-color: var(--lg-warm-soft);
   background: rgba(90, 66, 15, 0.08);
   color: var(--lg-warm-text);
@@ -172,7 +183,8 @@ body.page-legal .c-btn--secondary:hover {
 }
 
 .c-btn--ghost.legal-back:hover,
-.c-btn--ghost.legal-back:focus-visible {
+.c-btn--ghost.legal-back:focus-visible,
+.c-btn--ghost.legal-back:active {
   color: var(--lg-warm-text);
 }
 
@@ -304,9 +316,15 @@ body.page-legal main a:not(.c-btn--ghost):focus-visible {
   color: #C7C4BC;
 }
 
-.universe-footer__social .c-icon-btn:hover {
-  border-color: rgba(63, 169, 222, 0.35);
-  color: #F3F1EA;
+/* Doré sitewide (audit uniformisation boutons/CTA) : ce bloc footer dupliqué
+   dans legal.css utilisait encore le bleu brut (--u-accent-soft en dur) —
+   aligné sur le même doré "fond clair" que .universe-footer__list a:hover
+   juste au-dessus (#5C4213, même famille que --lg-warm-text). */
+.universe-footer__social .c-icon-btn:hover,
+.universe-footer__social .c-icon-btn:focus-visible,
+.universe-footer__social .c-icon-btn:active {
+  border-color: var(--lg-warm-soft);
+  color: var(--lg-warm-text);
 }
 
 .universe-footer__bottom {

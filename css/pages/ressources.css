@@ -35,10 +35,15 @@
   transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
 }
 
+/* Doré sitewide (audit uniformisation boutons/CTA) : --u-warm (vif) posé en
+   texte directement sur --u-bg (fond clair de cette page) mesure ~1,37:1 —
+   sous le seuil WCAG. Remplacé par --u-warm-on-light (5,43:1), le palier
+   déjà utilisé par les autres boutons de fond clair du site. */
 .ressources-back:hover,
-.ressources-back:focus-visible {
-  color: var(--u-warm);
-  border-color: var(--u-warm-soft);
+.ressources-back:focus-visible,
+.ressources-back:active {
+  color: var(--u-warm-on-light);
+  border-color: var(--u-warm-on-light-soft);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -119,15 +124,18 @@
 }
 
 .ressources-filters__pill:hover,
-.ressources-filters__pill:focus-visible {
+.ressources-filters__pill:focus-visible,
+.ressources-filters__pill:active {
   color: var(--u-ink);
-  border-color: var(--u-warm-soft);
+  border-color: var(--u-warm-on-light-soft);
 }
 
-/* Catégorie active — trait plein doré, pas de fond plein (reste sobre). */
+/* Catégorie active — trait plein doré, pas de fond plein (reste sobre).
+   --u-warm-on-light (et non --u-warm, vif) : même raison de contraste que
+   .ressources-back ci-dessus, ce filtre restant posé sur --u-bg. */
 .ressources-filters__pill[aria-pressed="true"] {
   color: var(--u-ink);
-  border-color: var(--u-warm);
+  border-color: var(--u-warm-on-light);
 }
 
 .ressources-filters__search {
@@ -153,7 +161,7 @@
 
 .ressources-filters__search-input:focus-visible {
   outline: none;
-  border-bottom-color: var(--u-warm);
+  border-bottom-color: var(--u-warm-on-light);
 }
 
 @media (max-width: 640px) {

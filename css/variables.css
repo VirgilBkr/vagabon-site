@@ -38,6 +38,28 @@
   --color-border: #CCCCCC;               /* lignes / séparateurs principaux */
   --color-border-detail: #A5A5A5;        /* détails de séparateurs, plus discrets */
   --color-border-accent: rgba(0, 138, 201, 0.4);
+
+  /* ---- Doré de survol/focus/active — source unique pour TOUS les boutons
+     et CTA du site (audit uniformisation des interactions, 2026). Référence
+     visuelle : .universe-cta ("Découvrir les projets"). Deux paliers, MÊME
+     famille de doré, choisis selon le fond du bouton (aucune couleur
+     inventée dans les deux cas — valeurs déjà présentes dans le projet) :
+     --color-warm est le doré vif #C7A34E déjà utilisé par .universe-cta,
+     réservé aux boutons posés sur un fond SOMBRE (Hero vidéo/image de
+     l'accueil, cartes/panneaux sombres) — mesuré ≈1,37:1 sur le fond
+     bleu-gris clair du reste du site, donc jamais utilisé en texte plat
+     là où le fond est clair. --color-warm-on-light est le doré sombre
+     #5A420F déjà défini par ailleurs sous 3 noms différents et dupliqués
+     (--color-transition-accent ci-dessous, --vc-warm-text dans contact.css,
+     --lg-warm-text dans legal.css, tous vérifiés à 5,43:1) : centralisé ici
+     comme source unique, les trois anciens noms sont repointés dessus
+     plutôt que dupliqués. C'est ce palier qui doit être utilisé pour tout
+     bouton posé sur le fond bleu-gris clair du site (boutons secondaires,
+     boutons ronds du header, CTA de la section Services, etc.). */
+  --color-warm: #C7A34E;
+  --color-warm-soft: rgba(199, 163, 78, 0.4);
+  --color-warm-on-light: #5A420F;
+  --color-warm-on-light-soft: rgba(90, 66, 15, 0.4);
   --color-card-border: rgba(33, 37, 41, 0.08); /* bordure de carte, volontairement quasi invisible */
   --color-focus: #008AC9;
   --color-overlay: rgba(255, 255, 255, 0.85);
@@ -157,12 +179,15 @@
      vérifiés ≥ 4.5:1 sur ce fond (7.48:1 et 4.52:1) ; --color-transition-
      accent est le doré sombre "survol chaud" vérifié 5.43:1 (le doré vif
      --u-warm #C7A34E, réservé aux fonds sombres des cartes/Hero, échoue à
-     1.37:1 sur ce fond clair et n'est donc pas repris ici). */
+     1.37:1 sur ce fond clair et n'est donc pas repris ici). MISE À JOUR
+     (audit uniformisation boutons/CTA) : cette valeur est désormais la
+     même que --color-warm-on-light défini plus haut (source unique) —
+     repointée par référence, aucun changement de valeur. */
   --color-transition-bg: #AEC8D8;
   --color-transition-surface: #AEC8D8; /* pas de sous-surface distincte identifiée dans la charte actuelle */
   --color-transition-text: #2B3236;
   --color-transition-text-muted: #495359;
-  --color-transition-accent: #5A420F;
+  --color-transition-accent: var(--color-warm-on-light);
   --color-transition-border: rgba(43, 50, 54, 0.18);
   --color-transition-border-strong: rgba(43, 50, 54, 0.32);
   --color-transition-overlay: rgba(174, 200, 216, 0.94);

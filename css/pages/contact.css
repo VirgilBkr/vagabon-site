@@ -34,7 +34,10 @@ body.page-contact {
   --vc-line-strong: rgba(43, 50, 54, 0.32);
   --vc-accent: #0B5D82;          /* 4.15:1 — focus, accent de bordure/lien */
   --vc-accent-soft: rgba(11, 93, 130, 0.14);
-  --vc-warm-text: #5A420F;       /* 5.43:1 — survol de texte (teinte "chaude") */
+  /* Doré sitewide (audit uniformisation boutons/CTA, voir variables.css) :
+     repointé sur la source unique --color-warm-on-light au lieu d'une
+     valeur dupliquée — aucun changement de rendu (même #5A420F, 5,43:1). */
+  --vc-warm-text: var(--color-warm-on-light);
   --vc-warm-soft: rgba(90, 66, 15, 0.14);
   --vc-error: #8C2A2A;           /* 4.86:1 */
 
@@ -78,9 +81,14 @@ body.page-contact .c-menu-toggle {
   color: #495359;
 }
 
-body.page-contact .c-icon-btn:hover {
-  border-color: var(--vc-accent-soft);
-  background: rgba(11, 93, 130, 0.1);
+/* Doré sitewide (audit uniformisation boutons/CTA) : boutons ronds du
+   header restés bleus (--vc-accent-soft) — alignés sur le même doré que
+   .contact-form__submit / .contact-calendly__button plus bas. */
+body.page-contact .c-icon-btn:hover,
+body.page-contact .c-icon-btn:focus-visible,
+body.page-contact .c-icon-btn:active {
+  border-color: var(--vc-warm-soft);
+  background: rgba(90, 66, 15, 0.1);
 }
 
 /* Centrage du texte du bouton "Réserver un appel" — même diagnostic et
@@ -108,7 +116,9 @@ body.page-contact .c-btn--secondary {
   color: #495359;
 }
 
-body.page-contact .c-btn--secondary:hover {
+body.page-contact .c-btn--secondary:hover,
+body.page-contact .c-btn--secondary:focus-visible,
+body.page-contact .c-btn--secondary:active {
   border-color: var(--vc-warm-soft);
   background: rgba(90, 66, 15, 0.08);
   color: var(--vc-warm-text);
@@ -531,7 +541,8 @@ select.contact-field__control option {
 }
 
 .contact-form__submit:hover,
-.contact-form__submit:focus-visible {
+.contact-form__submit:focus-visible,
+.contact-form__submit:active {
   border-color: var(--vc-warm-soft);
   background: rgba(90, 66, 15, 0.1);
   color: var(--vc-warm-text);
@@ -718,11 +729,15 @@ select.contact-field__control option {
               transform var(--duration-fast) var(--ease-standard);
 }
 
+/* Doré sitewide (audit uniformisation boutons/CTA) : ce bouton restait sur
+   l'ancien bleu --vc-accent alors que .contact-form__submit juste au-dessus
+   utilise déjà correctement --vc-warm-text/--vc-warm-soft — alignement. */
 .contact-calendly__button:hover,
-.contact-calendly__button:focus-visible {
-  border-color: var(--vc-accent-soft);
-  background: rgba(11, 93, 130, 0.1);
-  color: var(--vc-accent);
+.contact-calendly__button:focus-visible,
+.contact-calendly__button:active {
+  border-color: var(--vc-warm-soft);
+  background: rgba(90, 66, 15, 0.1);
+  color: var(--vc-warm-text);
   transform: translateY(-2px);
 }
 

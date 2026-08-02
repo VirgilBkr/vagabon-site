@@ -149,9 +149,16 @@
   transition: border-color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard);
 }
 
-.c-icon-btn:hover {
-  border-color: var(--color-border-accent);
-  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+/* Doré sitewide (audit uniformisation boutons/CTA, voir variables.css,
+   --color-warm-on-light) : ce fallback global est celui utilisé par défaut
+   sur fond clair, ce qui couvre la majorité des pages. Les pages posées sur
+   un fond sombre (ex. header de l'accueil sur le Hero vidéo) ont leur
+   propre surcharge en --color-warm, la variante vive (voir home.css). */
+.c-icon-btn:hover,
+.c-icon-btn:focus-visible,
+.c-icon-btn:active {
+  border-color: var(--color-warm-on-light-soft);
+  background: color-mix(in srgb, var(--color-warm-on-light) 12%, transparent);
 }
 
 .c-icon-btn[disabled] {
@@ -254,7 +261,8 @@
 }
 
 .c-nav-fullscreen__link:hover,
-.c-nav-fullscreen__link:focus-visible {
+.c-nav-fullscreen__link:focus-visible,
+.c-nav-fullscreen__link:active {
   color: var(--color-transition-accent);
 }
 
@@ -309,10 +317,16 @@
   color: var(--color-transition-text-muted);
 }
 
+/* Doré sitewide (audit uniformisation boutons/CTA) : l'inversion utilisait
+   le gris --color-transition-text-muted — passe au doré déjà utilisé par
+   .c-nav-fullscreen__link:hover juste au-dessus (--color-transition-accent,
+   qui référence maintenant --color-warm-on-light, voir variables.css), pour
+   que ce bouton suive la même teinte de survol que le reste du menu. */
 .c-nav-fullscreen .c-btn--primary:hover,
-.c-nav-fullscreen .c-btn--primary:focus-visible {
-  background: var(--color-transition-text-muted);
-  border-color: var(--color-transition-text-muted);
+.c-nav-fullscreen .c-btn--primary:focus-visible,
+.c-nav-fullscreen .c-btn--primary:active {
+  background: var(--color-transition-accent);
+  border-color: var(--color-transition-accent);
   color: var(--color-transition-bg);
 }
 
@@ -320,9 +334,15 @@
   color: var(--color-transition-accent);
 }
 
+/* Doré sitewide (audit uniformisation boutons/CTA) : ce lien e-mail est
+   déjà doré au repos (--color-transition-accent) — son survol/focus
+   repassait au gris neutre (--color-transition-text), soit l'inverse de la
+   règle demandée ("hover = doré"). Corrigé pour qu'il RESTE doré aux trois
+   états, comme tous les autres boutons du menu. */
 .c-nav-fullscreen .c-btn--ghost:hover,
-.c-nav-fullscreen .c-btn--ghost:focus-visible {
-  color: var(--color-transition-text);
+.c-nav-fullscreen .c-btn--ghost:focus-visible,
+.c-nav-fullscreen .c-btn--ghost:active {
+  color: var(--color-transition-accent);
 }
 
 .c-nav-fullscreen [data-menu-close],
@@ -334,8 +354,10 @@
 
 .c-nav-fullscreen [data-menu-close]:hover,
 .c-nav-fullscreen [data-menu-close]:focus-visible,
+.c-nav-fullscreen [data-menu-close]:active,
 .c-nav-fullscreen .c-icon-btn:hover,
-.c-nav-fullscreen .c-icon-btn:focus-visible {
+.c-nav-fullscreen .c-icon-btn:focus-visible,
+.c-nav-fullscreen .c-icon-btn:active {
   border-color: var(--color-transition-accent);
   color: var(--color-transition-accent);
   background: transparent;
@@ -397,14 +419,27 @@
   background: var(--color-button-primary-bg);
   color: var(--color-button-primary-text);
 }
-.c-btn--primary:hover { background: var(--color-button-primary-hover-bg); }
+/* Doré sitewide (audit uniformisation boutons/CTA) : le hover devenait un
+   simple assombrissement (--color-button-primary-hover-bg, gris) — passe au
+   doré partagé par tous les boutons du site. Structure inchangée (même
+   bouton plein, seule sa teinte de survol change), texte clair inchangé
+   (contraste conservé sur ce fond doré sombre). */
+.c-btn--primary:hover,
+.c-btn--primary:focus-visible,
+.c-btn--primary:active {
+  background: var(--color-warm-on-light);
+}
 
 .c-btn--secondary {
   background: transparent;
   color: var(--color-text);
   border-color: var(--color-border);
 }
-.c-btn--secondary:hover { border-color: var(--color-border-accent); }
+.c-btn--secondary:hover,
+.c-btn--secondary:focus-visible,
+.c-btn--secondary:active {
+  border-color: var(--color-warm-on-light-soft);
+}
 
 .c-btn--ghost {
   background: transparent;
@@ -415,7 +450,9 @@
   letter-spacing: normal;
   font-weight: 700;
 }
-.c-btn--ghost:hover { color: var(--color-accent-hover); }
+.c-btn--ghost:hover,
+.c-btn--ghost:focus-visible,
+.c-btn--ghost:active { color: var(--color-warm-on-light); }
 
 .c-btn--block { width: 100%; }
 .c-btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }

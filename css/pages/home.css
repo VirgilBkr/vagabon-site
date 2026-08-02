@@ -131,6 +131,34 @@ html.is-landing-locked body {
   padding-top: 0;
 }
 
+/* Doré sitewide (audit uniformisation boutons/CTA) : le header de cette
+   page reste sombre en permanence (dégradé noir au repos, noir 88% une fois
+   scrollé — voir body.page-home .c-header plus haut), contrairement au
+   fallback global de components.css (--color-warm-on-light, pensé pour un
+   fond clair). Ces boutons ont donc besoin du doré VIF --color-warm,
+   exactement comme .explore-button ci-dessus et .universe-cta sur
+   universe.html. Structure inchangée (bordure fine pour les boutons ronds,
+   bordure + fond transparent pour "Réserver un appel") — seule la teinte de
+   survol change. */
+.page-home .c-header__actions .c-icon-btn:hover,
+.page-home .c-header__actions .c-icon-btn:focus-visible,
+.page-home .c-header__actions .c-icon-btn:active,
+.page-home .c-menu-toggle:hover,
+.page-home .c-menu-toggle:focus-visible,
+.page-home .c-menu-toggle:active {
+  border-color: var(--color-warm-soft);
+  background: color-mix(in srgb, var(--color-warm) 14%, transparent);
+  color: var(--color-warm);
+}
+
+.page-home .c-header__actions .c-btn--secondary:hover,
+.page-home .c-header__actions .c-btn--secondary:focus-visible,
+.page-home .c-header__actions .c-btn--secondary:active {
+  border-color: var(--color-warm-soft);
+  background: color-mix(in srgb, var(--color-warm) 10%, transparent);
+  color: var(--color-warm);
+}
+
 /* ---------------------------------------------------------------------- */
 /* Curseur — page d'accueil uniquement. js/cursor.js ne crée plus les       */
 /* éléments .cursor-dot/.cursor-ring ici (voir isHomePage dans ce fichier)  */
@@ -409,16 +437,28 @@ body.page-home .c-card-project[data-cursor-label] {
   -webkit-backdrop-filter: blur(8px);
 }
 
+/* Doré sitewide (audit uniformisation boutons/CTA) : border-color détachée
+   de --hero-accent-soft (partagée avec le cadre décoratif du Hero et ses
+   coins, non concernés par ce changement — voir .explore-button__corner
+   plus bas, volontairement inchangé) au profit du doré vif --color-warm,
+   réservé aux boutons posés sur un fond sombre comme ce Hero. */
 .explore-button:hover,
-.explore-button:focus-visible {
-  border-color: var(--hero-accent-soft);
+.explore-button:focus-visible,
+.explore-button:active {
+  border-color: var(--color-warm-soft);
   background: color-mix(in srgb, var(--color-surface) 75%, transparent);
 }
 
+/* Doré sitewide (audit uniformisation boutons/CTA) : cette règle avait été
+   reportée telle quelle (bleu #008AC9) lors du renommage .home-hero--video
+   → .home-hero--cinematic pendant la promotion du Hero cinématographique,
+   sans jamais recevoir la correction dorée appliquée au reste du site.
+   Corrigée ici avec le même doré vif que .explore-button ci-dessus. */
 .home-hero--cinematic .explore-button:hover,
-.home-hero--cinematic .explore-button:focus-visible {
-  border-color: #008AC9;
-  background: rgba(0, 138, 201, 0.14);
+.home-hero--cinematic .explore-button:focus-visible,
+.home-hero--cinematic .explore-button:active {
+  border-color: var(--color-warm);
+  background: rgba(199, 163, 78, 0.14);
 }
 
 .explore-button:active {
