@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="css/utilities.css?v=2">
   <link rel="stylesheet" href="css/animations.css?v=3">
   <link rel="stylesheet" href="css/responsive.css?v=2">
-  <link rel="stylesheet" href="css/pages/home.css?v=3">
+  <link rel="stylesheet" href="css/pages/home.css?v=4">
 
   <!-- Données structurées JSON-LD — Person + ProfessionalService (section 29) -->
   <script type="application/ld+json">
@@ -74,34 +74,23 @@
 
   <div class="c-progress" data-progress aria-hidden="true"></div>
 
-  <!-- ======================= HEADER (identique sur toutes les pages) ======================= -->
-  <header class="c-header" data-header>
-    <div class="l-container c-header__inner">
-      <!-- Pas de mot-symbole ici (choix déjà en place avant le nettoyage du
-           site : voir css/pages/home.css, body.page-home). -->
-      <div class="c-header__spacer" aria-hidden="true"></div>
-
-      <div class="c-header__actions">
-        <button type="button" class="c-icon-btn u-hide-mobile" data-lang-toggle aria-label="Switch to English">FR</button>
-        <!-- Bouton son masqué sur cette page (l'ancienne vidéo qu'il
-             contrôlait a été remplacée par l'univers Marble, qui n'expose
-             pas de piste audio pilotable) : voir css/pages/home.css,
-             [data-audio-toggle]. Élément conservé dans le DOM (même
-             traitement que sur universe.html) plutôt que supprimé. -->
-        <button type="button" class="c-icon-btn u-hide-mobile" data-audio-toggle aria-label="Activer le son de la vidéo" data-i18n-attr="aria-label:nav.sound_video_label" aria-pressed="false" tabindex="-1">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 8a5 5 0 010 8"/></svg>
-        </button>
-        <!-- Reconnecté à la nouvelle page contact.html (apparence, position
-             et comportement du bouton strictement inchangés). -->
-        <a href="contact.html" class="c-btn c-btn--secondary u-hide-mobile" data-i18n="nav.book_call">Réserver un appel</a>
-        <button type="button" class="c-menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="nav-fullscreen" aria-label="Ouvrir le menu" data-i18n-attr="aria-label:nav.menu.open">
-          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
-          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
-          <span class="c-menu-toggle__bar" aria-hidden="true"></span>
-        </button>
-      </div>
-    </div>
-  </header>
+  <!-- HEADER — retiré entièrement sur cette page uniquement (promotion
+       home-hero-cinematic, correction production) : ni bouton langue "EN",
+       ni "Réserver un appel", ni bouton menu, ni le header lui-même
+       (dégradé sombre inclus) ne doivent apparaître sur cette homepage —
+       seul le contenu du Hero cinématique reste visible. .c-header n'existe
+       plus du tout dans le HTML de ce fichier (chaque page possède sa
+       propre copie, voir déjà le traitement page par page du bouton son) :
+       les autres
+       pages (universe.html, qui-suis-je.html, contact.html, etc.)
+       conservent leur propre <header> intact, non touché ici.
+       js/navigation.js et js/language.js protègent déjà toutes leurs
+       recherches de [data-header]/[data-menu-toggle] par un test de nullité
+       (if (!x) return;) : son absence ici ne provoque aucune erreur JS.
+       Le <nav class="c-nav-fullscreen"> ci-dessous reste dans le DOM
+       (hors périmètre de cette demande, qui ne porte que sur le header)
+       mais devient inatteignable sans le bouton menu — aria-hidden="true"
+       par défaut, aucun impact visuel ni fonctionnel. -->
 
   <!-- Menu plein écran -->
   <nav class="c-nav-fullscreen" id="nav-fullscreen" data-nav-menu data-open="false" aria-hidden="true" aria-label="Navigation principale">
@@ -134,44 +123,34 @@
   <main id="main-content" tabindex="-1">
 
     <!-- ======================= A. INTRODUCTION IMMERSIVE (HERO) =======================
-         Landing plein écran avec vidéo d'arrière-plan. Seule la LOGIQUE DE
-         COMPOSITION s'inspire d'une introduction cinématographique (cadre,
-         centre fort, générique) : aucun code, asset, texte, police ou
-         univers visuel n'est repris d'un site tiers. L'identité reste
-         entièrement celle de Vagabon (#008AC9, #000000, #FFFFFF).
-         Styles → css/pages/home.css. Bouton de défilement, pause de la
-         vidéo sous prefers-reduced-motion et fondu d'apparition
-         → js/animations.js.
+         Landing plein écran avec visuel cinématographique fixe en
+         arrière-plan (remplace l'ancien univers 3D Marble, retiré du
+         projet). Seule la LOGIQUE DE COMPOSITION s'inspire d'une
+         introduction cinématographique (cadre, centre fort, générique) :
+         aucun code, asset, texte, police ou univers visuel n'est repris
+         d'un site tiers. L'identité reste entièrement celle de Vagabon
+         (#008AC9, #000000, #FFFFFF).
+         Styles → css/pages/home.css. Animation (respiration idle,
+         parallaxe scroll + souris, repli statique) → js/home-hero-cinematic.js.
+         Bouton de défilement et fondu d'apparition → js/animations.js.
 
-         DÉCISION DOCUMENTÉE (section 13) : ce Hero reste visuellement sombre
-         (texte blanc, overlay sombre) car la vidéo fournie est un plan large
-         et lumineux (ciel/eau) — un overlay clair y réduirait fortement la
-         lisibilité. Cette section garde un habillage fixe via la classe
-         .home-hero--video, indépendamment du reste du site. -->
-    <section class="home-hero home-hero--video" id="home-hero" aria-labelledby="home-hero-title">
+         Le calque .home-hero__cinematic-layer est peint uniquement en CSS
+         (background-image dans css/pages/home.css) : le visuel s'affiche
+         donc immédiatement, même si JavaScript échoue ou si GSAP ne charge
+         pas. js/home-hero-cinematic.js n'ajoute que des mouvements
+         d'enrichissement (jamais l'affichage lui-même). -->
+    <section class="home-hero home-hero--cinematic" id="home-hero" aria-labelledby="home-hero-title">
 
-      <!-- Univers 3D Marble en arrière-plan plein écran (remplace l'ancienne
-           vidéo). Le fond CSS de .home-hero__media (poster existant) reste
-           affiché sous l'iframe pendant son chargement. aspect-ratio:4/3
-           du snippet Marble d'origine volontairement retiré (voir
-           css/pages/home.css, .home-hero__marble) pour que le monde
-           remplisse exactement le même espace que la vidéo précédente,
-           sans bande visible. splatUrl / mobileUrl / marbleWorldId
-           strictement inchangés par rapport au code fourni par Marble. -->
+      <!-- Visuel cinématographique unique, plein cadre (aucune découpe).
+           Aucun overlay sombre artificiel : l'image est volontairement
+           lumineuse (voir css/pages/home.css, .home-hero__cinematic-layer). -->
       <div class="home-hero__media" aria-hidden="true">
-        <iframe
-          class="home-hero__marble"
-          src="https://marble.worldlabs.ai/viewer.html?splatUrl=https%3A%2F%2Fcdn.marble.worldlabs.ai%2Fd7f2cf0d-1e4a-4d20-a319-fcf8d272aa91%2Ffedefdd3-2bfa-4f93-bdee-9d2b19692473_ceramic.spz&mobileUrl=https%3A%2F%2Fcdn.marble.worldlabs.ai%2Fd7f2cf0d-1e4a-4d20-a319-fcf8d272aa91%2F32957325-cf30-4c69-9486-9a4e90cd6a7f_ceramic_500k.spz&marbleWorldId=d7f2cf0d-1e4a-4d20-a319-fcf8d272aa91"
-          title="Univers 3D Vagabon"
-          loading="eager"
-          allow="xr-spatial-tracking"
-        ></iframe>
-        <div class="home-hero__video-overlay"></div>
+        <div class="home-hero__cinematic-layer" data-hero-cinematic-layer></div>
       </div>
 
       <!-- Cadre graphique décoratif : quatre coins indépendants (jamais un
            rectangle fermé). Marge responsive pilotée par --hero-frame-offset.
-           Conservé au-dessus de la vidéo : reste lisible et discret. -->
+           Conservé au-dessus du visuel : reste lisible et discret. -->
       <div class="home-hero__frame" data-reveal data-hero-element aria-hidden="true">
         <span class="home-hero__corner home-hero__corner--top-left"></span>
         <span class="home-hero__corner home-hero__corner--top-right"></span>
@@ -179,8 +158,8 @@
         <span class="home-hero__corner home-hero__corner--bottom-right"></span>
       </div>
 
-      <!-- Zone « contrôles supérieurs » : le header global fixe (menu, son,
-           langue) se superpose déjà au tiers supérieur du Hero.
+      <!-- Zone « contrôles supérieurs » : le header global fixe (menu, langue,
+           réservation) se superpose déjà au tiers supérieur du Hero.
            Il n'est pas dupliqué ici afin de ne rien casser sur les autres
            pages (voir header commun ci-dessus). -->
 
@@ -236,7 +215,6 @@
           <span class="explore-button__grid" aria-hidden="true"></span>
           <span class="explore-button__label" data-i18n="hero.button">Entrer dans l'univers</span>
         </a>
-        <p class="home-hero__sound-message" data-reveal style="--reveal-delay:860ms;" data-i18n="hero.sound_message">Expérience optimale avec le son</p>
       </div>
     </section>
 
@@ -258,6 +236,16 @@
   <script src="js/navigation.js" defer></script>
   <script src="js/animations.js" defer></script>
   <script src="js/data-renderer.js" defer></script>
+
+  <!-- GSAP + ScrollTrigger : bibliothèque déjà validée (utilisée dans le
+       Playground avant promotion). Chargée en <script defer> classique
+       (pas de bundler sur ce site) ; js/home-hero-cinematic.js vérifie sa
+       présence et fonctionne en repli statique pur si elle échoue à
+       charger — voir le fichier pour le détail du garde-fou. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="js/home-hero-cinematic.js" defer></script>
+
   <script src="js/main.js" defer></script>
 </body>
 </html>

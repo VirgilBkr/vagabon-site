@@ -161,7 +161,6 @@ const VAGABON_TRANSLATIONS = {
     "hero.metadata.location_label": "Basé à",
     "hero.metadata.location_value": "Reims · France",
     "hero.button": "Entrer dans l'univers",
-    "hero.sound_message": "Expérience optimale avec le son",
     "hero.title_accessible": "Vagabon — Studio créatif indépendant de Virgil Boukraa",
 
     /* ===================== UNIVERS (universe.html) ===================== */
@@ -549,7 +548,6 @@ const VAGABON_TRANSLATIONS = {
     "hero.metadata.location_label": "Based in",
     "hero.metadata.location_value": "Reims · France",
     "hero.button": "Enter the universe",
-    "hero.sound_message": "Best experienced with sound on",
     "hero.title_accessible": "Vagabon — Virgil Boukraa's independent creative studio",
 
     /* ===================== UNIVERS (universe.html) ===================== */

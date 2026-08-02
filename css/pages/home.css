@@ -3,27 +3,36 @@
    Styles de la page d'accueil / landing (index.html).
 
    Contient le système complet du Hero d'introduction (.home-hero /
-   .explore-button), avec vidéo d'arrière-plan plein écran. Composition
-   inspirée, dans sa seule LOGIQUE (écran plein, centre fort, cadre
-   décoratif, générique), d'une introduction cinématographique — aucun
-   asset, aucune classe et aucun texte n'est repris d'un site tiers. Tout
-   appartient à l'identité Vagabon (#008AC9, #000000, #FFFFFF). Ces styles
-   sont préfixés .home-hero / .explore-button et scoped à cette page : ils
-   ne modifient aucune autre page du site.
+   .explore-button), avec un visuel cinématographique fixe en arrière-plan
+   plein écran (calque unique, aucune découpe). Composition inspirée, dans
+   sa seule LOGIQUE (écran plein, centre fort, cadre décoratif, générique),
+   d'une introduction cinématographique — aucun asset, aucune classe et
+   aucun texte n'est repris d'un site tiers. Tout appartient à l'identité
+   Vagabon (#008AC9, #000000, #FFFFFF). Ces styles sont préfixés .home-hero /
+   .explore-button et scoped à cette page : ils ne modifient aucune autre
+   page du site.
+
+   PROMOTION PRODUCTION (home-hero-cinematic) : l'ancien univers 3D Marble
+   (iframe) a été entièrement retiré — il n'est plus chargé, affiché, masqué
+   ni conservé en repli. Le Hero affiche désormais .home-hero__cinematic-layer,
+   un calque image unique peint en CSS (voir plus bas), animé de façon
+   optionnelle par js/home-hero-cinematic.js (respiration idle, parallaxe
+   scroll + souris). Le voile sombre artificiel (.home-hero__video-overlay)
+   a été supprimé : l'image est volontairement lumineuse. La classe de
+   section .home-hero--video a été renommée .home-hero--cinematic (plus de
+   vidéo ni de Marble). Le bouton son du header, déjà sans fonction depuis
+   Marble, et ses styles associés ont également été retirés de ce fichier.
 
    NETTOYAGE DU SITE : l'ancien portfolio (autres pages) et l'ancien univers
    Marble (universe.html) ont été retirés du projet. Ce fichier ne sert plus
-   qu'à index.html, seule page restante — aucune règle de ce fichier n'a été
-   modifiée visuellement à cette occasion, seuls des commentaires devenus
-   obsolètes ont été mis à jour et un bloc CSS mort (#presentation, lié à
-   l'ancienne première section du site, qui n'existe plus) a été retiré.
+   qu'à index.html, seule page restante.
    ========================================================================== */
 
 /* ---------------------------------------------------------------------- */
 /* Verrou de scroll — landing page (index.html), seule page du projet.      */
 /* La landing occupe 100% du viewport et ne doit jamais pouvoir défiler     */
 /* vers un contenu situé sous elle (il n'y en a d'ailleurs pas dans le DOM  */
-/* de cette page). N'affecte ni la vidéo, ni les textes, ni les animations, */
+/* de cette page). N'affecte ni le visuel, ni les textes, ni les animations,*/
 /* ni les contrôles du Hero.                                                */
 /* ---------------------------------------------------------------------- */
 html.is-landing-locked,
@@ -57,12 +66,12 @@ html.is-landing-locked body {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Hero volontairement sombre dans les deux thèmes (décision documentée,   */
-/* voir le commentaire dans index.html, section 13 du brief) : la vidéo    */
-/* fournie est un plan large et lumineux (ciel/eau) qu'un overlay clair    */
-/* rendrait illisible. Redéclarer les jetons de couleur ICI, localement,   */
-/* suffit à figer tout le sous-arbre du Hero en apparence sombre — le      */
-/* reste du site continue de suivre normalement [data-theme].              */
+/* Hero volontairement sombre dans les deux thèmes : le visuel             */
+/* cinématographique reste lisible avec du texte blanc quelle que soit sa  */
+/* luminosité locale (voir text-shadow plus bas). Redéclarer les jetons de */
+/* couleur ICI, localement, suffit à figer tout le sous-arbre du Hero en   */
+/* apparence sombre — le reste du site continue de suivre normalement      */
+/* [data-theme].                                                           */
 /*                                                                          */
 /* Depuis la refonte graphique "post-Hero" (nouvelle palette claire +       */
 /* échelle d'espacements légèrement augmentée sitewide), les jetons         */
@@ -73,7 +82,7 @@ html.is-landing-locked body {
 /* toucher... à la structure générale du Hero". */
 /* ---------------------------------------------------------------------- */
 
-.home-hero--video {
+.home-hero--cinematic {
   --color-background: #000000;
   --color-text: #FFFFFF;
   --color-text-muted: #B5B5B5;
@@ -104,156 +113,22 @@ html.is-landing-locked body {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Header — page d'accueil uniquement. Le header .c-header lui-même est    */
-/* partagé par toutes les pages (voir index.html, section commune) : sa    */
-/* structure, ses classes et son comportement JS (js/navigation.js,        */
-/* js/theme.js, js/language.js, js/audio.js) restent strictement           */
-/* inchangés. Seule cette règle, scoped à body.page-home, pousse le groupe */
-/* de contrôles vers la droite en donnant tout l'espace disponible au      */
-/* nouvel élément .c-header__spacer (vide, remplace l'ancien placeholder   */
-/* de logo). Aucune autre page n'est affectée : elles n'ont pas la classe  */
-/* page-home sur <body> et conservent leur logo + disposition d'origine.  */
+/* Header — retiré entièrement de cette page (correction production,       */
+/* home-hero-cinematic) : <header class="c-header"> n'existe plus du tout  */
+/* dans index.html (voir ce fichier). Toutes les règles qui stylaient ce   */
+/* header sur la page d'accueil (dégradé sombre, spacer, actions,          */
+/* [data-lang-toggle], .c-btn--secondary, media query desktop) sont donc   */
+/* devenues mortes et ont été retirées d'ici. Rien de ceci n'affecte les   */
+/* autres pages : leur <header> reste physiquement présent dans leur       */
+/* propre HTML et suit toujours ses styles normaux (components.css).       */
+/* .home-hero avait un padding-top: var(--nav-height) pour réserver de     */
+/* l'espace sous le header fixe (voir plus haut) : neutralisé ci-dessous,  */
+/* scoped à .home-hero--cinematic, puisque cet espace n'a plus lieu d'être */
+/* sans header sur cette page.                                             */
 /* ---------------------------------------------------------------------- */
 
-/* Préservation explicite de l'apparence actuelle du header sur la page
-   d'accueil, suite à la refonte graphique claire du reste du site (nouvelle
-   palette par défaut : voir variables.css). Sans cette règle, le dégradé
-   du header basculerait aussi vers la nouvelle version claire ici — or la
-   consigne est explicite : "ne pas toucher... à son header [le Hero]".
-   Reproduit exactement les anciennes valeurs sombres codées en dur
-   (.c-header / .c-header.is-scrolled avant cette refonte). N'affecte que
-   cette page ; les autres pages suivent normalement le nouveau thème par
-   défaut et le bouton de thème. */
-body.page-home .c-header {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent);
-}
-body.page-home .c-header.is-scrolled {
-  background-color: rgba(0, 0, 0, 0.88);
-  border-bottom-color: rgba(255, 255, 255, 0.16);
-}
-
-/* Bouton son : sans objet ici (la vidéo qu'il contrôlait a été remplacée
-   par l'univers Marble, sans piste audio pilotable). Masqué plutôt que
-   laissé visible sans effet — même traitement que sur universe.html
-   (voir css/pages/universe.css, [data-audio-toggle]). N'affecte que
-   cette page. */
-body.page-home [data-audio-toggle] {
-  display: none !important;
-}
-
-/* Audit cohérence globale (identité visuelle unique du loader/menu, tous
-   écrans de transition confondus) : l'override sombre codé en dur
-   ci-dessus (fond noir, gris #B5B5B5) a été supprimé. Il datait d'une
-   ancienne direction artistique "sombre" de la page d'accueil et créait un
-   flash de couleur incohérent avec le loader clair (--color-background)
-   utilisé sur TOUTES les autres pages du site. Le loader suit désormais
-   partout la même unique source de vérité (.loader dans components.css,
-   variables --color-*), sans exception par page. */
-
-.page-home .c-header__spacer {
-  flex: 1 1 auto;
-}
-
-.page-home .c-header__actions {
-  gap: clamp(0.5rem, 1vw, 1rem);
-}
-
-/* Rapprochement du bord droit réel de l'écran (desktop uniquement, ≥769px) :
-   .c-header__inner hérite de .l-container (max-width: var(--container-max),
-   soit 1360px, centré) — sur un écran large, ça laisse une marge vide bien
-   plus grande que prévu entre le groupe de boutons et le bord de l'écran.
-   On retire ce plafond ICI SEULEMENT, et on pilote la distance au bord avec
-   un padding-right dédié (~30 à 50px, aligné visuellement sur le cadre
-   décoratif du Hero). Le padding gauche (inutilisé, rien à son contact)
-   reste celui de .l-container. Non scoped en dessous de 769px : le mobile
-   garde exactement son comportement actuel (voir responsive.css, inchangé). */
-@media (min-width: 769px) {
-  .page-home .c-header__inner {
-    max-width: none;
-    padding-right: clamp(30px, 3vw, 50px);
-  }
-}
-
-/* État visuel du bouton son du header une fois branché sur la vidéo du
-   Hero (voir initHeroVideoAudio() dans js/animations.js). Ces classes ne
-   sont posées que sur cette page (aucun autre gabarit n'a de vidéo Hero). */
-.page-home [data-audio-toggle].is-audio-on {
-  border-color: #008AC9;
-  background: rgba(0, 138, 201, 0.16);
-  color: #FFFFFF;
-}
-.page-home [data-audio-toggle].is-audio-unavailable {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-/* Centrage précis de "EN"/"FR" et de l'icône son dans leurs boutons ronds
-   du header (page d'accueil uniquement — .c-icon-btn est une classe
-   partagée, on ne touche donc pas [data-theme-toggle] ni les autres pages).
-   .c-icon-btn centre déjà via inline-flex, mais le line-height hérité du
-   corps de texte décale légèrement le texte "EN"/"FR" du centre visuel —
-   même cause que pour "Réserver un appel". Largeur/hauteur (40px, définies
-   par .c-icon-btn) ne changent pas. */
-.page-home .c-header__actions [data-lang-toggle],
-.page-home .c-header__actions [data-audio-toggle] {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  line-height: 1;
-  text-align: center;
-}
-
-/* Lisibilité du texte "FR" sur le header sombre du Hero (dégradé noir en
-   haut de page, voir body.page-home .c-header) : sans cette règle, le
-   texte hérite de la couleur sombre par défaut du site (--color-text),
-   peu lisible ici. Couleur uniquement — taille, position et bouton
-   inchangés (déjà gérés par la règle ci-dessus). */
-.page-home .c-header__actions [data-lang-toggle] {
-  color: #FFFFFF;
-}
-
-/* Un <svg> est inline par défaut : un léger espace lié à sa ligne de base
-   peut le décaler de 1-2px du centre exact du bouton rond. display:block
-   + flex:0 0 auto retire cette dépendance à la ligne de base ; la taille
-   (18px, déjà définie par .c-icon-btn svg) et le fonctionnement du bouton
-   son ne changent pas. */
-.page-home .c-header__actions [data-audio-toggle] svg {
-  display: block;
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  flex: 0 0 auto;
-}
-
-/* Centrage précis de "Réserver un appel" dans le header de la page
-   d'accueil. .c-btn centre déjà son contenu (display:inline-flex +
-   align-items/justify-content:center, voir components.css), mais le
-   line-height hérité de body (--line-height-body, pensé pour du texte
-   courant) agrandit la boîte de ligne du texte au-delà de ce dont une
-   seule ligne en majuscules a besoin : le texte paraît alors décalé d'un
-   ou deux pixels par rapport au centre visuel du bouton. line-height: 1
-   supprime cet espace superflu sans toucher au padding, à la largeur, à
-   la hauteur (min-height: 48px inchangée) ni à la bordure du bouton.
-   Scoped à cette seule instance (header, page d'accueil) : .c-btn reste
-   inchangé pour toutes les autres pages et les autres usages du bouton. */
-.page-home .c-header__actions .c-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  line-height: 1;
-}
-
-/* Lisibilité du texte "Réserver un appel" sur le header sombre du Hero :
-   .c-btn--secondary hérite par défaut de color: var(--color-text)
-   (components.css), résolu ici à la couleur sombre globale du site (le
-   fond dégradé noir du header n'est pas dans le sous-arbre de
-   .home-hero--video, qui redéfinit --color-text en blanc uniquement pour
-   son propre contenu) — d'où un texte peu lisible. Couleur uniquement :
-   bordure, fond, dimensions et hover restent ceux de .c-btn--secondary. */
-.page-home .c-header__actions .c-btn--secondary {
-  color: #FFFFFF;
+.home-hero.home-hero--cinematic {
+  padding-top: 0;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -280,8 +155,9 @@ body.page-home .c-card-project[data-cursor-label] {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Zone 1 — Univers 3D Marble en arrière-plan plein écran                  */
-/* (remplace l'ancienne vidéo — voir index.html pour l'historique)         */
+/* Zone 1 — Visuel cinématographique fixe en arrière-plan plein écran      */
+/* (remplace l'ancien univers 3D Marble, entièrement retiré du projet —    */
+/* il n'est plus chargé, affiché, masqué ni conservé en repli)             */
 /* ---------------------------------------------------------------------- */
 
 .home-hero__media {
@@ -289,79 +165,45 @@ body.page-home .c-card-project[data-cursor-label] {
   inset: 0;
   z-index: -2;
   overflow: hidden;
-  /* Fond de secours pendant le chargement du monde Marble (même image
-     poster qu'à l'époque de la vidéo, réutilisée telle quelle). */
-  background: #000 center / cover no-repeat url("../../assets/images/hero/vagabon-hero-poster-japon.webp");
 }
 
-/* Iframe Marble : remplit exactement .home-hero__media (donc tout le
-   Hero), à la place du couple width:100%/aspect-ratio:4/3 du snippet
-   Marble d'origine — ce ratio fixe est volontairement abandonné ici,
-   sinon l'iframe se retrouverait centrée avec des bandes visibles au
-   lieu de couvrir tout l'écran comme le faisait la vidéo. splatUrl,
-   mobileUrl et marbleWorldId (dans l'attribut src, voir index.html)
-   restent strictement ceux fournis, seul le dimensionnement change. */
-.home-hero__marble {
+/* Calque unique, peint entièrement en CSS : s'affiche immédiatement sans
+   dépendre de JavaScript ni de GSAP (voir index.html, commentaire du
+   Hero). js/home-hero-cinematic.js applique seulement transform/opacity
+   par-dessus (respiration idle, parallaxe) — jamais l'affichage lui-même.
+   inset:-3% (léger débord) donne de la marge aux transformations de
+   parallaxe sans jamais laisser apparaître de bord vide. background-position
+   calé pour garder le visage en entier avec un léger espace au-dessus,
+   le personnage centré et le logo VAGABON lisible (cadrage validé en
+   Playground, non modifiable ici sans repasser par une nouvelle validation). */
+.home-hero__cinematic-layer {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  display: block;
+  inset: -3%;
+  background-image: url("../../assets/images/hero/vagabon-hero-cinematic.png");
+  background-size: cover;
+  background-position: center 10%;
+  background-repeat: no-repeat;
+  will-change: transform;
 }
 
-.home-hero__video-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  /* Dégradé renforcé en haut (lisibilité du header) et en bas (lisibilité
-     de la phrase principale + du bouton, désormais tous deux en bas de
-     l'écran), plus un voile radial au centre — la vidéo fournie étant un
-     plan très clair (ciel/eau), un overlay hérité d'un fond sombre
-     générique ne suffirait pas seul. Légère teinte bleue en complément,
-     sans jamais obscurcir excessivement l'image ni masquer le monument. */
-  background:
-    radial-gradient(60% 55% at 50% 55%, rgba(0, 0, 0, 0.28), transparent 70%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.48) 0%, rgba(0, 0, 0, 0.22) 24%, rgba(0, 0, 0, 0.24) 52%, rgba(0, 0, 0, 0.56) 100%),
-    rgba(0, 20, 30, 0.07);
-}
+/* Aucun voile sombre artificiel : l'image fournie est volontairement
+   lumineuse (décision validée en Playground). Le texte reste lisible grâce
+   au text-shadow ci-dessous, jamais via un overlay assombrissant l'image. */
 
-/* Surtitre "STUDIO CRÉATIF INDÉPENDANT" : couleur noire volontaire (au lieu
-   du blanc/gris clair utilisé pour le reste du Hero) car cette ligne se
-   superpose souvent à une zone claire du ciel/de l'eau de la vidéo — un
-   texte sombre y reste plus lisible. Seule la couleur change ici : police
-   Good Times, taille, letter-spacing et les deux lignes horizontales de
-   .home-hero__eyebrow-line restent inchangés (règles ci-dessus/dessous).
-   Pas d'ombre portée noire ici (contrairement aux autres textes du Hero,
-   blancs) : une ombre noire floutée de 20px derrière un texte déjà noir ne
-   sert à rien et créait un halo sombre visible en haut du Hero. */
-.home-hero--video .home-hero__eyebrow-text {
-  color: #212529;
-  text-shadow: none;
-}
-
-/* Filet de sécurité supplémentaire pour le texte blanc du Hero : reste
-   lisible quelle que soit la luminosité exacte de l'image vidéo à l'instant
-   T. Ne s'applique pas au surtitre (texte noir, voir règle ci-dessus) ni au
-   message sonore (texte noir aussi désormais, voir règle dédiée ci-dessous). */
-.home-hero--video .home-hero__metadata-label,
-.home-hero--video .home-hero__metadata-value,
-.home-hero--video .home-hero__statement {
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.55);
-}
-
-/* "Expérience optimale avec le son" : couleur noire demandée, en remplacement
-   du gris clair hérité de --color-text-subtle. Sélecteur spécifique
-   (body.page-home + classes) pour l'emporter sûrement sur la règle générale
-   ci-dessous, sans !important. Ce texte se trouve dans la zone la plus
-   assombrie de l'overlay (bas du Hero, pour la lisibilité du bouton) : un
-   texte noir y perdrait du contraste, d'où la légère ombre blanche en
-   filet — pas de fond opaque. Position, taille, police, espacement et
-   alignement ne changent pas (aucune autre propriété touchée). */
-body.page-home .home-hero__sound-message {
-  color: #212529;
-  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.45);
+/* Sélecteur .home-hero.home-hero--cinematic (spécificité volontairement
+   accrue) : l'emporte sur les couleurs #aec7d8/var(--color-text-subtle)
+   déclarées plus bas (Zone 3, .home-hero__metadata-value et
+   .home-hero__metadata-side--right .home-hero__metadata-label), qui
+   restent la valeur par défaut du composant metadata hors de ce Hero.
+   Couleur blanche uniforme + ombre portée : paramètres validés en
+   Playground avant cette promotion. */
+.home-hero.home-hero--cinematic .home-hero__eyebrow-text,
+.home-hero.home-hero--cinematic .home-hero__metadata-label,
+.home-hero.home-hero--cinematic .home-hero__metadata-value,
+.home-hero.home-hero--cinematic .home-hero__statement,
+.home-hero.home-hero--cinematic .explore-button__label {
+  color: #FFFFFF;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -505,7 +347,7 @@ body.page-home .home-hero__sound-message {
   font-weight: 700;
 }
 
-/* Phrase principale : reste sous le monument visible dans la vidéo, juste
+/* Phrase principale : reste sous le personnage visible dans le visuel, juste
    au-dessus du bouton d'exploration (voir .home-hero__bottom). En Stigsa
    Display (charte section 24.6) : hérite de var(--font-body) depuis body,
    ne pas ajouter font-family: Good Times ici. Largeur de lecture maîtrisée
@@ -520,7 +362,7 @@ body.page-home .home-hero__sound-message {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Zone 7 + 8 — Phrase principale + bouton d'exploration + message sonore  */
+/* Zone 7 + 8 — Phrase principale + bouton d'exploration                  */
 /* ---------------------------------------------------------------------- */
 
 .home-hero__bottom {
@@ -556,11 +398,11 @@ body.page-home .home-hero__sound-message {
               transform var(--duration-fast) var(--ease-standard);
 }
 
-/* Renforcement du contraste du bouton sur fond vidéo (section 14 du
-   brief) : fond assombri + flou de verre, pour rester lisible quel que
-   soit le plan affiché à cet instant, sans devenir opaque au point de
-   masquer la vidéo. */
-.home-hero--video .explore-button {
+/* Renforcement du contraste du bouton sur le visuel cinématographique :
+   fond assombri + flou de verre, pour rester lisible quelle que soit la
+   zone de l'image affichée à cet endroit, sans devenir opaque au point de
+   masquer le visuel. */
+.home-hero--cinematic .explore-button {
   background: rgba(0, 0, 0, 0.36);
   border-color: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(8px);
@@ -573,8 +415,8 @@ body.page-home .home-hero__sound-message {
   background: color-mix(in srgb, var(--color-surface) 75%, transparent);
 }
 
-.home-hero--video .explore-button:hover,
-.home-hero--video .explore-button:focus-visible {
+.home-hero--cinematic .explore-button:hover,
+.home-hero--cinematic .explore-button:focus-visible {
   border-color: #008AC9;
   background: rgba(0, 138, 201, 0.14);
 }
@@ -592,7 +434,7 @@ body.page-home .home-hero__sound-message {
   text-transform: uppercase;
   /* Sans couleur explicite, ce texte héritait de la valeur déjà résolue
      par body { color: var(--color-text) } (sombre, thème global) : même
-     si .home-hero--video redéfinit --color-text en blanc, cette
+     si .home-hero--cinematic redéfinit --color-text en blanc, cette
      redéfinition ne s'applique qu'aux descendants qui RÉFÉRENCENT la
      variable, pas à un héritage de couleur déjà calculée plus haut dans
      l'arbre. D'où le texte peu lisible malgré le fond sombre du bouton. */
@@ -653,14 +495,6 @@ body.page-home .home-hero__sound-message {
   left: 130%;
 }
 
-.home-hero__sound-message {
-  font-size: var(--font-size-xs);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text-subtle);
-  margin: 0;
-}
-
 /* ---------------------------------------------------------------------- */
 /* Choréographie d'entrée (rejoue le système [data-reveal] global, avec   */
 /* un décalage propre au Hero piloté par --reveal-delay en style inline)  */
@@ -674,12 +508,12 @@ body.page-home .home-hero__sound-message {
 /* Mouvement réduit                                                         */
 /* ---------------------------------------------------------------------- */
 
-/* (aucune règle CSS supplémentaire requise ici : reset.css neutralise déjà
-   globalement animation-duration / transition-duration sous
-   prefers-reduced-motion. L'ancienne pause JS de la vidéo sous
-   prefers-reduced-motion n'existe plus — voir js/animations.js — puisque
-   la vidéo a été remplacée par l'univers Marble ; son mouvement interne
-   n'est pas piloté par ce site.) */
+/* reset.css neutralise déjà globalement animation-duration /
+   transition-duration sous prefers-reduced-motion pour les transitions
+   CSS classiques (reveal, hover…). Le mouvement piloté par GSAP
+   (respiration idle, parallaxe) est géré séparément et explicitement par
+   js/home-hero-cinematic.js, qui applique un rendu statique équivalent
+   sous prefers-reduced-motion (voir ce fichier). */
 
 /* ---------------------------------------------------------------------- */
 /* Responsive — tablette                                                    */
@@ -692,8 +526,8 @@ body.page-home .home-hero__sound-message {
 }
 
 /* ---------------------------------------------------------------------- */
-/* Responsive — mobile (ordre : surtitre, métadonnées, phrase, bouton,     */
-/* indication sonore — cf. section 8 de la demande de repositionnement)    */
+/* Responsive — mobile (ordre : surtitre, métadonnées, phrase, bouton —    */
+/* cf. section 8 de la demande de repositionnement)                        */
 /* ---------------------------------------------------------------------- */
 
 @media (max-width: 768px) {
@@ -746,7 +580,7 @@ body.page-home .home-hero__sound-message {
     border-color: var(--color-border);
     background: color-mix(in srgb, var(--color-surface) 55%, transparent);
   }
-  .home-hero--video .explore-button:hover {
+  .home-hero--cinematic .explore-button:hover {
     border-color: rgba(255, 255, 255, 0.35);
     background: rgba(0, 0, 0, 0.36);
   }
@@ -763,7 +597,7 @@ body.page-home .home-hero__sound-message {
 /* Responsive — mobile en orientation paysage, faible hauteur de viewport */
 /* (audit responsive) : sur un téléphone en paysage (ex. 844×390), le       */
 /* budget vertical disponible (hauteur du header + bloc de contenu +        */
-/* bloc du bas avec phrase/bouton/mention sonore) peut dépasser la hauteur  */
+/* bloc du bas avec phrase/bouton) peut dépasser la hauteur                */
 /* réelle de l'écran. Comme .home-hero utilise overflow:hidden, le         */
 /* contenu excédentaire serait alors rogné plutôt que de créer un scroll.   */
 /* Cette règle resserre UNIQUEMENT les espacements verticaux (aucune        */
@@ -783,19 +617,3 @@ body.page-home .home-hero__sound-message {
   }
 }
 
-/* ---------------------------------------------------------------------- */
-/* Bouton son du header — accessible aussi sur mobile (audit responsive).  */
-/* responsive.css masque volontairement .c-icon-btn (hors menu) ≤768px sur */
-/* TOUT le site, et .u-hide-mobile masque [data-audio-toggle] de la même   */
-/* façon : comportement sitewide intentionnel, non modifié ici. Mais sur   */
-/* cette page précise, le Hero affiche explicitement "Expérience optimale  */
-/* avec le son" juste sous le bouton d'exploration — priver les visiteurs  */
-/* mobiles du seul bouton permettant d'activer ce son rend cette phrase     */
-/* trompeuse. Cette règle, scoped à body.page-home uniquement, réaffiche    */
-/* seulement ce bouton précis sur mobile ; toutes les autres pages du site  */
-/* gardent exactement le même comportement mobile qu'avant (non touché). */
-@media (max-width: 768px) {
-  body.page-home .c-header__actions [data-audio-toggle] {
-    display: inline-flex;
-  }
-}
