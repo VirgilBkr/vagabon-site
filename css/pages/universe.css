@@ -278,6 +278,27 @@ body.page-universe .c-btn--primary:active {
   outline-color: var(--color-warm);
 }
 
+/* Correction ciblée (demande explicite du client, micro-correction isolée) :
+   ce CTA précis ("Parlons de votre projet", .universe-contact__cta, tout en
+   bas de universe.html) doit se comporter comme les boutons à CONTOUR déjà
+   corrigés (ex. .universe-cta, .c-btn--secondary) — contour + texte dorés,
+   PAS de remplissage doré plein — au lieu du remplissage hérité de
+   .c-btn--primary. La règle globale body.page-universe .c-btn--primary
+   ci-dessus N'EST PAS modifiée : elle reste responsable du remplissage doré
+   plein pour les autres boutons partageant cette classe (ex. "Réserver un
+   appel" dans le menu plein écran) ; cette surcharge, plus spécifique
+   (.universe-contact__cta) et placée après, ne s'applique qu'à ce CTA.
+   Repos inchangé : background-color: #AEC7D8 (hérité de .c-btn--primary,
+   non touché) — seuls :hover/:focus-visible/:active sont concernés ici. */
+body.page-universe .universe-contact__cta:hover,
+body.page-universe .universe-contact__cta:focus-visible,
+body.page-universe .universe-contact__cta:active {
+  background-color: rgba(199, 163, 78, 0.08);
+  border-color: var(--color-warm-soft);
+  color: var(--color-warm);
+  outline-color: var(--color-warm);
+}
+
 body.page-universe .c-btn--ghost {
   color: var(--u-accent);
 }
@@ -3310,31 +3331,29 @@ html.has-ice-cursor label {
   border-radius: var(--radius-sm);
 }
 
+/* Doré sitewide (demande explicite du client, micro-correction isolée) :
+   les 4 numéros de service (01-04) passent au même doré que les boutons
+   déjà validés (--color-warm), dans les trois états ci-dessous (repos,
+   service actif, survol/focus), pour un rendu doré cohérent quel que soit
+   l'état du bandeau. Titres, descriptions, listes, fond, animations,
+   scroll, layout et CTA de la section ne sont pas touchés. */
 .universe-services__panel-number {
   flex: none;
   font-family: var(--font-display);
   font-size: clamp(0.85rem, 1.2vw, 1.05rem);
   letter-spacing: var(--letter-spacing-eyebrow);
-  /* --u-ink-subtle (gris clair, ~2,1:1 sur --u-bg) remplacé par le palier
-     secondaire anthracite défini plus haut. */
-  color: var(--u-services-ink-soft);
+  color: var(--color-warm);
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-/* Numéro du service actif : --u-accent (bleu glacier, ~1,5:1 sur --u-bg)
-   était illisible en tant que couleur de texte — remplacé par --u-surface
-   (contraste plein, ~10,7:1). Le halo --u-accent-soft est conservé en
-   text-shadow (purement décoratif, ne porte aucune information et n'a donc
-   pas besoin de contraste) pour garder une touche "active" bleu glacier
-   sans jamais sacrifier la lisibilité du chiffre lui-même. */
 .universe-services__panel.is-active .universe-services__panel-number {
-  color: var(--u-surface);
+  color: var(--color-warm);
   text-shadow: 0 0 14px var(--u-accent-soft);
 }
 
 .universe-services__panel-header:hover .universe-services__panel-number,
 .universe-services__panel-header:focus-visible .universe-services__panel-number {
-  color: var(--u-surface);
+  color: var(--color-warm);
 }
 
 .universe-services__panel-title {
