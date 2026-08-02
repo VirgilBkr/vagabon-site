@@ -33,8 +33,15 @@ body.page-universe {
   --u-line-strong: rgba(243, 241, 234, 0.28);
   --u-accent: #3FA9DE;
   --u-accent-soft: rgba(63, 169, 222, 0.35);
-  --u-warm: #C7A34E;
-  --u-warm-soft: rgba(199, 163, 78, 0.4);
+  --u-warm: var(--color-warm);
+  --u-warm-soft: var(--color-warm-soft);
+  /* Doré sitewide (audit uniformisation boutons/CTA, voir variables.css) :
+     --u-warm reste réservé aux éléments posés sur un fond sombre (Hero,
+     signature, bandeau d'expertises, cartes). Les boutons de cette page qui
+     restent sur le fond bleu-gris clair (header, CTA Services, "Réserver un
+     appel") utilisent ce second palier, déjà vérifié à 5,43:1. */
+  --u-warm-on-light: var(--color-warm-on-light);
+  --u-warm-on-light-soft: var(--color-warm-on-light-soft);
   --u-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
 
   background: var(--u-bg);
@@ -140,9 +147,15 @@ body.page-universe .c-menu-toggle {
   color: #495359;
 }
 
-body.page-universe .c-icon-btn:hover {
-  border-color: var(--u-accent-soft);
-  background: rgba(63, 169, 222, 0.12);
+/* Doré sitewide (audit uniformisation boutons/CTA) : ces boutons ronds
+   restent sur le fond bleu-gris clair du header (voir body.page-universe
+   .c-header ci-dessus) — palier --u-warm-on-light, pas --u-warm (vif, réservé
+   au fond sombre du Hero). */
+body.page-universe .c-icon-btn:hover,
+body.page-universe .c-icon-btn:focus-visible,
+body.page-universe .c-icon-btn:active {
+  border-color: var(--u-warm-on-light-soft);
+  background: color-mix(in srgb, var(--u-warm-on-light) 12%, transparent);
 }
 
 /* Centrage de "FR" dans le bouton rond de langue. .c-icon-btn a déjà
@@ -213,9 +226,15 @@ body.page-universe .c-btn--secondary {
   color: #495359;
 }
 
-body.page-universe .c-btn--secondary:hover {
-  border-color: var(--u-accent-soft);
-  background: rgba(63, 169, 222, 0.1);
+/* Doré sitewide (audit uniformisation boutons/CTA) : touche notamment les 4
+   CTA de la section Services ("Parler de votre projet", etc.), posés sur le
+   même fond clair — palier --u-warm-on-light. */
+body.page-universe .c-btn--secondary:hover,
+body.page-universe .c-btn--secondary:focus-visible,
+body.page-universe .c-btn--secondary:active {
+  border-color: var(--u-warm-on-light-soft);
+  background: color-mix(in srgb, var(--u-warm-on-light) 10%, transparent);
+  color: var(--u-warm-on-light);
 }
 
 /* Bouton primaire (menu plein écran, "Réserver un appel") : abandon du
@@ -233,13 +252,18 @@ body.page-universe .c-btn--primary {
   color: #647279;
 }
 
-/* Inversion au survol/focus, dans la même palette à deux couleurs,
-   symétrique de l'état par défaut. */
+/* Doré sitewide (audit uniformisation boutons/CTA) : l'inversion gris-bleu
+   (#647279/#AEC7D8) est remplacée par le même principe d'inversion, mais
+   avec le doré --u-warm-on-light comme couleur de fond (palier "fond
+   clair", ce bouton restant sur le bleu-gris du header) — texte en --u-ink
+   (blanc cassé de cette page) pour un contraste large sur ce fond doré
+   sombre, plutôt que le bleu clair précédent. */
 body.page-universe .c-btn--primary:hover,
-body.page-universe .c-btn--primary:focus-visible {
-  background-color: #647279;
-  border-color: #647279;
-  color: #AEC7D8;
+body.page-universe .c-btn--primary:focus-visible,
+body.page-universe .c-btn--primary:active {
+  background-color: var(--u-warm-on-light);
+  border-color: var(--u-warm-on-light);
+  color: var(--u-ink);
 }
 
 body.page-universe .c-btn--ghost {
@@ -2808,9 +2832,13 @@ body.page-universe .universe-contact__cta {
   color: var(--u-ink);
 }
 
-.universe-contact__social .c-icon-btn:hover {
-  border-color: var(--u-accent-soft);
-  background: rgba(63, 169, 222, 0.1);
+/* Doré sitewide (audit uniformisation boutons/CTA) : icônes sociales sur
+   fond clair — palier --u-warm-on-light. */
+.universe-contact__social .c-icon-btn:hover,
+.universe-contact__social .c-icon-btn:focus-visible,
+.universe-contact__social .c-icon-btn:active {
+  border-color: var(--u-warm-on-light-soft);
+  background: color-mix(in srgb, var(--u-warm-on-light) 10%, transparent);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -2905,9 +2933,13 @@ body.page-universe .universe-contact__cta {
   color: var(--u-ink-muted);
 }
 
-.universe-footer__social .c-icon-btn:hover {
-  border-color: var(--u-accent-soft);
-  color: var(--u-ink);
+/* Doré sitewide (audit uniformisation boutons/CTA) : icônes sociales du
+   pied de page, même fond clair — palier --u-warm-on-light. */
+.universe-footer__social .c-icon-btn:hover,
+.universe-footer__social .c-icon-btn:focus-visible,
+.universe-footer__social .c-icon-btn:active {
+  border-color: var(--u-warm-on-light-soft);
+  color: var(--u-warm-on-light);
 }
 
 .universe-footer__bottom {
@@ -3095,5 +3127,385 @@ html.has-ice-cursor label {
   .universe-ice-cursor__vapor,
   .universe-intro__distortion-canvas {
     display: none;
+  }
+}
+
+/* ==========================================================================
+   SECTION SERVICES (entre Projets et Témoignages) — v2, sommaire éditorial
+   ==========================================================================
+   Scoped intégralement sous body.page-universe (fichier entier), donc sans
+   effet sur aucune autre page. Remplace la v1 (grille de 4 cartes) par 4
+   grands bandeaux empilés, sans rectangle fermé, sans icône.
+
+   FOND : AUCUN fond n'est déclaré ici, intentionnellement. Une version
+   précédente posait un dégradé bleu-anthracite quasi noir directement sur
+   .universe-services — retiré à la demande explicite du client, qui veut
+   voir apparaître ici exactement le même fond que le reste de la page
+   (var(--u-bg), hérité de body.page-universe / .l-page), sans aucune
+   nouvelle couche. La section est donc transparente, exactement comme
+   .universe-section (Projets, Témoignages) qui ne déclare elle non plus
+   aucun fond propre. Les couleurs de texte (--u-ink / --u-ink-muted /
+   --u-ink-subtle) restent celles déjà utilisées ailleurs sur cette même
+   page directement sur ce fond, par exemple .universe-project__title /
+   .universe-project__text (voir plus haut dans ce fichier) : Services suit
+   ici exactement le même précédent, pour "avoir toujours fait partie du
+   site" plutôt que d'inventer un traitement à part.
+
+   DÉGRADATION SANS JAVASCRIPT : par défaut (aucune classe ajoutée par le
+   script), les 4 panneaux sont simplement empilés, entièrement dépliés —
+   grid-template-rows: 1fr sur chaque contenu, jamais 0fr. Seule la classe
+   .is-services-interactive (ajoutée par js/universe-services.js une fois
+   GSAP confirmé disponible, y compris en reduced-motion : l'accordéon reste
+   alors utilisable au clic, seuls le pin/scrub/rotation 3D sont retirés
+   dans ce cas précis) active le repli en bandeaux fins des services
+   inactifs. Le pin desktop et la rotation d'entrée sont, eux, appliqués
+   uniquement en JS (jamais en CSS statique) via js/universe-services.js.
+
+   MISE EN PAGE DU SERVICE ACTIF (desktop) : grille à 2 colonnes fluides
+   (minmax + clamp + fr, jamais de largeur fixe) — colonne gauche ~35%
+   (numéro + titre), colonne droite ~65% (texte, prestations, CTA),
+   totalement indépendantes. Le bug de chevauchement de la version
+   précédente venait du titre en display:flex (ligne unique, largeur de
+   contenu non contrainte) qui débordait de sa colonne et venait recouvrir
+   le texte de droite : corrigé par min-width:0 sur les deux items de grille
+   (autorise le retrait du minimum de contenu implicite de CSS Grid) et par
+   un titre qui passe en colonne (nombre au-dessus, titre en dessous,
+   habilité à se répartir sur plusieurs lignes).
+   ========================================================================== */
+
+.universe-services__intro {
+  max-width: 640px;
+  margin-bottom: var(--space-2xl);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Contraste — le fond de la section est --u-bg (#AEC8D8, bleu glacier      */
+/* CLAIR, conservé tel quel). Le blanc cassé / gris clair (--u-ink,          */
+/* --u-ink-muted, --u-ink-subtle) y donnent des contrastes mesurés de       */
+/* ~1,5:1 à ~2,1:1 — tous très en dessous du minimum WCAG AA (4.5:1 texte    */
+/* normal, 3:1 grand texte), d'où la difficulté de lecture signalée. Le     */
+/* remplacement ci-dessous réutilise --u-surface (#0E131C, anthracite       */
+/* bleuté déjà présent dans la palette du fichier, jamais du noir pur       */
+/* #000000) directement comme couleur de texte : contraste mesuré ~10,7:1   */
+/* sur --u-bg, largement conforme. --u-services-ink-soft, dérivé du même    */
+/* --u-surface mélangé à --u-bg via color-mix() (aucune nouvelle couleur    */
+/* inventée, uniquement un mélange des deux jetons déjà existants), sert    */
+/* de palier "secondaire" pour les libellés discrets (mentions, sous-titres,*/
+/* numérotation inactive) : contraste mesuré ~5,3:1, toujours conforme,     */
+/* tout en restant visuellement plus léger que le texte éditorial principal.*/
+/* ---------------------------------------------------------------------- */
+.universe-services {
+  --u-services-ink-soft: color-mix(in srgb, var(--u-surface) 72%, var(--u-bg) 28%);
+}
+
+.universe-services__intro .universe-eyebrow {
+  color: var(--u-services-ink-soft);
+}
+
+.universe-services__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-heading);
+  /* Rétabli en --u-ink (blanc cassé) à la demande explicite du client : le
+     contraste mesuré (~1,5:1 sur --u-bg) reste sous le seuil WCAG, mais ce
+     grand titre est traité comme un élément de hiérarchie/mise en scène
+     plutôt que comme du texte de contenu — seul le contenu éditorial
+     (introduction, description, listes, mentions) reste en --u-surface. */
+  color: var(--u-ink);
+  margin: 0 0 var(--space-md);
+}
+
+.universe-services__text {
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  /* --u-surface (et non --u-ink-muted) : contraste ~10,7:1 sur --u-bg,
+     largement au-dessus du minimum WCAG, sans dépendre d'un survol pour
+     être lisible. */
+  color: var(--u-surface);
+  opacity: 1;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Pile de bandeaux — cible du pin desktop (voir js/universe-services.js). */
+/* La perspective légère donne de la profondeur à la rotation d'entrée     */
+/* sans jamais déformer le reste de la mise en page.                       */
+/* ---------------------------------------------------------------------- */
+.universe-services__stack {
+  perspective: 1600px;
+}
+
+.universe-services__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.universe-services__panel {
+  border-top: 1px solid var(--u-line);
+}
+
+.universe-services__panel:first-child {
+  border-top: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* En-tête de bandeau — vrai <button>, toujours pleine largeur, jamais un   */
+/* rectangle fermé (pas de fond, pas de bordure latérale). Numéro + titre.  */
+/* ---------------------------------------------------------------------- */
+.universe-services__panel-header {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(16px, 3vw, 32px);
+  width: 100%;
+  min-width: 0; /* autorise le retrait du minimum de contenu implicite en contexte grid (voir mise en page 2 colonnes plus bas) */
+  padding: clamp(20px, 3vw, 32px) 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: transform 0.3s var(--ease-standard);
+}
+
+.universe-services__panel-header:hover,
+.universe-services__panel-header:focus-visible {
+  transform: translateX(6px);
+}
+
+/* Doré sitewide (audit uniformisation boutons/CTA) : ce bouton (titre de
+   service cliquable) restait bleu au focus clavier — passe au même doré
+   "fond clair" que les autres contrôles de cette page. */
+.universe-services__panel-header:focus-visible {
+  outline: 2px solid var(--u-warm-on-light);
+  outline-offset: 6px;
+  border-radius: var(--radius-sm);
+}
+
+.universe-services__panel-number {
+  flex: none;
+  font-family: var(--font-display);
+  font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+  letter-spacing: var(--letter-spacing-eyebrow);
+  /* --u-ink-subtle (gris clair, ~2,1:1 sur --u-bg) remplacé par le palier
+     secondaire anthracite défini plus haut. */
+  color: var(--u-services-ink-soft);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* Numéro du service actif : --u-accent (bleu glacier, ~1,5:1 sur --u-bg)
+   était illisible en tant que couleur de texte — remplacé par --u-surface
+   (contraste plein, ~10,7:1). Le halo --u-accent-soft est conservé en
+   text-shadow (purement décoratif, ne porte aucune information et n'a donc
+   pas besoin de contraste) pour garder une touche "active" bleu glacier
+   sans jamais sacrifier la lisibilité du chiffre lui-même. */
+.universe-services__panel.is-active .universe-services__panel-number {
+  color: var(--u-surface);
+  text-shadow: 0 0 14px var(--u-accent-soft);
+}
+
+.universe-services__panel-header:hover .universe-services__panel-number,
+.universe-services__panel-header:focus-visible .universe-services__panel-number {
+  color: var(--u-surface);
+}
+
+.universe-services__panel-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  /* Rétabli en --u-ink (blanc cassé) à la demande explicite du client, pour
+     la hiérarchie visuelle titre/contenu — voir .universe-services__title
+     ci-dessus pour le détail du choix. */
+  color: var(--u-ink);
+  line-height: 1.02;
+  letter-spacing: var(--letter-spacing-display);
+  /* Taille généreuse par défaut (repli sans JS/interactivité) : les 4 titres
+     restent grands et bien lisibles, à l'image du sommaire éditorial de
+     référence, tant que l'accordéon n'est pas actif. */
+  font-size: clamp(1.7rem, 4.4vw, 3.3rem);
+  transition: font-size 0.4s var(--ease-standard), opacity 0.4s ease;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Contenu de bandeau — TOUJOURS déplié par défaut (grid-template-rows:1fr) */
+/* afin de rester pleinement visible et lisible sans JavaScript. Seule la   */
+/* classe .is-services-interactive (posée par le script) autorise le repli */
+/* des panneaux inactifs vers 0fr, plus bas dans ce fichier.                */
+/* ---------------------------------------------------------------------- */
+.universe-services__panel-content {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.55s var(--ease-standard);
+}
+
+.universe-services__panel-body {
+  min-height: 0; /* indispensable pour que le repli grid-template-rows fonctionne */
+  min-width: 0; /* idem en contexte grid 2 colonnes : empêche tout débordement sur la colonne du titre */
+  overflow: hidden;
+  padding-top: clamp(4px, 1vw, 14px);
+  padding-bottom: clamp(24px, 3.5vw, 40px);
+  transition: opacity 0.35s ease;
+  transform-origin: 0% 100%; /* bas-gauche : point d'ancrage de la rotation d'entrée pilotée par GSAP */
+}
+
+.universe-services__panel-desc {
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+  /* --u-ink-muted (~1,7:1 sur --u-bg) remplacé par --u-surface (~10,7:1). */
+  color: var(--u-surface);
+  max-width: 62ch;
+  margin: 0 0 var(--space-xl);
+}
+
+.universe-services__panel-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg) clamp(24px, 3vw, 48px);
+  margin-bottom: var(--space-xl);
+}
+
+.universe-services__panel-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.universe-services__panel-list li {
+  position: relative;
+  padding-left: 18px;
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  /* --u-ink-muted (~1,7:1 sur --u-bg) remplacé par --u-surface (~10,7:1). */
+  color: var(--u-surface);
+  line-height: 1.5;
+}
+
+.universe-services__panel-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 1px;
+  background: var(--u-accent-soft);
+}
+
+.universe-services__panel-subgroup + .universe-services__panel-subgroup {
+  margin-top: 0; /* déjà géré par la grille 2 colonnes ci-dessus */
+}
+
+.universe-services__panel-subheading {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-eyebrow);
+  text-transform: uppercase;
+  /* --u-ink-subtle (~2,1:1 sur --u-bg) remplacé par le palier secondaire
+     anthracite (--u-services-ink-soft, ~5,3:1). */
+  color: var(--u-services-ink-soft);
+  margin: 0 0 var(--space-xs);
+}
+
+.universe-services__panel-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-lg);
+}
+
+.universe-services__panel-mention {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  /* --u-ink-subtle (~2,1:1 sur --u-bg) remplacé par le palier secondaire
+     anthracite (--u-services-ink-soft, ~5,3:1). */
+  color: var(--u-services-ink-soft);
+}
+
+.universe-services__cta {
+  white-space: nowrap;
+  transition: transform 0.3s var(--ease-standard);
+}
+
+.universe-services__panel-footer:hover .universe-services__cta {
+  transform: translateX(3px);
+}
+
+@media (max-width: 640px) {
+  .universe-services__panel-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Mode interactif (classe posée par js/universe-services.js une fois GSAP */
+/* confirmé disponible) : bandeaux inactifs repliés + disposition 2         */
+/* colonnes (numéro/titre à gauche, contenu à droite) sur le service actif */
+/* en desktop. Le pin, le scrub et la rotation restent entièrement pilotés */
+/* en JS et ne dépendent d'aucune règle ci-dessous.                         */
+/* ---------------------------------------------------------------------- */
+.universe-services.is-services-interactive .universe-services__panel:not(.is-active) .universe-services__panel-content {
+  grid-template-rows: 0fr;
+}
+
+.universe-services.is-services-interactive .universe-services__panel:not(.is-active) .universe-services__panel-body {
+  opacity: 0;
+}
+
+.universe-services.is-services-interactive .universe-services__panel:not(.is-active) .universe-services__panel-title {
+  font-size: clamp(1.05rem, 1.9vw, 1.55rem);
+}
+
+@media (min-width: 901px) {
+  /* Grille fluide 2 colonnes (~35% / ~65%), minmax + clamp + fr uniquement —
+     jamais de largeur fixe. La colonne gauche ne dépasse jamais ~340px mais
+     peut aussi se réduire (minmax(0, ...)) : c'est ce "0" qui autorise le
+     texte du titre à se réduire/se répartir sur plusieurs lignes plutôt que
+     de forcer la colonne à s'élargir au-delà de sa cible et d'empiéter sur
+     la colonne de droite (cause du chevauchement précédent). */
+  .universe-services.is-services-interactive .universe-services__panel.is-active {
+    display: grid;
+    grid-template-columns: minmax(0, clamp(200px, 30vw, 340px)) minmax(0, 1fr);
+    align-items: start;
+    column-gap: clamp(32px, 5vw, 64px);
+  }
+
+  /* En-tête du service actif : numéro au-dessus du titre (plutôt qu'en
+     ligne) pour que le grand titre puisse se répartir sur plusieurs lignes
+     dans une colonne étroite, au lieu de rester forcé sur une seule ligne
+     qui déborderait de sa colonne. */
+  .universe-services.is-services-interactive .universe-services__panel.is-active .universe-services__panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding-top: clamp(20px, 3vw, 32px);
+  }
+
+  .universe-services.is-services-interactive .universe-services__panel.is-active .universe-services__panel-title {
+    font-size: clamp(1.9rem, 2.7vw, 2.5rem);
+    overflow-wrap: break-word;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Repli tactile / reduced-motion : l'accordéon (classe                    */
+/* .is-services-interactive) reste identique — un seul changement, décrit  */
+/* dans js/universe-services.js : pas de pin, pas de rotation créés dans    */
+/* ces deux contextes. Ici, on neutralise seulement la transition de        */
+/* hauteur pour éviter un mouvement jugé disgracieux sous reduced-motion,   */
+/* au profit d'un simple fondu — jamais de contenu masqué de façon          */
+/* permanente : l'accordéon reste utilisable au clic/tactile/clavier.       */
+@media (prefers-reduced-motion: reduce) {
+  .universe-services__panel-content {
+    transition: none;
+  }
+  .universe-services__panel-header,
+  .universe-services__cta {
+    transition: none;
   }
 }

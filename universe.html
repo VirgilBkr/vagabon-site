@@ -518,6 +518,205 @@
       </div>
     </section>
 
+    <!-- ======================= B.2 SERVICES =======================
+         Nouvelle section, insérée UNIQUEMENT ici entre la fin de Projets (B,
+         ci-dessus) et Témoignages (B.1, plus bas) — Hero, bandeau
+         d'expertises, Projets 01/02/03, Témoignages et Contact ne sont pas
+         modifiés. Présente les quatre offres principales de Vagabon (TPE,
+         PME, startups, entrepreneurs, indépendants/freelances) sous la forme
+         d'un sommaire éditorial à 4 bandeaux empilés (v2 — remplace la
+         grille de 4 cartes de la version précédente, abandonnée : plus
+         aucune carte fermée, aucun tilt individuel, aucun glow suivant la
+         souris).
+
+         MÉCANIQUE (adaptée de la référence GSAP fournie, story-scroll.tsx,
+         React/Tailwind — jamais copiée telle quelle, uniquement sa mécanique
+         d'animation reportée en vanilla JS) : la référence pin CHAQUE
+         section indépendamment (pinSpacing:false, ~1 ScrollTrigger de pin +
+         1 de rotation par section, empilement réel sur plusieurs viewports).
+         Ici, adaptation assumée et validée explicitement par le client pour
+         rester compacte (~1 viewport) : UN SEUL .universe-services__stack
+         est épinglé, piloté par UN SEUL ScrollTrigger principal qui traduit
+         la progression du scroll en 4 états internes (service actif 0 à 3).
+         Le service actif occupe l'essentiel de la hauteur ; les 3 autres se
+         réduisent à un bandeau fin (titre + numéro, cliquable). La rotation
+         "arrivée depuis le bas-gauche puis mise à plat" de la référence est
+         conservée mais atténuée (6 à 10°, jamais 30°) et appliquée au
+         contenu du panneau qui devient actif.
+
+         Contenu entièrement visible et lisible SANS JavaScript : les 4
+         panneaux sont simplement dépliés les uns sous les autres, aucun
+         n'est masqué par défaut (voir css/pages/universe.css, règles hors
+         [data-services-js-ready]). GSAP + ScrollTrigger (déjà chargés sur
+         cette page, voir les <script> juste avant </body>) n'activent le pin,
+         la rotation et l'accordéon qu'une fois confirmés disponibles — voir
+         js/universe-services.js pour le détail complet et les gardes-fous
+         (jamais de ScrollTrigger.killAll(), sélecteurs strictement limités
+         à .universe-services, nettoyage ciblé via gsap.matchMedia() lors des
+         changements de contexte desktop/mobile/reduced-motion). -->
+    <section class="universe-section universe-services" id="services" aria-labelledby="services-title">
+      <div class="universe-section__inner">
+        <div class="universe-services__intro" data-scene>
+          <div class="universe-eyebrow" data-reveal data-i18n="services.section_label">Services</div>
+          <h2 id="services-title" class="universe-services__title" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="services.title">Je crée des identités qui marquent.</h2>
+          <p class="universe-services__text" data-reveal data-reveal-delay="2" data-i18n="services.intro">Vagabon accompagne les marques de la réflexion stratégique jusqu'à la production de leurs contenus et à leur visibilité.</p>
+        </div>
+
+        <!-- Sommaire éditorial à 4 bandeaux empilés (remplace la grille de
+             cartes). data-services-stack est la cible du pin desktop ;
+             chaque bandeau est un <button> réel (accessible clavier,
+             aria-expanded/aria-controls) suivi de son panneau de contenu.
+             Sans JavaScript : les 4 panneaux sont simplement dépliés les uns
+             sous les autres (voir universe.css, règles de base sans JS) —
+             aucun contenu n'est jamais perdu. js/universe-services.js ne
+             cible que les éléments data-service-* ci-dessous. -->
+        <div class="universe-services__stack" data-services-stack>
+          <div class="universe-services__list" data-services-list>
+
+            <!-- Service 1 — Production photo & vidéo -->
+            <div class="universe-services__panel is-active" data-service-panel data-service-index="0">
+              <button type="button" class="universe-services__panel-header" data-service-toggle id="service-tab-0" aria-expanded="true" aria-controls="service-panel-0">
+                <span class="universe-services__panel-number">01</span>
+                <span class="universe-services__panel-title" data-i18n="services.01.title">Production photo &amp; vidéo</span>
+              </button>
+              <div class="universe-services__panel-content" id="service-panel-0" role="region" aria-labelledby="service-tab-0" data-service-content>
+                <div class="universe-services__panel-body">
+                  <p class="universe-services__panel-desc" data-i18n="services.01.description">Des contenus visuels pensés pour raconter votre marque avec justesse, cohérence et impact.</p>
+                  <div class="universe-services__panel-columns">
+                    <ul class="universe-services__panel-list">
+                      <li data-i18n="services.01.item_1">Conception de concepts visuels</li>
+                      <li data-i18n="services.01.item_2">Préparation et direction de tournage</li>
+                      <li data-i18n="services.01.item_3">Captation vidéo</li>
+                      <li data-i18n="services.01.item_4">Photographie</li>
+                    </ul>
+                    <ul class="universe-services__panel-list">
+                      <li data-i18n="services.01.item_5">Contenus pour les réseaux sociaux</li>
+                      <li data-i18n="services.01.item_6">Formats publicitaires</li>
+                      <li data-i18n="services.01.item_7">Interviews et contenus de marque</li>
+                      <li data-i18n="services.01.item_8">Sélection, montage et déclinaisons des contenus</li>
+                    </ul>
+                  </div>
+                  <div class="universe-services__panel-footer">
+                    <span class="universe-services__panel-mention" data-i18n="services.mention">Sur devis</span>
+                    <a href="contact.html" class="c-btn c-btn--secondary universe-services__cta" data-i18n="services.01.cta">Parler de votre projet</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Service 2 — Identité visuelle & branding -->
+            <div class="universe-services__panel" data-service-panel data-service-index="1">
+              <button type="button" class="universe-services__panel-header" data-service-toggle id="service-tab-1" aria-expanded="false" aria-controls="service-panel-1">
+                <span class="universe-services__panel-number">02</span>
+                <span class="universe-services__panel-title" data-i18n="services.02.title">Identité visuelle &amp; branding</span>
+              </button>
+              <div class="universe-services__panel-content" id="service-panel-1" role="region" aria-labelledby="service-tab-1" data-service-content>
+                <div class="universe-services__panel-body">
+                  <p class="universe-services__panel-desc" data-i18n="services.02.description">Une identité cohérente et reconnaissable, conçue pour traduire votre positionnement et vous différencier.</p>
+                  <div class="universe-services__panel-columns">
+                    <ul class="universe-services__panel-list">
+                      <li data-i18n="services.02.item_1">Création ou refonte de logo</li>
+                      <li data-i18n="services.02.item_2">Direction artistique</li>
+                      <li data-i18n="services.02.item_3">Palette de couleurs</li>
+                      <li data-i18n="services.02.item_4">Choix typographiques</li>
+                    </ul>
+                    <ul class="universe-services__panel-list">
+                      <li data-i18n="services.02.item_5">Charte graphique</li>
+                      <li data-i18n="services.02.item_6">Système visuel</li>
+                      <li data-i18n="services.02.item_7">Déclinaisons pour supports numériques et imprimés</li>
+                      <li data-i18n="services.02.item_8">Recommandations d'utilisation de la marque</li>
+                    </ul>
+                  </div>
+                  <div class="universe-services__panel-footer">
+                    <span class="universe-services__panel-mention" data-i18n="services.mention">Sur devis</span>
+                    <a href="contact.html" class="c-btn c-btn--secondary universe-services__cta" data-i18n="services.02.cta">Construire mon identité</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Service 3 — Stratégie de communication & contenu -->
+            <div class="universe-services__panel" data-service-panel data-service-index="2">
+              <button type="button" class="universe-services__panel-header" data-service-toggle id="service-tab-2" aria-expanded="false" aria-controls="service-panel-2">
+                <span class="universe-services__panel-number">03</span>
+                <span class="universe-services__panel-title" data-i18n="services.03.title">Stratégie de communication &amp; contenu</span>
+              </button>
+              <div class="universe-services__panel-content" id="service-panel-2" role="region" aria-labelledby="service-tab-2" data-service-content>
+                <div class="universe-services__panel-body">
+                  <p class="universe-services__panel-desc" data-i18n="services.03.description">Une feuille de route claire pour prendre la parole avec régularité, cohérence et pertinence.</p>
+                  <div class="universe-services__panel-columns">
+                    <ul class="universe-services__panel-list">
+                      <li data-i18n="services.03.item_1">Audit de communication</li>
+                      <li data-i18n="services.03.item_2">Définition des objectifs</li>
+                      <li data-i18n="services.03.item_3">Identification des audiences</li>
+                      <li data-i18n="services.03.item_4">Stratégie éditoriale</li>
+                      <li data-i18n="services.03.item_5">Stratégie de contenu</li>
+                    </ul>
+                    <ul class="universe-services__panel-list">
+                      <li data-i18n="services.03.item_6">Plan de communication</li>
+                      <li data-i18n="services.03.item_7">Calendrier éditorial</li>
+                      <li data-i18n="services.03.item_8">Recommandations par canal</li>
+                      <li data-i18n="services.03.item_9">Idées de contenus et formats</li>
+                      <li data-i18n="services.03.item_10">Accompagnement sur plusieurs mois</li>
+                    </ul>
+                  </div>
+                  <div class="universe-services__panel-footer">
+                    <span class="universe-services__panel-mention" data-i18n="services.mention">Sur devis</span>
+                    <a href="contact.html" class="c-btn c-btn--secondary universe-services__cta" data-i18n="services.03.cta">Définir ma stratégie</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Service 4 — SEO & SEA (deux colonnes = SEO / SEA) -->
+            <div class="universe-services__panel" data-service-panel data-service-index="3">
+              <button type="button" class="universe-services__panel-header" data-service-toggle id="service-tab-3" aria-expanded="false" aria-controls="service-panel-3">
+                <span class="universe-services__panel-number">04</span>
+                <span class="universe-services__panel-title" data-i18n="services.04.title">SEO &amp; SEA</span>
+              </button>
+              <div class="universe-services__panel-content" id="service-panel-3" role="region" aria-labelledby="service-tab-3" data-service-content>
+                <div class="universe-services__panel-body">
+                  <p class="universe-services__panel-desc" data-i18n="services.04.description">Une stratégie de visibilité conçue pour attirer les bonnes audiences et soutenir durablement votre activité.</p>
+                  <div class="universe-services__panel-columns">
+                    <div class="universe-services__panel-subgroup">
+                      <p class="universe-services__panel-subheading" data-i18n="services.04.seo_label">SEO</p>
+                      <ul class="universe-services__panel-list">
+                        <li data-i18n="services.04.seo_item_1">Audit du référencement naturel</li>
+                        <li data-i18n="services.04.seo_item_2">Recherche de mots-clés</li>
+                        <li data-i18n="services.04.seo_item_3">Analyse des intentions de recherche</li>
+                        <li data-i18n="services.04.seo_item_4">Recommandations de structure</li>
+                        <li data-i18n="services.04.seo_item_5">Stratégie éditoriale SEO</li>
+                        <li data-i18n="services.04.seo_item_6">Création ou optimisation d'articles</li>
+                        <li data-i18n="services.04.seo_item_7">Optimisation des contenus existants</li>
+                        <li data-i18n="services.04.seo_item_8">Plan de mots-clés adapté aux offres de l'entreprise</li>
+                      </ul>
+                    </div>
+                    <div class="universe-services__panel-subgroup">
+                      <p class="universe-services__panel-subheading" data-i18n="services.04.sea_label">SEA</p>
+                      <ul class="universe-services__panel-list">
+                        <li data-i18n="services.04.sea_item_1">Stratégie Google Ads</li>
+                        <li data-i18n="services.04.sea_item_2">Sélection des mots-clés</li>
+                        <li data-i18n="services.04.sea_item_3">Structuration des campagnes</li>
+                        <li data-i18n="services.04.sea_item_4">Recommandations d'annonces</li>
+                        <li data-i18n="services.04.sea_item_5">Réflexion sur les contenus display</li>
+                        <li data-i18n="services.04.sea_item_6">Recommandations de ciblage</li>
+                        <li data-i18n="services.04.sea_item_7">Suivi et pistes d'optimisation</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="universe-services__panel-footer">
+                    <span class="universe-services__panel-mention" data-i18n="services.mention">Sur devis</span>
+                    <a href="contact.html" class="c-btn c-btn--secondary universe-services__cta" data-i18n="services.04.cta">Améliorer ma visibilité</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ======================= B.1 TÉMOIGNAGES =======================
          Nouvelle section, insérée UNIQUEMENT ici entre la fin de Projets/
          Projet 03 (B, ci-dessus) et Contact (D, plus bas) — Hero, bandeau
@@ -745,6 +944,18 @@
   <script src="js/universe-cursor.js?v=9" defer></script>
   <script src="js/universe-hero-distortion.js?v=1" defer></script>
   <script src="js/universe-media-stack.js?v=9" defer></script>
+
+  <!-- GSAP + ScrollTrigger : chargés pour la première fois sur cette page,
+       uniquement pour la section Services (.universe-services). Bibliothèque
+       déjà approuvée et utilisée ailleurs dans le projet (index.html,
+       Playground) — même CDN/version que js/home-hero-cinematic.js. Aucune
+       autre section de universe.html n'en dépend ; js/universe-services.js
+       vérifie leur présence et se dégrade proprement si le CDN ne charge
+       pas (voir ce fichier pour le détail des gardes-fous). -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="js/universe-services.js?v=1" defer></script>
+
   <script src="js/main.js" defer></script>
 </body>
 </html>
