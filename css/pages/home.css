@@ -149,6 +149,7 @@ html.is-landing-locked body {
   border-color: var(--color-warm-soft);
   background: color-mix(in srgb, var(--color-warm) 14%, transparent);
   color: var(--color-warm);
+  outline-color: var(--color-warm);
 }
 
 .page-home .c-header__actions .c-btn--secondary:hover,
@@ -157,6 +158,21 @@ html.is-landing-locked body {
   border-color: var(--color-warm-soft);
   background: color-mix(in srgb, var(--color-warm) 10%, transparent);
   color: var(--color-warm);
+  outline-color: var(--color-warm);
+}
+
+/* Doré sitewide (audit uniformisation boutons/CTA, passe 2) : les barres du
+   burger (.c-menu-toggle__bar, fond via background et non color) ne
+   suivaient pas le survol/focus/clic du bouton lui-même. Un fallback
+   global doré "fond clair" existe désormais pour toutes les pages
+   (components.css, --color-warm-on-light) — cette page a besoin de sa
+   propre surcharge en doré VIF (--color-warm), cohérente avec le reste des
+   boutons du header sur ce Hero sombre, plus spécifique donc prioritaire
+   sur le fallback global. */
+.page-home .c-menu-toggle:hover .c-menu-toggle__bar,
+.page-home .c-menu-toggle:focus-visible .c-menu-toggle__bar,
+.page-home .c-menu-toggle:active .c-menu-toggle__bar {
+  background: var(--color-warm);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -442,11 +458,22 @@ body.page-home .c-card-project[data-cursor-label] {
    coins, non concernés par ce changement — voir .explore-button__corner
    plus bas, volontairement inchangé) au profit du doré vif --color-warm,
    réservé aux boutons posés sur un fond sombre comme ce Hero. */
+/* Doré sitewide (audit uniformisation boutons/CTA, passe 2) : jusqu'ici,
+   seuls border-color/background/color étaient corrigés au clavier
+   (:focus-visible) — la bague de focus elle-même (outline, posée
+   globalement en bleu par :focus-visible dans base.css et jamais
+   surchargée par les règles boutons) restait visible et bleue derrière ce
+   correctif. outline-color est désormais explicitement aligné sur le même
+   doré, sur CE bouton et tous les autres boutons du site (voir chaque
+   fichier css/pages/*.css et components.css). Sans effet sur :hover/:active
+   seuls (l'outline ne s'affiche que si :focus-visible correspond réellement
+   — safe à ajouter dans le même bloc groupé). */
 .explore-button:hover,
 .explore-button:focus-visible,
 .explore-button:active {
   border-color: var(--color-warm-soft);
   background: color-mix(in srgb, var(--color-surface) 75%, transparent);
+  outline-color: var(--color-warm);
 }
 
 /* Doré sitewide (audit uniformisation boutons/CTA) : cette règle avait été
@@ -459,6 +486,7 @@ body.page-home .c-card-project[data-cursor-label] {
 .home-hero--cinematic .explore-button:active {
   border-color: var(--color-warm);
   background: rgba(199, 163, 78, 0.14);
+  outline-color: var(--color-warm);
 }
 
 .explore-button:active {
@@ -516,6 +544,11 @@ body.page-home .c-card-project[data-cursor-label] {
   opacity: 0.5;
 }
 
+/* Doré sitewide (audit uniformisation boutons/CTA) : ce balayage lumineux
+   n'est visible qu'au survol/focus (voir .explore-button:hover::after plus
+   bas, qui fait glisser ce calque de -60% à 130%) — c'était donc bien un
+   bleu qui apparaissait spécifiquement DANS l'état interactif du bouton,
+   invisible au repos. Remplacé par le même doré vif que le reste du bouton. */
 .explore-button::after {
   content: "";
   position: absolute;
@@ -523,7 +556,7 @@ body.page-home .c-card-project[data-cursor-label] {
   left: -60%;
   width: 40%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-accent) 22%, transparent), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-warm) 22%, transparent), transparent);
   transform: skewX(-18deg);
   transition: left 700ms var(--ease-standard);
   z-index: 1;

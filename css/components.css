@@ -154,11 +154,42 @@
    sur fond clair, ce qui couvre la majorité des pages. Les pages posées sur
    un fond sombre (ex. header de l'accueil sur le Hero vidéo) ont leur
    propre surcharge en --color-warm, la variante vive (voir home.css). */
+/* Doré sitewide (audit uniformisation boutons/CTA, passe 2) : outline-color
+   ajouté sur ce bloc et tous les autres blocs :hover/:focus-visible/:active
+   de boutons du site — sans cela, la bague de focus clavier (outline)
+   restait bleue partout (héritée de :focus-visible dans base.css, jamais
+   surchargée jusqu'ici), au-dessus même des couleurs déjà corrigées. Ajout
+   sans risque dans ce bloc groupé : l'outline ne s'affiche de toute façon
+   que lorsque :focus-visible s'applique réellement. */
 .c-icon-btn:hover,
 .c-icon-btn:focus-visible,
 .c-icon-btn:active {
   border-color: var(--color-warm-on-light-soft);
   background: color-mix(in srgb, var(--color-warm-on-light) 12%, transparent);
+  color: var(--color-warm-on-light);
+  outline-color: var(--color-warm-on-light);
+}
+
+/* Doré sitewide (audit uniformisation boutons/CTA, passe 2) : .c-menu-toggle
+   (bouton burger) ne partage pas la classe .c-icon-btn dans le HTML — sans
+   cette règle dédiée, il n'avait AUCUN comportement de survol/focus/clic nulle
+   part sur le site en dehors de la page d'accueil (voir .page-home
+   .c-menu-toggle dans home.css), et affichait donc uniquement la bague de
+   focus clavier bleue par défaut. Même traitement que .c-icon-btn ci-dessus
+   (palier fond clair, fallback global) ; les pages qui ont leur propre
+   variante de .c-icon-btn (universe/contact/legal) étendent aussi ce
+   sélecteur à .c-menu-toggle dans leur fichier respectif. */
+.c-menu-toggle:hover,
+.c-menu-toggle:focus-visible,
+.c-menu-toggle:active {
+  border-color: var(--color-warm-on-light-soft);
+  outline-color: var(--color-warm-on-light);
+}
+
+.c-menu-toggle:hover .c-menu-toggle__bar,
+.c-menu-toggle:focus-visible .c-menu-toggle__bar,
+.c-menu-toggle:active .c-menu-toggle__bar {
+  background: var(--color-warm-on-light);
 }
 
 .c-icon-btn[disabled] {
@@ -328,6 +359,7 @@
   background: var(--color-transition-accent);
   border-color: var(--color-transition-accent);
   color: var(--color-transition-bg);
+  outline-color: var(--color-transition-accent);
 }
 
 .c-nav-fullscreen .c-btn--ghost {
@@ -343,6 +375,7 @@
 .c-nav-fullscreen .c-btn--ghost:focus-visible,
 .c-nav-fullscreen .c-btn--ghost:active {
   color: var(--color-transition-accent);
+  outline-color: var(--color-transition-accent);
 }
 
 .c-nav-fullscreen [data-menu-close],
@@ -361,6 +394,7 @@
   border-color: var(--color-transition-accent);
   color: var(--color-transition-accent);
   background: transparent;
+  outline-color: var(--color-transition-accent);
 }
 
 @media (max-width: 860px) {
@@ -428,6 +462,7 @@
 .c-btn--primary:focus-visible,
 .c-btn--primary:active {
   background: var(--color-warm-on-light);
+  outline-color: var(--color-warm-on-light);
 }
 
 .c-btn--secondary {
@@ -439,6 +474,7 @@
 .c-btn--secondary:focus-visible,
 .c-btn--secondary:active {
   border-color: var(--color-warm-on-light-soft);
+  outline-color: var(--color-warm-on-light);
 }
 
 .c-btn--ghost {
@@ -452,7 +488,7 @@
 }
 .c-btn--ghost:hover,
 .c-btn--ghost:focus-visible,
-.c-btn--ghost:active { color: var(--color-warm-on-light); }
+.c-btn--ghost:active { color: var(--color-warm-on-light); outline-color: var(--color-warm-on-light); }
 
 .c-btn--block { width: 100%; }
 .c-btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
@@ -584,9 +620,18 @@
   transition: all var(--duration-fast) var(--ease-standard);
 }
 
-.filter-btn:hover {
-  border-color: var(--color-border-accent);
+/* Doré sitewide (audit uniformisation boutons/CTA) : .filter-btn n'est
+   actuellement référencé par aucun fichier HTML/JS du site (composant
+   hérité, non utilisé en production) — corrigé par cohérence avec le
+   reste de la famille .c-btn/.c-icon-btn au cas où il serait réactivé,
+   mais sans impact visuel actuel. :focus-visible/:active ajoutés (absents
+   jusqu'ici) pour suivre le même triptyque que tous les autres boutons. */
+.filter-btn:hover,
+.filter-btn:focus-visible,
+.filter-btn:active {
+  border-color: var(--color-warm-on-light-soft);
   color: var(--color-text);
+  outline-color: var(--color-warm-on-light);
 }
 
 .filter-btn[aria-pressed="true"] {

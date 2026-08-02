@@ -151,11 +151,21 @@ body.page-universe .c-menu-toggle {
    restent sur le fond bleu-gris clair du header (voir body.page-universe
    .c-header ci-dessus) — palier --u-warm-on-light, pas --u-warm (vif, réservé
    au fond sombre du Hero). */
+/* Doré sitewide (audit uniformisation boutons/CTA, passe 2) : .c-menu-toggle
+   ajouté à ce groupe (absent jusqu'ici — voir components.css pour le
+   fallback global désormais en place) + color ajouté pour que le texte/
+   icône à l'intérieur de ces boutons (ex. "FR", "✕") devienne doré comme
+   la bordure, conformément au comportement de référence .universe-cta. */
 body.page-universe .c-icon-btn:hover,
 body.page-universe .c-icon-btn:focus-visible,
-body.page-universe .c-icon-btn:active {
+body.page-universe .c-icon-btn:active,
+body.page-universe .c-menu-toggle:hover,
+body.page-universe .c-menu-toggle:focus-visible,
+body.page-universe .c-menu-toggle:active {
   border-color: var(--u-warm-on-light-soft);
   background: color-mix(in srgb, var(--u-warm-on-light) 12%, transparent);
+  color: var(--u-warm-on-light);
+  outline-color: var(--u-warm-on-light);
 }
 
 /* Centrage de "FR" dans le bouton rond de langue. .c-icon-btn a déjà
@@ -235,6 +245,7 @@ body.page-universe .c-btn--secondary:active {
   border-color: var(--u-warm-on-light-soft);
   background: color-mix(in srgb, var(--u-warm-on-light) 10%, transparent);
   color: var(--u-warm-on-light);
+  outline-color: var(--u-warm-on-light);
 }
 
 /* Bouton primaire (menu plein écran, "Réserver un appel") : abandon du
@@ -264,6 +275,7 @@ body.page-universe .c-btn--primary:active {
   background-color: var(--u-warm-on-light);
   border-color: var(--u-warm-on-light);
   color: var(--u-ink);
+  outline-color: var(--u-warm-on-light);
 }
 
 body.page-universe .c-btn--ghost {
@@ -713,11 +725,22 @@ html.js [data-scene].is-visible {
               color var(--duration-base) var(--ease-standard);
 }
 
+/* Doré sitewide (audit uniformisation boutons/CTA, passe 2) : ce bouton est
+   la RÉFÉRENCE officielle du comportement doré (bordure + texte + flèche)
+   demandé pour tout le site. Deux ajustements pour qu'il l'incarne
+   pleinement lui-même : :active ajouté (n'était pas listé alors que hover
+   et focus-visible l'étaient — clic tactile/souris n'activait donc pas
+   explicitement ce doré, même si :active hérite en pratique de :hover tant
+   que le pointeur reste dessus) ; outline-color ajouté, sinon la bague de
+   focus clavier globale (bleue, base.css) restait visible par-dessus,
+   MÊME sur ce bouton de référence. */
 .universe-cta:hover,
-.universe-cta:focus-visible {
+.universe-cta:focus-visible,
+.universe-cta:active {
   border-color: var(--u-warm-soft);
   background: rgba(199, 163, 78, 0.08);
   color: var(--u-warm);
+  outline-color: var(--u-warm);
 }
 
 .universe-cta__arrow {
@@ -2839,6 +2862,7 @@ body.page-universe .universe-contact__cta {
 .universe-contact__social .c-icon-btn:active {
   border-color: var(--u-warm-on-light-soft);
   background: color-mix(in srgb, var(--u-warm-on-light) 10%, transparent);
+  outline-color: var(--u-warm-on-light);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -2940,6 +2964,7 @@ body.page-universe .universe-contact__cta {
 .universe-footer__social .c-icon-btn:active {
   border-color: var(--u-warm-on-light-soft);
   color: var(--u-warm-on-light);
+  outline-color: var(--u-warm-on-light);
 }
 
 .universe-footer__bottom {

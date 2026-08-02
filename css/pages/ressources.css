@@ -44,6 +44,7 @@
 .ressources-back:active {
   color: var(--u-warm-on-light);
   border-color: var(--u-warm-on-light-soft);
+  outline-color: var(--u-warm-on-light);
 }
 
 /* ---------------------------------------------------------------------- */
@@ -128,6 +129,7 @@
 .ressources-filters__pill:active {
   color: var(--u-ink);
   border-color: var(--u-warm-on-light-soft);
+  outline-color: var(--u-warm-on-light);
 }
 
 /* Catégorie active — trait plein doré, pas de fond plein (reste sobre).

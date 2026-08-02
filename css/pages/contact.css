@@ -84,11 +84,19 @@ body.page-contact .c-menu-toggle {
 /* Doré sitewide (audit uniformisation boutons/CTA) : boutons ronds du
    header restés bleus (--vc-accent-soft) — alignés sur le même doré que
    .contact-form__submit / .contact-calendly__button plus bas. */
+/* Doré sitewide (audit uniformisation boutons/CTA, passe 2) : .c-menu-toggle
+   ajouté à ce groupe (absent jusqu'ici) + color ajouté (texte/icône devient
+   doré comme la bordure, conformément au bouton de référence). */
 body.page-contact .c-icon-btn:hover,
 body.page-contact .c-icon-btn:focus-visible,
-body.page-contact .c-icon-btn:active {
+body.page-contact .c-icon-btn:active,
+body.page-contact .c-menu-toggle:hover,
+body.page-contact .c-menu-toggle:focus-visible,
+body.page-contact .c-menu-toggle:active {
   border-color: var(--vc-warm-soft);
   background: rgba(90, 66, 15, 0.1);
+  color: var(--vc-warm-text);
+  outline-color: var(--vc-warm-text);
 }
 
 /* Centrage du texte du bouton "Réserver un appel" — même diagnostic et
@@ -122,6 +130,7 @@ body.page-contact .c-btn--secondary:active {
   border-color: var(--vc-warm-soft);
   background: rgba(90, 66, 15, 0.08);
   color: var(--vc-warm-text);
+  outline-color: var(--vc-warm-text);
 }
 
 /* Logo — classe locale dédiée (même recette que .universe-brand dans
@@ -547,6 +556,7 @@ select.contact-field__control option {
   background: rgba(90, 66, 15, 0.1);
   color: var(--vc-warm-text);
   transform: translateY(-2px);
+  outline-color: var(--vc-warm-text);
 }
 
 .contact-form__submit-arrow {
@@ -739,6 +749,7 @@ select.contact-field__control option {
   background: rgba(90, 66, 15, 0.1);
   color: var(--vc-warm-text);
   transform: translateY(-2px);
+  outline-color: var(--vc-warm-text);
 }
 
 .contact-calendly__button[aria-disabled="true"] {
