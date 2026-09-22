@@ -268,7 +268,7 @@ un système de contenu séparé par langue), et enrichir
    build n'est nécessaire.
 4. Une fois le domaine connu, mettez à jour les URLs `canonical`, Open
    Graph, `sitemap.xml` et `robots.txt` (actuellement sur un domaine
-   placeholder `https://www.vagabon-exemple.fr`).
+   placeholder `https://virgilbkr.github.io/vagabon-site`).
 
 ---
 

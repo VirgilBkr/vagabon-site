@@ -1,11 +1,10 @@
 # VAGABON — robots.txt
 # Autorise l'indexation complète du site en production.
-# Domaine à mettre à jour dans sitemap.xml avant la mise en ligne définitive.
+# Domaine : https://virgilbkr.github.io/vagabon-site/ (GitHub Pages)
 
 User-agent: *
 Allow: /
-Disallow: /legal.html
-Disallow: /privacy.html
-Disallow: /404.html
+Disallow: /vagabon-site/mentions-legales.html
+Disallow: /vagabon-site/politique-confidentialite.html
 
-Sitemap: https://www.vagabon-exemple.fr/sitemap.xml
+Sitemap: https://virgilbkr.github.io/vagabon-site/sitemap.xml
