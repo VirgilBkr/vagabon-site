@@ -534,3 +534,299 @@
   color: #495359;
 }
 
+/* ==========================================================================
+   D. PAGINATION PLEIN ÉCRAN — feature/about-page-pagination
+   ==========================================================================
+   Toute cette section ne redéfinit toujours aucun jeton --u-* / --color-*,
+   ne modifie aucune des règles ci-dessus (A/B/C), et reste strictement
+   scopée à .who-pagination / .who-page / #profil-#valeurs-#vision-#methode
+   DANS le contexte .who-pagination--active. Portée : qui-suis-je.html
+   uniquement (js/about-pagination.js n'est chargé sur aucune autre page).
+
+   ÉTAT PAR DÉFAUT (repli) — tant que js/about-pagination.js n'a pas posé
+   .who-pagination--active sur .who-pagination, .who-pagination /
+   .who-pagination__viewport / .who-page restent des conteneurs neutres
+   (display de base, aucun position/transform) : les 5 sections s'affichent
+   EXACTEMENT comme avant cette fonctionnalité, en flux vertical normal. Ce
+   repli s'applique sans JS, si le CDN GSAP/ScrollTrigger ne charge pas, et
+   AVANT que le script n'ait tranché entre mode enrichi et mode réduit.
+   -------------------------------------------------------------------------- */
+
+.who-pagination__nav {
+  display: none;
+}
+
+/* Posée immédiatement par js/about-pagination.js dès qu'il s'exécute (que
+   GSAP soit disponible ou non, que prefers-reduced-motion s'applique ou
+   non) : seule la VISIBILITÉ de la pagination dépend de la présence du
+   script, jamais du mode d'animation choisi ensuite. */
+.who-pagination--nav-visible .who-pagination__nav {
+  display: flex;
+}
+
+.who-pagination__nav {
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+  position: fixed;
+  right: clamp(16px, 3vw, 40px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+
+.who-pagination__dot {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.06em;
+  color: var(--u-ink-subtle);
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.who-pagination__dot:hover,
+.who-pagination__dot:focus-visible {
+  color: var(--color-warm);
+}
+
+.who-pagination__dot[aria-current="true"] {
+  color: var(--color-warm);
+}
+
+.who-pagination__dot:focus-visible {
+  outline: 2px solid var(--color-warm);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.who-pagination__sr-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .who-pagination__nav {
+    right: 10px;
+    gap: 4px;
+  }
+  .who-pagination__dot {
+    width: 26px;
+    height: 26px;
+    font-size: 0.62rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ÉTAT ENRICHI — .who-pagination--active, posée uniquement par
+   js/about-pagination.js pendant qu'un contexte gsap.matchMedia()
+   desktop/tablette/mobile est actif (jamais sous prefers-reduced-motion,
+   jamais sans GSAP/ScrollTrigger). C'est ici, et UNIQUEMENT ici, que les
+   5 pages passent en empilement plein écran pin + scrub.
+   -------------------------------------------------------------------------- */
+
+.who-pagination--active .who-pagination__viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* Hauteur fixe, une seule fois pour toutes (plus de redimensionnement
+     dynamique à la page la plus haute) : le débordement de contenu de
+     chaque page est désormais géré par la lecture interne pilotée par le
+     scrub (.who-page__content-track ci-dessous), plus par un
+     agrandissement de cette boîte. */
+  height: 100vh;
+  height: 100dvh;
+}
+
+.who-pagination--active .who-page {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Fenêtre le défilement interne du contenu (.who-page__content-track) à
+     exactement la hauteur de la page, sans jamais afficher de scrollbar :
+     c'est ce cadrage qui rend le "y: -overflowDistance" du track invisible
+     en dehors de la page elle-même. */
+  overflow: hidden;
+  /* Fond opaque — exactement --u-bg, le même bleu-gris que le reste du
+     site (déjà posé sur body.page-universe dans universe.css, jamais
+     redéfini ici). Sans cette ligne, .who-page n'a aucun fond propre : la
+     page active laisse transparaître le texte/les images des pages
+     précédentes/suivantes empilées derrière elle pendant la rotation
+     (bug signalé par le client). Avec ce fond, chaque page se comporte
+     comme une vraie feuille opaque qui masque totalement ce qu'il y a
+     dessous, tout en gardant le z-index déjà posé par
+     js/about-pagination.js (inchangé) pour l'ordre d'empilement. */
+  background-color: var(--u-bg);
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-origin: 0% 100%; /* bas gauche, demande explicite */
+}
+
+/* Le conteneur interne qui se translate verticalement pendant la phase de
+   lecture (voir js/about-pagination.js) : hauteur naturelle (jamais forcée
+   à 100%), pour que son scrollHeight réel puisse dépasser la page — c'est
+   justement ce débordement qui est mesuré, puis parcouru via "y". */
+.who-pagination--active .who-page__content-track {
+  will-change: transform;
+}
+
+/* Centrage vertical du contenu à l'intérieur de la page pinnée — who-hero
+   garde son display:flex existant (aligné en interne, inchangé) ; seules
+   les sections who-section (qui n'ont par défaut aucun centrage vertical
+   propre, juste un padding-block de rythme) en reçoivent un ici, scopé à
+   .who-pagination--active uniquement : le rendu de repli (flux normal) ne
+   voit jamais cette règle. Si le contenu déborde réellement (classe
+   who-page--overflow posée par js/about-pagination.js après mesure),
+   l'alignement passe en haut : la lecture doit commencer par le début du
+   contenu, pas par son milieu. */
+.who-pagination--active .who-section.who-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Marge de sécurité haute/basse, uniforme sur les 4 sections (who-hero
+     garde son padding propre défini en section B, déjà correct, non
+     modifié ici). --nav-height est la hauteur réelle du header fixe
+     (.c-header, voir css/components.css) : ce padding-top s'adapte donc
+     automatiquement à toute résolution, contrairement à une valeur fixe
+     devinée pour un seul écran. Remplace à la fois le padding-block:10rem
+     hérité de .universe-section (beaucoup trop généreux dans une page
+     désormais pinnée à hauteur fixe : c'est ce qui faisait sous-estimer le
+     débordement réel de #profil/#valeurs et déclencher la transition
+     suivante trop tôt) et l'ancien correctif ponctuel de #vision plus bas
+     dans ce fichier (padding-top:var(--space-lg), devenu inférieur à
+     --nav-height après une passe de compaction précédente — cause du
+     titre masqué par le header). js/about-pagination.js lit ce padding
+     réel via getComputedStyle pour calculer la hauteur disponible. */
+  padding-top: calc(var(--nav-height) + var(--space-md));
+  padding-bottom: var(--space-lg);
+}
+
+.who-pagination--active .who-page.who-page--overflow {
+  align-items: flex-start;
+}
+
+/* --------------------------- Compaction ciblée (100dvh) -------------------
+   Objectif : faire tenir chaque page dans le viewport sans jamais couper de
+   texte. Uniquement scopé à .who-pagination--active : le rendu de repli
+   (fallback / reduced-motion) garde la mise en page actuelle, déjà validée,
+   inchangée. Si malgré cette compaction une page reste plus haute que le
+   viewport, js/about-pagination.js fait défiler son contenu interne
+   (.who-page__content-track) pendant une phase de lecture dédiée, sans
+   jamais couper de texte ni ouvrir de scroll indépendant. */
+
+/* Taille de corps de texte UNIQUE pour les 3 "niveaux" de paragraphe
+   présents sur les 5 pages (who-section__body : #profil/#vision/#methode ;
+   who-value__text : les 4 blocs de #valeurs ; who-methode-step__body : les
+   4 étapes de #methode) — avant cette règle, #profil et #valeurs avaient
+   chacun leur propre clamp() différent, et #vision/#methode gardaient la
+   taille de base non réduite : d'où l'impression de typographie
+   incohérente entre les pages signalée par le client. Une seule valeur,
+   réduction volontairement très légère (comparer à --font-size-body:1rem /
+   --line-height-body:1.55 en base), mélangeant vw et vh comme demandé. */
+.who-pagination--active .who-section__body,
+.who-pagination--active .who-value__text,
+.who-pagination--active .who-methode-step__body {
+  font-size: clamp(0.85rem, 0.7vw + 0.4vh, 0.95rem);
+  line-height: 1.5;
+}
+
+/* #profil — page la plus dense (10 paragraphes). Priorité 1 : élargir la
+   colonne de texte (moins de lignes = moins de hauteur, "largeur de texte
+   mieux exploitée" demandée) plutôt que de réduire drastiquement la
+   typographie. Priorité 2 seulement : resserrer légèrement taille/interligne
+   et l'espacement entre paragraphes. */
+@media (min-width: 901px) {
+  .who-pagination--active #profil .who-section__inner--split {
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(24px, 3.5vw, 48px);
+  }
+}
+
+.who-pagination--active #profil .who-section__body {
+  margin-top: var(--space-xs);
+}
+
+.who-pagination--active #profil .who-section__title {
+  margin-bottom: 0;
+}
+
+.who-pagination--active #profil .who-section__number {
+  margin-bottom: var(--space-2xs);
+}
+
+/* #valeurs — les 4 blocs passent d'une liste verticale à une grille 2x2 sur
+   desktop/tablette large (répartition en colonnes, explicitement permise) :
+   même contenu, même nombre de mots, hauteur totale divisée par ~2. Les
+   séparateurs (var(--u-line), déjà utilisé au repos) suivent la nouvelle
+   grille au lieu de rester uniquement horizontaux. */
+@media (min-width: 901px) {
+  .who-pagination--active #valeurs .who-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: var(--space-lg);
+  }
+  .who-pagination--active #valeurs .who-value {
+    padding: var(--space-md) var(--space-lg);
+    border-top: none;
+  }
+  .who-pagination--active #valeurs .who-value:nth-child(3),
+  .who-pagination--active #valeurs .who-value:nth-child(4) {
+    border-top: 1px solid var(--u-line);
+  }
+  .who-pagination--active #valeurs .who-value:nth-child(odd) {
+    border-right: 1px solid var(--u-line);
+    padding-left: 0;
+  }
+  .who-pagination--active #valeurs .who-value:nth-child(even) {
+    padding-right: 0;
+  }
+}
+
+/* #vision — resserre l'espacement entre les 5 paragraphes centrés (déjà
+   volontairement plus large, --space-lg, en repos) sans toucher à la
+   largeur de colonne propre à cette section. Le padding-top spécifique
+   utilisé ici auparavant (var(--space-lg), 44px) a été retiré : il était
+   devenu inférieur à --nav-height (88px) et faisait passer le titre sous
+   le header. #vision utilise désormais le même padding-top header-safe
+   que les 3 autres sections (règle .who-pagination--active
+   .who-section.who-page ci-dessus). */
+.who-pagination--active #vision .who-section__body {
+  margin-top: var(--space-sm);
+}
+
+/* #methode — déjà en grille 2x2 : resserrage léger uniquement. */
+.who-pagination--active #methode .who-methode-steps {
+  margin-top: var(--space-md);
+  gap: var(--space-md) var(--space-lg);
+}
+
+.who-pagination--active #methode .who-section__body {
+  margin-top: var(--space-sm);
+}
+
+/* --------------------------- Mobile (<901px) -------------------------------
+   Priorité absolue : lisibilité. Aucune superposition de texte, aucune
+   largeur coupée, aucune image qui masque le contenu — la compaction
+   desktop ci-dessus (colonnes, grille 2x2) est desactivée par les media
+   queries min-width:901px déjà utilisées ; seuls des ajustements
+   d'espacement, déjà présents dans les sections A/B/C de ce fichier
+   (@media max-width:900px / 768px), continuent de s'appliquer. */
+@media (max-width: 900px) {
+  .who-pagination--active .who-page {
+    padding-block: var(--space-lg);
+  }
+}
+

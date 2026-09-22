@@ -41,7 +41,7 @@
        / [data-scene]. Rien n'est dupliqué depuis ce fichier partagé. -->
   <link rel="stylesheet" href="css/pages/universe.css?v=49">
   <!-- Styles propres à cette page (Hero + 4 sections de présentation). -->
-  <link rel="stylesheet" href="css/pages/qui-suis-je.css?v=1">
+  <link rel="stylesheet" href="css/pages/qui-suis-je.css?v=2">
 </head>
 <body class="page-universe page-qui-suis-je">
   <a class="skip-link" href="#main-content">Aller au contenu</a>
@@ -107,11 +107,30 @@
   <div class="l-page">
   <main id="main-content" tabindex="-1">
 
+    <!-- =======================================================================
+         PAGINATION PLEIN ÉCRAN — feature/about-page-pagination.
+         .who-pagination enveloppe les 5 sections existantes SANS en retirer
+         ni en modifier le contenu, les classes ou les id : who-hero, #profil,
+         #valeurs, #vision, #methode restent identiques, seule une classe
+         who-page + un data-page-index leur sont ajoutés. .who-pagination__nav
+         (01 à 05) est un sibling de .who-pagination__viewport, donc jamais
+         affecté par le pin/les transformations appliquées aux pages.
+
+         DÉGRADATION — sans js/about-pagination.js (ou GSAP/ScrollTrigger
+         indisponibles, ou prefers-reduced-motion), css/pages/qui-suis-je.css
+         n'applique NI position:absolute NI transform aux .who-page tant que
+         .who-pagination--active n'est pas posée par le script : les 5
+         sections restent alors en flux normal, exactement le rendu actuel de
+         cette page. Voir js/about-pagination.js pour le détail des 3
+         contextes (desktop/tablette/mobile) et le repli reduced-motion. -->
+    <div class="who-pagination" data-pagination>
+      <div class="who-pagination__viewport" data-pagination-viewport>
+
     <!-- ======================= A. HERO ======================= -->
-    <section class="who-hero" aria-labelledby="who-hero-title">
+    <section class="who-hero who-page" data-page-index="0" aria-labelledby="who-hero-title">
       <a href="universe.html" class="who-back">← <span data-i18n="cta.back_universe">Retour à l'univers</span></a>
 
-      <div class="who-hero__inner">
+      <div class="who-hero__inner who-page__content-track">
         <div class="who-hero__text">
           <div class="universe-eyebrow" data-reveal data-i18n="who.hero_eyebrow">Qui suis-je</div>
           <!-- Nom : même clé que la signature du Hero de universe.html
@@ -170,8 +189,8 @@
          attributs data-reveal qu'avant ce changement — seul un wrapper de
          mise en page a été ajouté autour, rien n'a été retiré ni modifié
          dans le texte lui-même. -->
-    <section class="who-section who-section--split universe-section" id="profil" aria-labelledby="profil-title">
-      <div class="who-section__inner who-section__inner--split universe-section__inner" data-scene>
+    <section class="who-section who-section--split universe-section who-page" data-page-index="1" id="profil" aria-labelledby="profil-title">
+      <div class="who-section__inner who-section__inner--split universe-section__inner who-page__content-track" data-scene>
         <div class="who-section__text">
           <span class="who-section__number" aria-hidden="true" data-i18n="who.section01.number">01</span>
           <div class="universe-eyebrow" data-reveal data-i18n="who.section01.eyebrow">Mon profil</div>
@@ -218,8 +237,8 @@
          Pas de numéro affiché : aucun numéro n'a été demandé pour cette
          section, et les sections existantes 02/03/04 ne sont pas
          renumérotées (aucune autre section n'est modifiée). -->
-    <section class="who-section who-section--split who-section--visual-left universe-section" id="valeurs" aria-labelledby="valeurs-title">
-      <div class="who-section__inner who-section__inner--split universe-section__inner" data-scene>
+    <section class="who-section who-section--split who-section--visual-left universe-section who-page" data-page-index="2" id="valeurs" aria-labelledby="valeurs-title">
+      <div class="who-section__inner who-section__inner--split universe-section__inner who-page__content-track" data-scene>
         <!-- Photo réelle (séance de Muay Thaï avec le coach) — remplace
              l'emplacement réservé. who-section__visual reste le même
              conteneur (largeur, ratio 4:5, bordure) déjà utilisé ailleurs
@@ -294,8 +313,8 @@
          texte et espacement entre paragraphes propres à cette section (voir
          override #vision dans qui-suis-je.css), sans toucher à
          who-section__body utilisé ailleurs (section 01, section 03). -->
-    <section class="who-section who-section--statement universe-section" id="vision" aria-labelledby="vision-title">
-      <div class="who-section__inner universe-section__inner" data-scene>
+    <section class="who-section who-section--statement universe-section who-page" data-page-index="3" id="vision" aria-labelledby="vision-title">
+      <div class="who-section__inner universe-section__inner who-page__content-track" data-scene>
         <div class="universe-eyebrow" data-reveal data-i18n="who.vision.eyebrow">Ma vision</div>
         <h2 id="vision-title" class="who-section__statement" data-reveal data-reveal-delay="1" data-word-reveal data-i18n="who.vision.title">Ma manière d'aborder la communication et la création</h2>
         <p class="who-section__body who-section__body--centered" data-reveal data-reveal-delay="2" data-i18n="who.vision.body1">Ce que j'aime avant tout dans la communication, c'est la difficulté, aujourd'hui, de réussir à créer un contenu réellement différenciant. Nous sommes confrontés à longueur de journée à des publicités, des publications, des vidéos et toutes sortes de contenus. Et, la plupart du temps, ça nous saoule — moi le premier d'ailleurs.</p>
@@ -315,8 +334,8 @@
          who-methode-step* dédiées à cette page (l'ancienne who-section__steps
          ne convenait plus au contenu, beaucoup plus riche désormais — voir
          qui-suis-je.css). -->
-    <section class="who-section who-section--split who-section--visual-left universe-section" id="methode" aria-labelledby="methode-title">
-      <div class="who-section__inner who-section__inner--split universe-section__inner" data-scene>
+    <section class="who-section who-section--split who-section--visual-left universe-section who-page" data-page-index="4" id="methode" aria-labelledby="methode-title">
+      <div class="who-section__inner who-section__inner--split universe-section__inner who-page__content-track" data-scene>
         <div class="who-section__visual" data-reveal data-reveal-delay="3" aria-hidden="true"></div>
         <div class="who-section__text">
           <span class="who-section__number" aria-hidden="true" data-i18n="who.section04.number">04</span>
@@ -348,6 +367,20 @@
         </div>
       </div>
     </section>
+
+      </div>
+      <!-- Sibling de .who-pagination__viewport : jamais pinné, jamais
+           transformé — reste toujours visible et cliquable, y compris
+           pendant les transitions entre pages (voir consigne "ne masque pas
+           la pagination derrière le header ou le menu"). -->
+      <nav class="who-pagination__nav" data-pagination-nav aria-label="Navigation entre les sections de la page">
+        <button type="button" class="who-pagination__dot" data-page-target="0" aria-current="true"><span class="who-pagination__sr-text">Section</span><span class="who-pagination__dot-num">01</span></button>
+        <button type="button" class="who-pagination__dot" data-page-target="1" aria-current="false"><span class="who-pagination__sr-text">Section</span><span class="who-pagination__dot-num">02</span></button>
+        <button type="button" class="who-pagination__dot" data-page-target="2" aria-current="false"><span class="who-pagination__sr-text">Section</span><span class="who-pagination__dot-num">03</span></button>
+        <button type="button" class="who-pagination__dot" data-page-target="3" aria-current="false"><span class="who-pagination__sr-text">Section</span><span class="who-pagination__dot-num">04</span></button>
+        <button type="button" class="who-pagination__dot" data-page-target="4" aria-current="false"><span class="who-pagination__sr-text">Section</span><span class="who-pagination__dot-num">05</span></button>
+      </nav>
+    </div>
 
   </main>
 
@@ -396,6 +429,16 @@
   <script src="js/universe.js" defer></script>
   <script src="js/universe-cursor.js?v=9" defer></script>
   <script src="js/qui-suis-je-slideshow.js" defer></script>
+
+  <!-- GSAP + ScrollTrigger : même CDN/version que universe.html
+       (js/universe-services.js), chargés ici pour la première fois sur
+       cette page, uniquement pour .who-pagination. js/about-pagination.js
+       vérifie leur présence et se dégrade proprement (flux normal, voir
+       css/pages/qui-suis-je.css) si le CDN ne charge pas. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="js/about-pagination.js?v=2" defer></script>
+
   <script src="js/main.js" defer></script>
 </body>
 </html>
